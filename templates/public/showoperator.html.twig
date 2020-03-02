@@ -1,0 +1,176 @@
+{% extends '::base_simple.html.twig' %}
+
+{% block content %}
+
+    {% if operator is defined %}
+
+    <h3 class="box-title titulo_ficha">Ficha de Operador</h3>
+
+    <div class="box-body no-padding" style="display: block;">
+        <div>
+            <div class="col-xs-12 tarjeta">        
+	            <div><label>Nº Operador: </label><span> {{ operator.opNop }} </span></div>
+	            <div><label>Denominación: </label><span> {{ operator.opDenoop }} </span></div>
+                {% if operator.opSreg == 'PAE' %}
+                    <div><label>Alcance: </label><span> PRODUCTOS UTILIZABLES EN PRODUCCION ECOLOGICA </span></div>
+                {% else %}
+                    <div><label>Alcance: </label><span> {{ operator.opRegistro.reDeno }} ({{ operator.opSubregistro.reDeno }}) </span></div>
+                {% endif %}
+                {% if normativas is defined and normativas|length > 0 %}
+                    <div><label>Normativa: </label></div>
+                    {% for norma in normativas %}
+                        <p>- {{ norma.normaNormativa | default('')}} </p>
+                    {% endfor %}
+
+                {% endif %}
+
+            </div>
+
+            {% if info is defined and info['rlEntity'] is defined %}
+            <div class="separador col-xs-12"></div>
+                        
+            <div class="col-xs-12 tarjeta">
+                <div align="right"><span>Actualizado el 
+                    {% if operator.updatedDate != null %}{{ operator.updatedDate|date("d/m/Y") }}
+                    {% else %}
+                        {{ operator.createdDate|date("d/m/Y") }}
+                    {% endif %}
+                    </span>
+                </div>
+                {% if info['rlEntity'] == "ProductosPae" %}
+                <div><label>Productos utilizables en agricultura ecológica</label></div>
+                {% for productoPae in operator.opProductosPae %}
+                <br>        
+                <div><label>Marca Comercial: </label><span> {{ productoPae.pipPro }} </span></div>
+                <div><label>Descripción: </label><span> {{ productoPae.pipDsc }} </span></div>
+                {#<div><label>Tipo de Producto: </label><span> {{ productoPae.pipTpp }} </span></div>#}
+                {% endfor %}
+                {%  endif %}
+
+                {% if info['rlEntity'] == "Ganaderias" %}
+                    {% set mostrados = [] %}
+                    <div><label>Productos:</label></div>
+                    {% for ganaderia in operator.opGanaderias %}
+                        {% if ganaderia.gnProductosG.pnDeno is defined %}
+                            {% if ganaderia.gnProductosG.pnDeno | default('') not in mostrados %}
+                                <div><label>- </label><span> {{ ganaderia.gnProductosG.pnDeno | default('')}} </span></div>
+                                {% set mostrados = mostrados|merge([ganaderia.gnProductosG.pnDeno | default('')]) %}
+                            {% endif %}
+
+                        {% endif %}
+                    {% endfor %}
+                {%  endif %}
+
+                {% if info['rlEntity'] == "CultivosRec" %}              
+                    {% set mostrados = [] %}
+                    <div><label>Productos:</label></div>
+                    {% for cultivoRec in operator.opCultivosRec %}
+                        {% if cultivoRec.ruProducto.ptDeno is defined and cultivoRec.ruProducto.ptEst == 'L' %}
+                            {% if cultivoRec.ruProducto.ptDeno | default('') not in mostrados  %}
+                                <div><label>- </label><span> {{ cultivoRec.ruProducto.ptDeno | default('')}} </span></div>
+                                {% set mostrados = mostrados|merge([cultivoRec.ruProducto.ptDeno | default('')]) %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {%  endif %}
+
+                {% if info['rlEntity'] == "CultivosRec2" %}
+                    {% set mostrados = [] %}
+                    <div><label>Cultivos: </label></div>    
+                    {% for cultivoRec2 in operator.opCultivosRec2 %}
+                        {% if cultivoRec2.ru2Cultivos.cuDeno is defined %}                            
+                            {% if cultivoRec2.ru2Cultivos.cuDeno | default('') not in mostrados %}
+                                
+                                <div><label>- </label><span> {{ cultivoRec2.ru2Cultivos.cuDeno | default('')}} </span></div>
+                                {% set mostrados = mostrados|merge([cultivoRec2.ru2Cultivos.cuDeno | default('')]) %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {%  endif %}
+
+                 {% if info['rlEntity'] == "AvesCorral" %}
+                <div><label>Aves de corral</label></div>
+                {% for avecorral in operator.opAvesCorral %}
+                    <br>        
+                    <div><label>Especie: </label><span> {{ avecorral.avcEsp }} </span></div>
+                    <div><label>Raza: </label><span> {{ avecorral.avcTpn }} </span></div>
+                {% endfor %}
+                {%  endif %}
+
+                {% if info['rlEntity'] == "IAvesCorral" %}
+                <div><label>Industria de aves de corral</label></div>
+                    {% for iavecorral in operator.opIAvesCorral %}
+                    <br>        
+                        <div><label>Marca: </label><span> {{ iavecorral.aviMar }} </span></div>
+                        <div><label>Producto: </label><span> {{ iavecorral.aviPrd }} </span></div>
+                        <div><label>Variedad: </label><span> {{ iavecorral.aviVar }} </span></div>
+                    {% endfor %}
+                {%  endif %}
+
+                {% if info['rlEntity'] == "ProductosIndus" %}
+                    <div><label>Productos industriales</label></div>
+                    {% for productoindus in operator.opProductosIndus %}
+                        <br>        
+                        <div><label>Marca: </label><span> {{ productoindus.piMarca }} </span></div>
+                        {% if productoindus.piDpro is defined %}
+                            <div><label>Producto: </label><span> {{ productoindus.piDpro }} </span></div>
+                        {% else %}
+                            <div><label>Producto: </label><span> {{ productoindus.piPro }} </span></div>
+                        {% endif %}
+                    {% endfor %}
+                {%  endif %}
+
+
+                {% if info['rlEntity'] == "Industrias" %}
+                    {% set mostrados = [] %}
+                    <div><label>Actividad:</label></div>
+                    {% for industrias in operator.opIndustrias %}
+                        {% if industrias.inActividadI.ainDeno is defined%}  
+                            {% if industrias.inActividadI.ainDeno  | default('') not in mostrados %}
+                                <div><label> - </label><span> {{ industrias.inActividadI.ainDeno }} </span></div>
+                                {% set mostrados = mostrados|merge([industrias.inActividadI.ainDeno | default('')]) %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                
+
+
+                {%  endif %}
+
+                {% if info['rlEntity'] == "Operator" %}
+                    {% if (info['rlInfo'] == "GGN") and (operator.opTpex != 'P' )  and (operator.opSreg=='1OP') %}
+                        <div><label>Codigo GGN: </label><span> {{ operator.opNrgap }} </span></div>
+                    {%  endif %}
+                    {% if operator.opAct != '' %}
+                        <div><label>Actividad:</label></div>
+                        <div><label> - </label><span> {{ operator.opAct }} </span></div>
+                    {% endif %}               
+                {% endif %}               
+            </div>
+            {% endif %}
+            <div class="separador col-xs-12"></div>
+
+            <div class="col-xs-12 tarjeta">
+                <div class="titulo_abajo"><b><span> Datos de Contacto </b></span></div>
+                {% if info['rlEntity'] == "Industrias" and operator.opIndustrias|length > 0 %}
+                    <div><label>Domicilio: </label><span> {{ operator.opIndustrias.0.inDom | default('') }} </span></div>
+                    <div><label>Localidad: </label><span> {{ operator.opIndustrias.0.inPob | default('') }} </span></div>
+                    <div><label>Provincia: </label><span> {{ operator.opIndustrias.0.inProv | default('') }} </span></div>
+                    <div><label>Código Postal: </label><span> {{ operator.opIndustrias.0.inCdp | default('') }} </span></div>
+                    <div><label>Teléfono: </label><span> {{ operator.opIndustrias.0.inTel | default('') }} </span></div>
+                {% else %}
+                    <div><label>Domicilio: </label><span> {{ operator.opdomop | default('') }} </span></div>
+                    <div><label>Localidad: </label><span> {{ operator.opPbcl }} </span></div>
+                    <div><label>Provincia: </label><span> {{ operator.opPvcl }} </span></div>
+                    <div><label>Código Postal: </label><span> {{ operator.opCdp | default('') }} </span></div>
+                    <div><label>Teléfono: </label><span> {{ operator.opTel | default('') }} </span></div>
+                {% endif %}
+
+
+            </div>
+        </div>
+        <a href="{{path('public_operator_search') }}"><button class="btn btn-success btn_volver">Volver</button> </a>
+    </div>
+
+	{% endif %}
+{% endblock %}

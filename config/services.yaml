@@ -1,0 +1,241 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    gsbase_host: sohiscert3.ddns.cyberoam.com #82.159.232.128
+    gsbase_port: 8121
+    gsbase_user: __*web
+    gsbase_pass: S0h1scert
+    gsbase_corp: shc
+    gsbase_apl: gsges_shc
+    gsbase_ex: shc
+    gsbase_accion: consulta_xml
+    gsbase_ventana: consulta-xml
+    from_email: manuel.navarro@atlantic.es # Parámetro para pruebas.
+    locale: es
+    cartas: ['000092', '000019']
+    analisis: ['000065', '000068', '000071', '000072']
+    certificados: ['000000']
+    compromisos: [null]
+    docexptypes:
+        solicitud: 'Solicitud'
+        accion: 'Acción Correctiva'
+        presupuesto: 'Presupuesto Aceptado'
+        cuestionario: 'Cuestionario de ampliación actividad'
+        programa: 'Programa de producción vegetal (PAC)'
+        modificacion: 'Modificación Datos (unidad de producción, datos operador)'
+        solicitudexp: 'Solicitudes Excepcionales (de semillas, manejo ganado)'
+        solicutudgan: 'Solicitud de manejo de ganado'
+        inclusion: 'Inclusión de productos'
+        recursosrec: 'Recursos y reclamaciones'
+        comunicacion: 'Comunicación incidencias ayudas agroambientales'
+    plantilla_cartas: 'F155-02'
+    #uploaddir: '/../../../app/logs/update/'
+    path_update_logs: '%kernel.root_dir%/logs/update/'
+    web_root: 'http://intranet-clientesshc.e4ff.pro-eu-west-1.openshiftapps.com/web/'
+    repo_dir: '/opt/app-root/src/' #'http://intranet-clientesshc.e4ff.pro-eu-west-1.openshiftapps.com'
+    email_from_address: 'noreply@sohiscert.com'
+    email_from_name: 'Area Privada Sohiscert'
+    mail_to: 'sohiscert@sohiscert.com'
+    mailer_transport: 'smtp'
+    mailer_port: 587
+    mailer_host: 'smtp.1and1.com'
+    mailer_user: 'noreply@sohiscert.com'
+    mailer_password: 'Noreply@@2019??'
+    mailer_encryption: 'tls'
+    auth_mode: 'login'
+    nop_conversion:
+        RP: 'PAE'
+        RI: 'IAE'
+        RC: 'CAE'
+        RG: 'GAE'
+        RF: 'FAE'
+        RT: 'TAE'
+        RS: 'SAE'
+        RN: 'NAE'
+    ftp_server: 'sohiscert3.ddns.cyberoam.com'
+    ftp_user_name: 'userftp1'
+    ftp_user_pass: 'AtlIntTec.12'
+    
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: false # Automatically registers your services as commands, event subscribers, etc.
+        public: true
+        bind:
+            $gsbase_host: '%gsbase_host%'
+            $gsbase_port: '%gsbase_port%'
+            $gsbase_user: '%gsbase_user'
+            $gsbase_pass: '%gsbase_pass%'
+            $gsbase_corp: '%gsbase_corp%'
+            $gsbase_accion: '%gsbase_accion%'
+            $gsbase_ventana: '%gsbase_ventana%'
+            $from_email: '%from_email%'
+            $locale: '%locale%'
+            $cartas: '%cartas%'
+            $analisis: '%analisis%'
+            $certificados: '%certificados%'
+            $compromisos: '%compromisos%'
+            $docexptypes: '%docexptypes%'
+            $plantilla_cartas: '%plantilla_cartas%'
+            $path_update_logs: '%path_update_logs%'
+            $web_root: '%web_root%'
+            $repo_dir: '%repo_dir%'
+            $email_from_address: '%email_from_address%'
+            $email_from_name: '%email_from_name%'
+            $mail_to: '%mail_to%'
+            $mailer_transport: '%mailer_transport%'
+            $mailer_port: '%mailer_port%'
+            $mailer_host: '%mailer_host%'
+            $mailer_user: '%mailer_user%'
+            $mailer_password: '%mailer_password%'
+            $mailer_encryption: '%mailer_encryption%'
+            $auth_mode: '%auth_mode%'
+            $nop_conversion: '%nop_conversion%'
+            $ftp_server: '%ftp_server%'
+            $ftp_user_name: '%ftp_user_name%'
+            $ftp_user_pass: '%ftp_user_pass%'
+
+    
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{DependencyInjection,Entity,Mailer,GsBase,Command,Ftp,Tools,Migrations,Tests,Kernel.php}'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+    App\GsBase\GsBase:
+        arguments: ["%gsbase_host%","%gsbase_port%","%gsbase_user%","%gsbase_pass%","%gsbase_corp%","%gsbase_apl%","%gsbase_ex%","%gsbase_accion%","%gsbase_ventana%"]
+       
+    App\Command\GsBaseConnectCommand:
+        tags:
+            - { name: 'console.command', command: 'gsbase:connect'}
+        arguments: ['%path_update_logs%']
+
+    App\Command\UpdateRegisterCommand:
+        tags: { name: 'console.command', command: 'gsbase:update:registro'}
+
+    App\Command\EmailUpdateDocFactuCommand:
+        tags: { name: 'console.command', command: 'email:emaildocfactu:send'}
+
+    App\Command\EmailUpdateDocConcluCommand:
+        tags: { name: 'console.command', command: 'email:emaildoccon:send'}
+
+    App\Command\EmailUpdateDocCommand:
+        tags: { name: 'console.command', command: 'email:emaildoc:send'}
+    
+    App\Command\EmaildocanaSendCommand:
+        tags: { name: 'console.command', command: "email:emaildocana:send" }
+
+    App\Command\EmaildoccarSendCommand:
+        tags: { name: 'console.command', command: "email:emaildoccar:send" }
+
+    App\Command\UpdateProductosPaeCommand:
+        tags: { name: 'console.command', command: "gsbase:update:productospae" }
+
+    App\Command\UpdateProductosIndusCommand:
+        tags: { name: 'console.command', command: "gsbase:update:productosindus" }
+
+    App\Command\UpdateProductosCommand:
+        tags: { name: 'console.command', command: "gsbase:update:productos" }
+
+    App\Command\UpdateOperatorEntityCommand:
+        tags: { name: 'console.command', command: "gsbase:update:operatorentity" }
+
+    App\Command\UpdateOperatorCommand:
+        tags: { name: 'console.command', command: "gsbase:update:operator" }
+
+    App\Command\UpdateIndustriasCommand:
+        tags: { name: 'console.command', command: "gsbase:update:industrias" }
+
+    App\Command\UpdateGanaderiasCommand:
+        tags: { name: 'console.command', command: "gsbase:update:ganaderias" }
+
+    App\Command\UpdateDateDocumentsOperatorsClientCommand:
+        tags: { name: 'console.command', command: "gsbase:update:datedocuments" }       
+    
+    App\Command\UpdateCultivosRecCommand:
+        tags: { name: 'console.command', command: "gsbase:update:cultivosrec" }         
+
+    App\Command\UpdateCultivosRecBisCommand:
+        tags: { name: 'console.command', command: "gsbase:update:cultivosrecbis" }
+
+    App\Command\UpdateCultivosRec2Command:
+        tags: { name: 'console.command', command: "gsbase:update:cultivosrec2" }
+
+    App\Command\UpdateContactCommand:
+        tags: { name: 'console.command', command: "gsbase:update:contact" }
+
+    App\Command\UpdateClientCommand:
+        tags: { name: 'console.command', command: "gsbase:update:client" }
+
+    App\Command\UpdateBasicInfoCommand:
+        tags: { name: 'console.command', command: "gsbase:update:basicinfo" }
+
+    App\Command\UpdateAvesCorralCommand:
+        tags: { name: 'console.command', command: "gsbase:update:avescorral" }
+
+    App\Command\RemoveOperatorCommand:
+        tags: { name: 'console.command', command: "gsbase:remove:operator" }
+
+    App\Command\IniUserOperatorsCommand:
+        tags: { name: 'console.command', command: "app:ini:batch:useroperators" }
+
+    App\Command\IniContactCommand:
+        tags: { name: 'console.command', command: "app:ini:batch:clientscontact" }
+
+    App\Command\IniClientOperatorsCommand:
+        tags: { name: 'console.command', command: "app:ini:batch:clientuseroperators" }
+
+    App\Command\EmailUpdateDocCertiCommand:
+        tags: { name: 'console.command', command: "email:emaildoccerti:send" }
+
+    gsbasexml:
+        class: App\GsBase\GsBaseXml
+        arguments: ["@service_container"]
+
+    toolsupdate:
+        class: App\Tools\ToolsUpdate
+        arguments: ["@service_container"]
+    
+    app.ftp.service:
+        class: App\Ftp\Ftp
+        arguments: [ '%nop_conversion%' ]
+
+    App\Entity\AccessLog:
+        class: App\Entity\AccessLog
+
+    LoginAuthenticator:
+        class:  App\Security\LoginAuthenticator
+        #arguments:
+        arguments: [ '@doctrine.orm.entity_manager',"@router"] 
+    
+    App\Repository\OperatorRepository:
+        tags: ['doctrine.repository_service']
+    App\Repository\UserOperatorRepository:
+        tags: ['doctrine.repository_service']
+    App\Repository\UpdateLogRepository:
+        tags: ['doctrine.repository_service']
+    App\Repository\ProductosRepository:
+        tags: ['doctrine.repository_service']
+    App\Repository\ProductosGRepository:
+        tags: ['doctrine.repository_service']
+    App\Repository\IndustriasRepository:
+        tags: ['doctrine.repository_service']
+    App\Repository\RelationshipRegisterRepository:
+        tags: ['doctrine.repository_service']
+    App\Repository\UserRepository:
+        tags: ['doctrine.repository_service']
+    app.mailer.service:
+        class: App\Mailer\Mailer
+        arguments: ['%email_from_address%','%email_from_name%','%mail_to%']

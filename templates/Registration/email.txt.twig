@@ -1,0 +1,10 @@
+{% block subject %}
+    Bienvenido a Sohiscert
+{% endblock %}
+
+{% block body_html %}
+    Email : {{ user.email }} 
+    Usuario : {{ user.username }} 
+    Password : {{ user.plainPassword }} 
+    Link de activación : {{confirmationUrl}} 
+{% endblock %}

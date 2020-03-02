@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta charset="UTF-8"/>
+    {#<title>{% block title %}{% endblock %}</title>#}
+    <title>Intranet Sohiscert</title>
+    {% block stylesheets %}
+        <!-- Bootstrap 3.3.2 -->
+        <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css"/>
+        <!-- Font Awesome Icons -->
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"
+              type="text/css"/>
+        <!-- Theme style -->
+        <link href="{{ asset('dist/css/AdminLTE.min.css') }}" rel="stylesheet" type="text/css"/>
+        {#/* CSS para Pruebas clonado estilos SHC */#}
+        {#<!-- Fontello Icons -->#}
+        {#<link href="{{ asset('plugins/fontello/fontello.css') }}" rel="stylesheet"#}
+        {#type="text/css"/>#}
+        {#<!-- Css SHC adaptative theme -->#}
+        {#<link href="{{ asset('app/css/adaptive.css') }}" rel="stylesheet" type="text/css"/>#}
+        {#/* FIN PRUEBAS */#}
+        <!-- Css SHC -->
+        <link href="{{ asset('app/css/style.css') }}" rel="stylesheet" type="text/css"/>
+    {% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
+</head>
+    <body>
+        <div>
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") == true %}
+                {{ 'layout.logged_in_as'|trans({'%username%': username}, 'message') }} |
+                <a href="{{ path('security_logout') }}">
+                    {{ 'layout.logout'|trans({}, 'message') }}
+                </a>
+            {% else %}
+                <a href="{{ path('security_login') }}"></a>
+            {% endif %}
+        </div>
+
+        {% if app.request.hasPreviousSession %}
+            {% for type, messages in app.session.flashbag.all() %}
+                {% for message in messages %}
+                    <div class="flash-{{ type }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        {% endif %}
+
+        <div>
+            {% block body_content %}
+            {% endblock body_content %}  
+        </div>
+    </body>
+</html>

@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+{% trans_default_domain 'message' %}
+
+{% block content %}
+<div id="contain">
+
+  
+
+
+    <div id="contain2" class="login-logo center"><img id="logo" src="https://sohiscert.com/wp-content/uploads/2018/07/logo-vector-sohiscert.jpg"></div>
+        <br>&nbsp;</br>
+        <div class="center" align="center">Cambio de contraseña</div>
+        
+        <br>&nbsp;</br>
+    
+    <form action="{{ path('resetting_send_email') }}" method="POST" class="fos_user_resetting_request">
+        <div>
+            {% if invalid_username is defined %}
+                <div class="alert alert-danger alert-dismissable">
+                <i class="fa fa-ban"></i>
+                  
+                     <b>Error! {{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}) }}</b>
+                   
+                </div>
+            {% endif %}
+            <label for="username">{{ 'resetting.request.username'|trans }}</label>
+            <input type="text" class="form-control" id="username" name="username" required="required" placeholder="Usuario"/>
+        </div>
+        <br>&nbsp;</br>
+        <div class="footer">
+                    <input type="submit" value="{{ 'resetting.request.submit'|trans }}" class="btn btn-primary btn-block btn-flat"/>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+   

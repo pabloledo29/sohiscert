@@ -1,0 +1,219 @@
+{% extends 'base_full.html.twig' %}
+{% block content %}
+
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Clientes
+            <small>Perfil de Cliente</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-group"></i> Clientes</a></li>
+            <li class="active">Perfil</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+
+
+                <div class="box box-info">
+                    <div class="box-header">
+                        <!-- tools box -->
+                        <div class="pull-right box-tools">
+                            <button class="btn btn-danger btn-sm" data-widget="collapse" data-toggle="tooltip" title=""
+                                    data-original-title="Collapse"><i class="fa fa-minus"></i></button>
+                        </div>
+                        <!-- /. tools -->
+                        <i class="fa fa-user"></i>
+
+                        <h3 class="box-title">Perfil de Cliente </h3>
+                        {% for type, messages in app.session.flashbag.all() %}
+                            {% for message in messages %}
+                                <div class="flash-{{ type }}">
+                                    <div class="form-box" id="login-box">
+                                        <div class="alert alert-success alert-dismissable">
+                                            <i class="fa fa-ban"></i>
+                                            <button type="button" class="close" data-dismiss="alert"
+                                                    aria-hidden="true">&times;</button>
+                                            <b></b>{{ message }}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box box-body">
+                        {% if userOperator.clientId is defined %}
+                            <p><label>Usuario: </label> {{ userOperator.username }} </p>
+                            <p><label>Email: </label> {{ userOperator.email }} </p>
+                            <form action="{{ path('admin_useroperator_edit', {'id': userOperator.id }) }}"
+                                  method="post">
+                                <input name="id" type="hidden" value="{{ userOperator.id }}"/>
+                                <button type="submit" class="pull-right btn btn-xs btn-info"><span
+                                            class="fa fa-pencil"></span> Editar
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer" style="display: block;">
+
+                    </div>
+                    <!-- /.box-footer -->
+                </div>
+                <div class="box box-info">
+                    <div class="box-header">
+                        <i class="fa fa-user"></i>
+
+                        <h3 class="box-title">Datos de Cliente </h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        {% if userOperator.clientId is not null %}
+
+                            <strong><i class="fa fa-user margin-r-5"></i> Denominacion: </strong>
+                            <p class="text-muted" id="deno"> {{ userOperator.clientId.clDeno }} </p>
+
+                            {#<div><label>Actividad: </label><span> {{userOperator.clientId.clActi}} </span></div>#}
+                            <strong><i class="fa fa-map-marker margin-r-5"></i> Domicilio: </strong>
+                            <p class="text-muted" id="address"> {{ userOperator.clientId.clDom }}
+                                <br> {{ userOperator.clientId.clPob }}, {{ userOperator.clientId.clProv }}
+                                <br> {{ userOperator.clientId.clCdp }}</p>
+
+                            <strong><i class="fa fa-info margin-r-5"></i> País: </strong>
+                            <p class="text-muted" id="country"> {{ userOperator.clientId.clPais }} </p>
+                            {% if userOperator.clientId.contact is not null %}
+                                <strong>
+                                    <i class="fa fa-globe margin-r-5"></i> Contacto </strong>:
+                                <p class="text-muted"> {{ userOperator.clientId.contact.cnDeno |default('') }}
+                                    {{ userOperator.clientId.contact.cnApe1|default('') }}
+                                    {{ userOperator.clientId.contact.cnApe2 |default('') }} </p>
+                            {% endif %}
+                            <strong><i class="fa fa-phone margin-r-5"></i> Teléfono: </strong><p class="text-muted"
+                                                                                                 id="tel"> {{ userOperator.clientId.clTel }} </p>
+                            <strong><i class="fa fa-fax margin-r-5"></i> Fax: </strong><p class="text-muted"
+                                                                                          id="fax"> {{ userOperator.clientId.clFax }} </p>
+                            <strong><i class="fa fa-envelope-o margin-r-5"></i> Email: </strong><p class="text-muted"
+                                                                                                   id="email"> {{ userOperator.clientId.clEma }} </p>
+
+
+                            <div align="right">
+                                {#<span>Actualizado el#}
+                                {#<span id="updtime">#}
+                                {#{% if userOperator.clientId.updatedDate != null %}#}
+                                {#{{ userOperator.clientId.updatedDate|date("d/m/Y") }}#}
+                                {#{% else %}#}
+                                {#{{ userOperator.clientId.createdDate|date("d/m/Y") }}#}
+                                {#{% endif %}</span>#}
+                                {#</span>#}
+                                {% if updateLog is not null %}
+                                    <span>Actualizado el: {{ updateLog.timeStamp|date('d/m/Y') }}
+                                 </span>
+                                {% endif %}
+                            </div>
+                        {% else %}
+
+                            <div class="callout callout-danger">
+                                <h4></h4>
+
+                                <p>Datos aún no disponibles, actualice.</p>
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <div id="updMsg" class="hidden">
+                            <h4></h4>
+
+                            <p></p>
+                        </div>
+                        <div class="input-group-btn">
+                            <form id="refreshForm" action="{{ path('admin_useroperator_update') }}" method="post">
+                                <input name="id" type="hidden" value="{{ userOperator.id }}"/>
+                                <button id="refresh" class="pull-right btn btn-info"><i class="fa fa-refresh"></i>
+                                    Actualizar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- /.box-footer -->
+                </div>
+                <div class="box box-info">
+                    <div class="box-header">
+                        <i class="fa fa-th-list"></i>
+
+                        <h3 class="box-title">Listado de Operadores </h3>
+                    </div>
+                    <!-- /.box-header -->
+
+                    <div class="box-body">
+                        <table id="listoperators" class="table">
+                            <thead>
+                            <tr>
+                                <th>Nº Operador</th>
+                                <th>Alcance</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% if userOperator.operators is defined %}
+                                {% for op in userOperator.operators %}
+                                    <tr>
+                                        <td>
+                                            <a class="showOp"
+                                               href="{{ path('admin_useroperator_expediente_show', {'id': op.id }) }}">{{ op.opNop }}</a>
+                                        </td>
+                                        <td>{{ op.opRegistro.reDeno }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+
+                {#<div class="box box-info">#}
+                {#<div class="box-header">#}
+                {#<i class="fa fa-search"></i>#}
+
+                {#<h3 class="box-title"> Consultas </h3>#}
+                {#</div>#}
+                {#<!-- /.box-header -->#}
+
+                {#<div class="box-body">#}
+                {#<div class="input-group-btn">#}
+                {#<form id="listPresu" action="{{ path('admin_useroperator_presupuestos') }}" method="post">#}
+                {#<input name="userOperatorUsername" type="hidden" value="{{ userOperator.username }}"/>#}
+                {#<button id="presu" class="pull-left btn btn-info"><i class="fa fa-files-o"></i>#}
+                {#Ver Presupuestos#}
+                {#</button>#}
+                {#</form>#}
+                {#<form id="listFacturas" action="{{ path('admin_useroperator_billingclient') }}"#}
+                {#method="post">#}
+                {#<input name="cif" type="hidden" value="{{ userOperator.username }}"/>#}
+                {#<input name="query" type="hidden" value="billing">#}
+                {#<button id="fact" class="pull-right btn btn-info"><i class="fa fa-eur"></i>#}
+                {#Ver Facturas#}
+                {#</button>#}
+                {#</form>#}
+                {#</div>#}
+                {#</div>#}
+                {#<!-- /.box-body -->#}
+                {#</div>#}
+                <!-- /.box -->
+            </div>
+        </div>
+
+    </section><!-- /.content -->
+{% endblock %}
+{% block js %}
+    <script src="{{ asset('app/admin/js/userOperator.js') }}" type="text/javascript"></script>
+{% endblock %}

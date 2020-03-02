@@ -1,0 +1,61 @@
+{% extends '::base_simple.html.twig' %}
+
+
+
+{% block content %}
+
+ <h2> Actualizar Basic info </h2>  
+
+<button id="buttonUpdateBasicInfo" class="btn btn-primary btn-block buttonUpdateParameter" data-url="{{path('update_basic_info') }}">Guardar</button>
+
+<div id="info">
+</div>
+
+
+{% endblock %}
+
+{% block js %}
+
+<script type="text/javascript">
+	
+	$(document).ready(function(){
+
+    $("#buttonUpdateBasicInfo").click(function(){
+        
+        var url = $(this).attr("data-url");
+        
+        $.ajax({
+            url: url,
+            type: "POST",
+        data: {
+            update: 1,
+            create: 1,
+        },
+        success: function(response) {
+                        
+            if(response.type == 'success'){
+                console.table(response);
+
+                console.log('TiposCultivos - Creados: ' + response.tiposCultivos.registersCreated.length + ' Modificados: ' + response.tiposCultivos.registersUpdated.length + ' Sin alterar: ' + response.tiposCultivos.registersNotUpdated.length);
+                console.log('Cultivos - Creados: ' + response.cultivos.registersCreated.length + ' Modificados: ' + response.cultivos.registersUpdated.length + ' Sin alterar: ' + response.cultivos.registersNotUpdated.length);
+                console.log('TiposProducc - Creados: ' + response.tiposProducc.registersCreated.length + ' Modificados: ' + response.tiposProducc.registersUpdated.length + ' Sin alterar: ' + response.tiposProducc.registersNotUpdated.length);
+                console.log('ProductosG - Creados: ' + response.productosG.registersCreated.length + ' Modificados: ' + response.productosG.registersUpdated.length + ' Sin alterar: ' + response.productosG.registersNotUpdated.length);
+                console.log('Especies - Creados: ' + response.especies.registersCreated.length + ' Modificados: ' + response.especies.registersUpdated.length + ' Sin alterar: ' + response.especies.registersNotUpdated.length);
+                console.log('TiposProducto - Creados: ' + response.tiposProducto.registersCreated.length + ' Modificados: ' + response.tiposProducto.registersUpdated.length + ' Sin alterar: ' + response.tiposProducto.registersNotUpdated.length);
+
+            }
+            else{
+                console.log('algo fallo');
+
+            }
+        },
+        error: function (xhr, status) {  
+                  alert('Error desconocido ' + status); 
+        } 
+        });
+    });
+});
+
+</script>
+
+ {% endblock %}

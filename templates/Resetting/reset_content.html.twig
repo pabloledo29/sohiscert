@@ -1,0 +1,46 @@
+{% extends '::base.html.twig' %}
+{% trans_default_domain 'message' %}
+
+{% block content %}
+<div id="contain">
+
+  
+
+
+    <div id="contain2" class="login-logo center"><img id="logo" src="https://sohiscert.com/wp-content/uploads/2018/07/logo-vector-sohiscert.jpg"></div>
+        <br>&nbsp;</br>
+        <div class="center" align="center">Cambio de contraseña</div>
+        
+        <br>&nbsp;</br>
+
+        {{ form_start(form, { 'action': path('fos_user_resetting_reset', {'token': token}), 'attr': { 'class': 'fos_user_resetting_reset' } }) }}
+
+            <div class="form-group {% if form.Password.first.vars.valid==false %}has-error{% endif %}">
+                            {{ form_label(form.Password.first, 'Password: ') }}
+                            {{ form_widget(form.Password.first, {'attr': {'class': 'form-control', 'placeholder': '*******'} }) }}
+                            <div id="error_password" class="error-block"><span
+                                        class="label label-danger">{{ form.Password.first.vars.errors }}</span>
+                            </div>
+            </div>                  
+            <div class="form-group {% if form.Password.second.vars.valid==false %}has-error{% endif %}">
+                            {{ form_label(form.Password.second, 'Confirme password: ') }}
+                            {{ form_widget(form.Password.second, {'attr': {'class': 'form-control', 'placeholder': '********'} }) }}
+                            <div id="error_password" class="error-block"><span
+                                        class="label label-danger">{{ form.Password.second.vars.errors }}</span>
+                            </div>
+            </div>
+
+            <br>&nbsp;</br>
+
+            <div class="footer">
+                    <input type="submit" value="{{ 'resetting.request.submit'|trans }}" class="btn btn-primary btn-block btn-flat"/>
+            </div>
+
+        {{ form_end(form) }}
+
+</div>
+{% endblock %}
+
+
+
+

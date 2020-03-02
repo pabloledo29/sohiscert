@@ -1,0 +1,62 @@
+{% extends 'base_private.html.twig' %}
+
+
+
+{% block content %}
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-md-10">
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <h3 class="box-title">Subida de Documentación de expediente</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    {{ form_start(form, { attr: form.vars.attr|merge({ novalidate: 'novalidate' }) }) }}
+
+                    <div class="box-body">
+
+                        <div class="form-group {% if form.operator.vars.valid==false %}has-error{% endif %}">
+                            {{ form_label(form.operator, 'Número de Expediente: ') }}
+                            {{ form_widget(form.operator, {'attr': {'class': 'form-control'} }) }}
+                            <div id="error_operator" class="error-block"><span
+                                        class="label label-danger">{{ form.operator.vars.errors }}</span></div>
+                        </div>
+
+                        <div class="form-group {% if form.type.vars.valid==false %}has-error{% endif %}">
+                            {{ form_label(form.type, 'Tipo de Documento: ') }}
+                            {{ form_widget(form.type, {'attr': {'class': 'form-control'} }) }}
+                            <div id="error_type" class="error-block"><span
+                                        class="label label-danger">{{ form.type.vars.errors }}</span></div>
+                        </div>
+
+                        <div class="form-group {% if form.description.vars.valid==false %}has-error{% endif %}">
+                            {{ form_label(form.description, 'Descripción: ') }}
+                            {{ form_widget(form.description, {'attr': {'class': 'form-control'} }) }}
+                            <div id="error_description" class="error-block"><span
+                                        class="label label-danger">{{ form.description.vars.errors }}</span></div>
+                        </div>
+
+                        <div class="form-group {% if form.document.vars.valid==false %}has-error{% endif %}">
+                            {{ form_label(form.document, 'Adjuntar documento: ') }}
+                            {{ form_widget(form.document, {'attr': {'class': ''} }) }}
+                            <div id="error_type" class="error-block"><span
+                                        class="label label-danger">{{ form.document.vars.errors }}</span></div>
+                        </div>
+
+                        <div class="input-group-btn">
+                            <button id="save" class="btn btn-success"><i class="fa fa-save"></i> Enviar</button>
+                        </div>
+
+
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+{% endblock %}

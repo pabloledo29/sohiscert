@@ -1,0 +1,12 @@
+{% block subject %}
+    Bienvenido a Sohiscert.
+{% endblock %}
+
+{% block body_html %}
+    Sus datos de conexión son los siguientes:
+
+    Usuario : {{ user.username }}
+    Clave : {{ user.plainPassword }}
+
+    El e-mail configurado para su cuenta es : {{ user.email }}
+{% endblock %}

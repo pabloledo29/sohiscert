@@ -1,0 +1,107 @@
+
+.sombras2{
+-webkit-box-shadow: 10px 10px 152px -30px rgba(0,0,0,0.75);
+-moz-box-shadow: 10px 10px 152px -30px rgba(0,0,0,0.75);
+box-shadow: 10px 10px 152px -30px rgba(0,0,0,0.75);
+}
+	 
+	 #anuncio{
+	
+	 }
+	 #contain{
+	 overflow:hidden;
+		background-color:white!important;
+/*	 display:flex;
+	 justify-content:center;
+	 flex-direction:column;
+	 align-items:center;*/
+	
+	   width:650px;
+	 min-width:650px;
+	 max-width:650px;
+	 
+	   
+	 
+	   /*max-height:1185px;*/
+	   height:auto;
+	 }
+	
+	 
+	 
+	 #fondo{
+	 	 	  background-image: url("https://sohiscert.com/wp-content/uploads/2018/07/img-bg-730x1024.jpg");
+			
+			 background-size: cover;
+		width:650px;
+	 min-width:650px;
+	 max-width:650px;
+	 
+	   height:auto;
+		 padding-right:5%;
+		 padding-left:5%;
+		 
+	   padding-top:3%;
+	   padding-bottom:3%;
+	 }
+	 #mensaje{
+	 text-align: justify;
+	 text-justify: inter-word;
+	
+	 padding:5%;
+	 padding-left:10%;
+	 padding-right:10%;
+	 margin-bottom:3%;
+	 padding-bottom:3%;
+	 margin: 0;
+	 overflow: auto;
+	 height: auto;
+	 }
+	
+	#mensaje p{
+	color:grey;
+	font-weight:500;
+	
+	}
+	
+	#mensaje h1{
+	font-size:50px;
+	font-weight:500;
+	}
+	
+	 #boton1{
+	 float:left;
+	 width:35%;
+	 height:40px;
+	 background-color:#40733c;
+	 text-align:center;
+	 border-radius: 50px;
+	 color:white;
+	 font-weight:bold;
+	 }
+	 #boton2{
+	 float:right;
+	 width:35%;
+	 height:40px;
+	 background-color:#40733c;
+	 text-align:center;
+	border-radius: 50px;
+	color:white;
+	font-weight:bold;
+	 }
+	 #boton3 {
+	 width:100%;
+	 height:40px;
+	 background-color:#40733c;
+	 text-align:center;
+	color:white;
+	font-weight:bold;
+	 }
+	 #img2{
+	 width:100%;
+	 min-width:100%;
+	 max-width:100%;
+	 min-height:500px;
+	 max-height:500px;
+	 height:500px;
+	 
+	 }

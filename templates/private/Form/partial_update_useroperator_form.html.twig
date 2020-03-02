@@ -1,0 +1,68 @@
+{% extends 'base_private.html.twig' %}
+
+
+
+{% block content %}
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-md-10">
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <h3 class="box-title">Edición cliente</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    {{ form_start(form, { attr: form.vars.attr|merge({ novalidate: 'novalidate' }) }) }}
+
+                    <div class="box-body">
+
+                        {#<div class="form-group {% if form.email.vars.valid==false %}has-error{% endif %}">#}
+                            {#{{ form_label(form.email, 'Email: ') }}#}
+                            {#{{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'email@dominio.com'} }) }}#}
+                            {#<div id="error_email" class="error-block"><span#}
+                                        {#class="label label-danger">{{ form.email.vars.errors }}</span></div>#}
+                        {#</div>#}
+
+                        <div class="form-group {% if form.current_password.vars.valid==false %}has-error{% endif %}">
+                            {{ form_label(form.current_password, 'Password actual: ') }}
+                            {{ form_widget(form.current_password, {'attr': {'class': 'form-control', 'placeholder': '*******'} }) }}
+                            <div id="error_password" class="error-block"><span
+                                        class="label label-danger">{{ form.current_password.vars.errors }}</span>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group {% if form.Password.first.vars.valid==false %}has-error{% endif %}">
+                            {{ form_label(form.Password.first, 'Nueva password: ') }}
+                            {{ form_widget(form.Password.first, {'attr': {'class': 'form-control', 'placeholder': '*******'} }) }}
+                            <div id="error_password" class="error-block"><span
+                                        class="label label-danger">{{ form.Password.first.vars.errors }}</span>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group {% if form.Password.second.vars.valid==false %}has-error{% endif %}">
+                            {{ form_label(form.Password.second, 'Confirme nueva password: ') }}
+                            {{ form_widget(form.Password.second, {'attr': {'class': 'form-control', 'placeholder': '********'} }) }}
+                            <div id="error_password" class="error-block"><span
+                                        class="label label-danger">{{ form.Password.second.vars.errors }}</span>
+                            </div>
+                        </div>
+
+
+                        <div class="input-group-btn">
+                            <button id="save" class="btn btn-success"><i class="fa fa-save"></i> Añadir</button>
+                        </div>
+
+
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+{% endblock %}

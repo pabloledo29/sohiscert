@@ -1,0 +1,55 @@
+{% extends 'base_private.html.twig' %}
+
+
+
+{% block content %}
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-md-10">
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <h3 class="box-title">Formulario de Contacto</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    {{ form_start(form, { attr: form.vars.attr|merge({ novalidate: 'novalidate' }) }) }}
+
+                    <div class="box-body">
+
+
+                        <div class="form-group {% if form.contactName.vars.valid==false %}has-error{% endif %}">
+                            {{ form_label(form.contactName, 'Persona de Contacto:') }}
+                            {{ form_widget(form.contactName, {'attr': {'class': 'form-control', 'placeholder': 'Nombre de la persona que realiza la consulta'} }) }}
+                            <div id="error_operator" class="error-block"><span
+                                        class="label label-danger">{{ form.contactName.vars.errors }}</span></div>
+                        </div>
+
+                        <div class="form-group {% if form.description.vars.valid==false %}has-error{% endif %}">
+                            {{ form_label(form.description, 'Descripción: ') }}
+                            {{ form_widget(form.description, {'attr': {'class': 'form-control', 'placeholder': 'Describa brevemente el motivo de su mensaje'} }) }}
+                            <div id="error_type" class="error-block"><span
+                                        class="label label-danger">{{ form.description.vars.errors }}</span></div>
+                        </div>
+
+                        <div class="form-group {% if form.message.vars.valid==false %}has-error{% endif %}">
+                            {{ form_label(form.message, 'Mensaje: ') }}
+                            {{ form_widget(form.message, {'attr': {'class': 'form-control', 'placeholder': 'Mensaje...'} }) }}
+                            <div id="error_type" class="error-block"><span
+                                        class="label label-danger">{{ form.message.vars.errors }}</span></div>
+                        </div>
+
+                        <div class="input-group-btn">
+                            <button id="save" class="btn btn-success"><i class="fa fa-save"></i> Enviar</button>
+                        </div>
+
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+{% endblock %}

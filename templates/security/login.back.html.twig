@@ -1,0 +1,152 @@
+{% extends '::base.html.twig' %}
+
+
+
+{% block content %}
+
+
+    <!-- _________________________ Start Header _________________________ -->
+    <header id="header">
+        <div class="header_top">
+            <div class="header_top_outer">
+                <div class="header_top_inner">
+                    <div class="header_top_right">
+                        <div class="header_top_aligner"></div>
+                        <div class="social_wrap">
+                            <div class="social_wrap_inner">
+                                <ul>
+                                    <li><a href="#" class="cmsms-icon-facebook-circled-2" title="Facebook"
+                                           target="_blank"></a></li>
+                                    <li><a href="#" class="cmsms-icon-gplus-circled" title="Google+"
+                                           target="_blank"></a>
+                                    </li>
+                                    <li><a href="#" class="cmsms-icon-linkedin-circled" title="Linkedin"
+                                           target="_blank"></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="header_top_left">
+                        <div class="header_top_aligner"></div>
+                        <div class="meta_wrap">
+                            <div>
+                                CERTIFICACIÓN AGROALIMENTARIA
+                            </div>
+                            <div>
+                                <a href="mailto:sohiscert@sohiscert.com"><img
+                                            src="http://atlanticcreative.es/shc/wp-content/uploads/2015/04/sobre.png"/></a>
+                            </div>
+                            <div class="iconotelefono cmsms-icon-phone-2">00 34 955 868 051
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cl"></div>
+                </div>
+            </div>
+            <div class="header_top_but closed">
+                    <span class="cmsms_bot_arrow">
+                        <span></span>
+                    </span>
+            </div>
+        </div>
+        {#<div class="header_mid" data-height="80">#}
+        {#<div class="header_mid_outer">#}
+        {#<div class="header_mid_inner">#}
+
+        {#<div class="logo_wrap">#}
+        {#<style type="text/css">#}
+        {#.header_mid .header_mid_inner .logo_wrap {#}
+        {#width: 161px;#}
+        {#}#}
+        {#</style>#}
+        {#<a href="http://localhost/shc_entera/" title="Sohiscert" class="logo">#}
+        {#<img src="http://localhost/shc_entera/wp-content/uploads/2015/04/logo1.png"#}
+        {#alt="Sohiscert"/>#}
+
+        {#<style type="text/css">#}
+        {#.header_mid_inner .logo .logo_retina {#}
+        {#width: 161px;#}
+        {#}#}
+        {#</style>#}
+        {#<img class="logo_retina"#}
+        {#src="http://localhost/shc_entera/wp-content/uploads/2015/04/logoretina1.png"#}
+        {#alt="Sohiscert" width="161" height="40"/>#}
+        {#</a>#}
+        {#</div>#}
+
+        {#&#123;&#35;<div class="resp_nav_wrap">&#35;&#125;#}
+        {#&#123;&#35;<div class="resp_nav_wrap_inner">&#35;&#125;#}
+        {#&#123;&#35;<div class="resp_nav_content">&#35;&#125;#}
+        {#&#123;&#35;<a class="responsive_nav cmsms-icon-menu-2" href="javascript:void(0);"></a>&#35;&#125;#}
+        {#&#123;&#35;</div>&#35;&#125;#}
+        {#&#123;&#35;</div>&#35;&#125;#}
+        {#&#123;&#35;</div>&#35;&#125;#}
+
+
+        {#</div>#}
+        {#</div>#}
+        {#</div>#}
+    </header>
+    <!-- _________________________ Finish Header _________________________ -->
+
+
+
+
+
+
+    <div class="login-box">
+
+        {% for type, messages in app.session.flashbag.all() %}
+            {% for message in messages %}
+                <div class="flash-{{ type }}">
+                    <div class="form-box" id="login-box">
+                        <div class="alert alert-danger alert-dismissable">
+                            <i class="fa fa-ban"></i>
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <b>Error! </b>{{ message }}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <div class="login-logo">Intranet</div>
+
+        <div class="login-box-body" id="login-box">
+            <p class="login-box-msg">
+                {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                    {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'message') }} |
+                    <a href="{{ path('security_logout') }}">
+                        {{ 'layout.logout'|trans({}, 'message') }}
+                    </a>
+                {% else %}
+                    <a href="{{ path('security_login') }}">{{ 'layout.login'|trans({}, 'message') }}</a>
+                {% endif %}
+            </p>
+
+            <form action="{{ path("security_logout") }}" method="post">
+                <div class="form-group has-feedback">
+                    <input type="text" class="form-control" id="username" name="_username" value="{{ last_username }}"
+                           required="required" placeholder="Usuario"/>
+                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                    <input type="password" class="form-control" id="password" name="_password" required="required"
+                           placeholder="Contraseña"/>
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                </div>
+               <!-- <input type="hidden" name="_csrf_token" value="{#{{ csrf_token }}#}"> -->
+
+                <div class="footer">
+                    <input type="submit" id="_submit" name="_submit" value="Entrar"
+                           class="btn btn-primary btn-block btn-flat"/>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+
+
+
+{% endblock %}

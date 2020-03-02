@@ -1,0 +1,102 @@
+{% extends 'base_private.html.twig' %}
+{% block content %}
+
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Documentos Generales
+            <small>Documentos</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-group"></i> Documentos Generales</a></li>
+            <li class="active">Documentos</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+
+
+                <div class="box box-info">
+                    <div class="box-header">
+                        <!-- tools box -->
+                        <div class="pull-right box-tools">
+                            <button class="btn btn-danger btn-sm" data-widget="collapse" data-toggle="tooltip" title=""
+                                    data-original-title="Collapse"><i class="fa fa-minus"></i></button>
+                        </div>
+                        <!-- /. tools -->
+                        <i class="fa fa-user"></i>
+
+                        <h3 class="box-title"> Documentos Generales</h3>
+                        {% for type, messages in app.session.flashbag.all() %}
+                            {% for message in messages %}
+                                <div class="flash-{{ type }}">
+                                    <div class="form-box" id="login-box">
+                                        <div class="alert alert-success alert-dismissable">
+                                            <i class="fa fa-ban"></i>
+                                            <button type="button" class="close" data-dismiss="alert"
+                                                    aria-hidden="true">&times;</button>
+                                            <b></b>{{ message }}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-footer" style="display: block;">
+
+                    </div>
+                    <!-- /.box-footer -->
+                </div>
+                <div class="box box-info">
+                    <div class="box-header">
+                        <i class="fa fa-files-o"></i>
+
+                        <h3 class="box-title">Listado de Documentos Generales </h3>
+                    </div>
+                    <!-- /.box-header -->
+
+                    <div class="box-body">
+                        {% if filelist is defined and filelist|length > 0 %}
+                            <table id="listoperators" class="table">
+                                <thead>
+                                <tr>
+                                    <th>Documento</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for key,doc in filelist %}
+                                    <tr>
+                                        <td>
+                                            <form action="{{ path('useroperator_generaldoc_show') }}"
+                                                  method="POST">
+                                                <input type="hidden" value="{{ doc }}" name="path"/>
+                                                <i class="fa fa-floppy-o"></i>
+                                                <a href="#"
+                                                   onclick="$(this).closest('form').submit()"> {{ key }}</a>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <div class="callout callout-info">
+                                <h4></h4>
+
+                                <p>No hay documentos disponibles para mostrar.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+
+    </section><!-- /.content -->
+{% endblock %}

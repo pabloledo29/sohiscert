@@ -1,0 +1,21 @@
+{% extends '::base_simple.html.twig' %}
+
+
+
+{% block content %}
+
+{% if errormsg is defined %}
+
+	{{ errormsg }}
+
+{% else %}
+ 
+
+
+	<p>{{prueba}}</p>
+
+
+{% endif %}
+
+
+{% endblock %}

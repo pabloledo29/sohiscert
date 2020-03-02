@@ -1,0 +1,26 @@
+{% extends '::base_simple.html.twig' %}
+
+
+
+{% block content %}
+ 
+ <h2> Registers Created </h2>  
+
+{% for registerC in registersCreated %}
+
+<p>{{ registerC.id }} - {{ registerC.codigo }} </p>
+
+{% endfor %}
+
+</br>
+
+<h2> Registers Update </h2>
+
+{% for registerU in registersUpdated %}
+
+<p>{{ registerU.id }} - {{ registerU.codigo }} </p>
+
+{% endfor %}
+
+
+{% endblock %}

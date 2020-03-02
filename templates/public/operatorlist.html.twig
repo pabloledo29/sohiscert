@@ -1,0 +1,41 @@
+{% extends '::base_simple.html.twig' %}
+
+
+
+{% block content %}
+
+
+{% if errormsg is defined %}
+
+	{{ errormsg }}
+
+{% else %}
+ 
+	 <h2> Operators Created </h2>  
+
+	{% for operatorC in operatorsCreated %}
+
+	<p>{{ operatorC }}</p>
+
+	{% endfor %}
+
+	</br>
+
+	<h2> Operators Update </h2>
+
+	{% for operatorU in operatorsUpdated %}
+
+	<p>{{ operatorU.id }} - {{ operatorU.codigo }} - {{ operatorU.opDenoop }} - {{ operatorU.opPbcl }}</p>
+
+	{% endfor %}
+
+{% endif %}
+
+    
+	<h1> {{ prueba }} </h1>
+	{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+    	<p>Logueado como: {{ app.user.username }}</p>
+	{% endif %}
+
+
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'base_simple.html.twig' %}
+
+{% block content %}
+
+{#{{ ld(userOperators) }}#}
+
+    {# total items count #}
+    {#<div class="count">#}
+        {#{{ pagination.getTotalItemCount }}#}
+    {#</div>#}
+    {#<table>#}
+        {#<tr>#}
+            {#&#123;&#35; sorting of properties based on query components &#35;&#125;#}
+            {#<th>{{ knp_pagination_sortable(pagination, 'Id', 'u.id') }}</th>#}
+            {#<th{% if pagination.isSorted('u.username') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Title', 'u.username') }}</th>#}
+            {#&#123;&#35;<th>{{ knp_pagination_sortable(pagination, 'Release', ['a.date', 'a.time']) }}</th>&#35;&#125;#}
+        {#</tr>#}
+
+        {#&#123;&#35; table body &#35;&#125;#}
+        {#{% for userOperator in pagination %}#}
+            {#<tr {% if loop.index is odd %}class="color"{% endif %}>#}
+                {#<td>{{ userOperator.id }}</td>#}
+                {#<td>{{ userOperator.userName }}</td>#}
+                {#&#123;&#35;<td>{{ article.date | date('Y-m-d') }}, {{ article.time | date('H:i:s') }}</td>&#35;&#125;#}
+            {#</tr>#}
+        {#{% endfor %}#}
+    {#</table>#}
+    {#&#123;&#35; display navigation &#35;&#125;#}
+    {#<div class="navigation">#}
+        {#{{ knp_pagination_render(pagination) }}#}
+    {#</div>#}
+    Ok.
+
+{% endblock %}

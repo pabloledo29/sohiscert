@@ -1,0 +1,14 @@
+{% block subject %}
+    Formulario de Contacto.
+{% endblock %}
+
+{% block body_html %}
+    Se ha enviado el siguiente mensaje:
+
+    Persona de contacto : {{ contactForm.contactName }}
+    Descripción : {{ contactForm.description }}
+
+    Mensaje: {{ contactForm.message }}
+
+    El e-mail configurado para su cuenta es : {{ user.email }}
+{% endblock %}

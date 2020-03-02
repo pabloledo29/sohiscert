@@ -1,0 +1,20 @@
+{% extends '::base.html.twig' %}
+
+
+
+{% block content %}
+  <!-- Main content -->
+  <section class="content">
+
+    <div class="error-page">
+      <h2 class="headline text-yellow"> 404</h2>
+      <div class="error-content">
+        <h3><i class="fa fa-warning text-yellow"></i> Oh! Página no encontrada.</h3>
+        <p>
+          No pudimos encontrar la página que estabas buscando.
+          Mientras tanto, puede volver a <a href="{{ path('index') }}">la página inicial</a>.
+        </p>
+      </div><!-- /.error-content -->
+    </div><!-- /.error-page -->
+  </section><!-- /.content -->
+{% endblock %}

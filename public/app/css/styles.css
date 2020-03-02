@@ -1,0 +1,87 @@
+@import url(http://fonts.googleapis.com/css?family=Oxygen);
+
+
+.box-info{
+	font-family: 'Oxygen', sans-serif;
+}
+.table tbody tr:nth-child(odd) {
+    color: #8CBC9F !important;	
+    text-decoration: none !important;
+}
+.table tbody tr:nth-child(even) {
+    color: black !important;	
+    text-decoration: none !important;
+}
+
+.table tbody tr:nth-child(odd) td a{
+	color: #8CBC9F !important;
+	text-decoration: none !important;
+}
+.table tbody tr:nth-child(even) td a{
+	color: black !important;
+	text-decoration: none !important;
+}
+#listoperators{
+	display: none;
+}
+#errorSearch{
+	color: red;
+}
+#successSearchInfo, #errorSearch{
+	display: none;
+	padding-bottom: 2%;
+}
+#successSearchInfo{
+	color: #979ca4;
+}
+.buscador{
+	display: block; 
+	margin-top:22%;
+}
+th{
+	text-transform: uppercase;
+}
+td, td a{
+	font-size: 13px;
+}
+tr td:nth-child(2n) a,tr td:nth-child(3n) a{ 
+	text-transform: capitalize;
+}
+.formulario{
+	padding-left: 15px !important;
+}
+.btn_buscar{
+	background-color:#8CBC9F;
+	border-radius: 2em;
+	width:55%;
+	border-color:#8CBC9F;
+}
+.separador{
+	clear: both;
+	height: 20px;
+}
+.tarjeta{
+	width:50%;
+	margin-left: 25%;
+	border: 1px solid #8CBC9F;
+	padding: 1em;
+	border-radius: 1em;
+}
+.titulo_ficha{
+	color: #8CBC9F;
+	margin-left: 25%;
+}
+.titulo_abajo{
+	padding-bottom: 3%;
+}
+.box-body{
+	font-family: 'Oxygen', sans-serif;
+}
+.btn_volver{
+	margin-top: 1%;
+	margin-left: 25%;
+	background-color: #8CBC9F;
+    border-radius: 2em;
+    width: 80px;
+    border-color: #8CBC9F;
+}

@@ -1,0 +1,29 @@
+{% extends '::base_simple.html.twig' %}
+
+
+
+{% block content %}
+
+{% if errormsg is defined %}
+
+	{{ errormsg }}
+
+{% else %}
+ 
+	 <h2> RelantionshipRegisters List </h2>  
+
+	{% for rlregister in allRelationshipRegisters %}
+
+	<p>{{ rlregister.rlSreg }}</p>
+
+	{% endfor %}
+
+
+
+	</br>
+
+
+{% endif %}
+
+
+{% endblock %}

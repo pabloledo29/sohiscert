@@ -1,0 +1,98 @@
+{% extends '::base_simple.html.twig' %}
+
+
+{% block content %}
+
+
+    <div class="box box-info">
+        <div class="formulario col-xs-4">
+            <div class="box-header">
+                <!-- tools box -->
+                <div class="pull-right box-tools">
+                </div>
+                <!-- /. tools -->
+
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body no-padding buscador">
+                <div class="row">
+                    <div class="col-md-12" style="margin-bottom: 5px;">
+                        <form role="form" action="{{ path('public_operator_search_result') }}" method="POST"
+                              id="searchForm">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label> CIF</label>
+                                    <input type="text" id="opCif" name="opCif" class="form-control" placeholder="CIF"
+                                           value="">
+                                </div>
+                                <div class="form-group">
+                                    <label> Denominación</label>
+                                    <input type="text" id="opDenoop" name="opDenoop" class="form-control"
+                                           placeholder="Denominación" value="">
+                                </div>
+                                <div class="form-group">
+                                    <label> Productos</label>
+                                    <select id="idPro" name="idPro" class="form-control">
+                                        <option value=""></option>
+                                        {% for producto in productos %}
+                                            <option value="{{ producto }}">{{ producto }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <p class="text-left">
+                                    <button class="btn btn-success btn_buscar " id="searchOperators"><i
+                                                class="fa fa-search"> &nbsp;Buscar</i></button>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.box-body -->
+        </div>
+    </div>
+    <div class="box box-info col-xs-8">
+        <div class="box-header">
+            <h3 class="box-title" style="color:#8CBC9F">Listado de Operadores</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="table-responsive">
+            <div class="box-footer" style="display: block;">
+                <div id="successSearchInfo" class="callout callout-success">
+                    <span id="successSearchInfoMessage"></span>
+                </div>
+                <div id="errorSearch" class="callout callout-danger">
+                    <span id="errorSearchInfoMessage"></span>
+                </div>
+            </div>
+            <!-- /.box-footer -->
+            <table id="listoperators" class="table">
+                <thead>
+                <tr>
+                    <th>Nº Operador</th>
+                    <th>Alcance</th>
+                    <th>Denominación</th>
+                    <th>CIF</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <!-- /.box-body -->
+    </div><!-- /.box -->
+
+
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="{{ asset('app/public/searchOperators.js') }}"></script>
+    {% if errormsg is defined %}
+
+        <script type="text/javascript">
+            $('#errorSearch').show("slow").text("{{errormsg}}");
+        </script>
+
+    {% endif %}
+{% endblock %}
