@@ -11,6 +11,12 @@
 
 ###> symfony/phpunit-bridge ###
 .phpunit
+.phpunit.xml.dist
 .phpunit.result.cache
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
+
+symfony.lock
+pruebas.sh
+composer.lock
+phpinfo.php
