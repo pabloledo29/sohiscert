@@ -34,7 +34,7 @@ parameters:
     plantilla_cartas: 'F155-02'
     #uploaddir: '/../../../app/logs/update/'
     path_update_logs: '%kernel.root_dir%/logs/update/'
-    web_root: 'http://intranet-clientesshc.e4ff.pro-eu-west-1.openshiftapps.com/web/'
+    web_root: 'http://intranet-clientesshc.e4ff.pro-eu-west-1.openshiftapps.com/public/'
     repo_dir: '/opt/app-root/src/' #'http://intranet-clientesshc.e4ff.pro-eu-west-1.openshiftapps.com'
     email_from_address: 'noreply@sohiscert.com'
     email_from_name: 'Area Privada Sohiscert'
@@ -114,7 +114,8 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-    App\GsBase\GsBase:
+    gsbase:
+        class: App\GsBase\GsBase
         arguments: ["%gsbase_host%","%gsbase_port%","%gsbase_user%","%gsbase_pass%","%gsbase_corp%","%gsbase_apl%","%gsbase_ex%","%gsbase_accion%","%gsbase_ventana%"]
        
     App\Command\GsBaseConnectCommand:

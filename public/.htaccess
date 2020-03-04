@@ -4,7 +4,6 @@
 # start page (path "/") because otherwise Apache will apply the rewriting rules
 # to each configured DirectoryIndex file (e.g. index.php, index.html, index.pl).
 DirectoryIndex index.php
-php_value memory_limit 512
 # Disabling MultiViews prevents unwanted negotiation, e.g. "/app" should not resolve
 # to the front controller "/app.php" but be rewritten to "/app.php/app".
 <IfModule mod_negotiation.c>

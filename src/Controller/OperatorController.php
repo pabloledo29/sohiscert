@@ -359,12 +359,13 @@ class OperatorController extends AbstractController
         $opReg = $request->getCurrentRequest('opreg');
         $prodDeno = $request->getCurrentRequest('idprod'); // Se recibe el nombre del producto
         $opAct = $request->getCurrentRequest('idAct');
-        
+       
         $em = $this->getDoctrine()->getManager();
 
         if (strlen($opCIF) < 8 && strlen($opDenoop) < 5 &&
             strlen($opReg) < 1 && strlen($prodDeno) < 1 && strlen($opAct) < 1
         ) {
+            
             $allProducts = $this->loadAllProducts();
             $allActivities = $this->loadAllActivities();
         
@@ -420,23 +421,24 @@ class OperatorController extends AbstractController
      */
     public function adminShowOperator($id)
     {
+        
         $em = $this->getDoctrine()->getManager();
 
         $operator = $em->getRepository(Operator::class)->find($id);
         $normativas = null;
         $info = null;
         //info a mostrar:
-        $relation = $em->getDoctrine()->getRepository(RelationshipRegister::class)->getRelationByRegSreg(
+        $relation = $em->getRepository(RelationshipRegister::class)->getRelationByRegSreg(
             $operator->getOpReg(),
             $operator->getOpSreg()
         );
         
      
-        $normativas = $em->getDoctrine()->getRepository(Operator::class)->getOperatorNormative($operator);
+        $normativas = $em->getRepository(Operator::class)->getOperatorNormative($operator);
 
         $info = $relation;
         $estado = $this->showState($operator->getOpEst());
-        $updateLog = $em->getDoctrine()->getManager()->getRepository(UpdateLog::class)->getLastUpdateLog();
+        $updateLog = $em->getRepository(UpdateLog::class)->getLastUpdateLog();
       
         return $this->render(
             'admin/useroperator_expediente.html.twig',

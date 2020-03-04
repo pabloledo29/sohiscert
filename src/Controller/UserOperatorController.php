@@ -295,21 +295,24 @@ class UserOperatorController extends AbstractController
         $user = $this->getDoctrine()->getManager(); 
         $username = $request->request->get('username');
         $email = $request->request->get('email');
-
+        
         /** @var UserOperator $userOperator */
         $userOperator = new UserOperator();
-        $userOperator->setUsername($username);
-        $userOperator->setEmail($email);
+        if($username != null)
+            $userOperator->setUsername($username);
+        if($email != null)
+            $userOperator->setEmail($email);
+        
        $response = new Response();
        $dispatcher = $this->get('event_dispatcher');
        $event = new ResponseEvent($kernel,$request,0,$response);
       
         $dispatcher->dispatch('registration_initalize', $event);
         
-        //if (null === $event->getResponse()) {
+        if (null === $event->getResponse()) {
 
-            //return $event->getResponse();
-        //}
+            return $event->getResponse();
+        }
         
         
         
@@ -344,16 +347,16 @@ class UserOperatorController extends AbstractController
             
            $dispatcher->dispatch('registration_success', $event);
 
-
+           
             $em->persist($userOperator);
             $em->flush();
            // $userManager->updateUser($userOperator, true);
 
-            $request->get('session')->getFlashBag()->add('msg', 'El cliente ha sido guardado correctamente');
+            $request->getSession()->getFlashBag()->add('msg', 'El cliente ha sido guardado correctamente');
 
             /*Alternativa al tratamiento dado ante completado del registros proporcionada por FosUser*/
                 $dispatcher->dispatch(
-                    'registration_complete',new FilterUserResponseEvent($userOperator, $request, $response));
+                    'registration_complete',new ResponseEvent($kernel, $request, 1,$response));
 
             return $this->redirect($this->generateUrl('admin_operator_list_nouser'));
         }
@@ -385,19 +388,23 @@ class UserOperatorController extends AbstractController
         }
 
         $form = $this->createForm(RegistrationUserOperatorType::class, $user);
+       
+       
         $form->remove('username');
+       
         $form->handleRequest($request);
-
+       
         if ($form->isSubmitted() && $form->isValid()) {
-
+             
             $userManager = $em;
             $userManager->persist($user);
             $userManager->flush();
 
-            $request->get('session')->getFlashBag()->add('msg', 'El usuario ha sido modificado correctamente');
+            $request->getSession()->getFlashBag()->add('msg', 'El usuario ha sido modificado correctamente');
 
             return $this->redirect($this->generateUrl('admin_useroperator_list'));
         }
+        
 
         return $this->render('admin/form/update_user_operator.form.html.twig', array('form' => $form->createView()));
     }

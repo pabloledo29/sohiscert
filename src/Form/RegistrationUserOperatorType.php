@@ -12,7 +12,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
+use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Class RegistrationUserOperatorType
  * @package App\Form
@@ -25,16 +28,25 @@ class RegistrationUserOperatorType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('Password',PasswordType::class,array('required'=>true))
+        $builder
             ->add('username', HiddenType::class)
             ->add('email')
+            ->add('password',RepeatedType::class,['type'=>PasswordType::class,
+                                                          'required'=>false,
+                                                          'empty_data' => '@novale@',
+                                                          'invalid_message' => 'Las contraseñas deben coincidir',
+                                                          'options' => ['attr' => [ 'class' => 'form-control','placeholder'=> '*******']],
+                                                          'first_options'  => ['label' =>'Password:'],
+                                                          'second_options' => ['label' => 'Confirmar password:']])
             ->add(
                 'enabled',
                 ChoiceType::class,
                 array(
                     'choices' => array(true => 'Sí', false => 'No'),
                 )
-            );
+            )
+           
+            ->getForm();
     }
 
     public function configureOptions(OptionsResolver $resolver)

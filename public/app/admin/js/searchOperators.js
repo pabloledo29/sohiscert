@@ -17,6 +17,7 @@ $(document).ready(function () {
 
         if ($('#opCif').val().length > 8 || $('#opDenoop').val().length > 4 ||
             $('#idPro').val().length > 0 || $('#idAct').val().length > 0) {
+                
             $.ajax({
                 url: url,
                 type: "POST",
@@ -58,6 +59,7 @@ $(document).ready(function () {
                     }
                 },
                 error: function (xhr, status) {
+                    
                     alert('Error desconocido ' + status);
                 }
             });
@@ -72,6 +74,7 @@ $(document).ready(function () {
     });
 
     function fillTable(response) {
+        console.log(response);
         var content;
         var url = $('#searchForm').attr("action");
         var url2 = $('#listoperators').data('client');

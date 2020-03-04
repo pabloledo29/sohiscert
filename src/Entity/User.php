@@ -79,7 +79,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
     /**
      * @ORM\Column(type="boolean", nullable=false)
      */
-    private $expired;
+    private $expired = 0;
 
     /**
      * @ORM\Column(name="expires_at",type="datetime", nullable=true)
@@ -132,14 +132,14 @@ use Symfony\Component\Security\Core\User\UserInterface;
     /**
      * @ORM\Column(name="credentials_expired",type="boolean", nullable=false)
      */
-    private $credentials_expired;
+    private $credentials_expired=0;
     
     
 
     /**
      * @ORM\Column(type="boolean", name="locked", nullable=false)
      */
-    private $locked;
+    private $locked=0;
   
     /**
     * @ORM\Column(type="string", name="confirmation_token", length=255, nullable=true, columnDefinition="VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL")
@@ -148,6 +148,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
     public function __construct()
     {
+        $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         //parent::__construct();
         // your own logic
     }
@@ -343,12 +344,17 @@ use Symfony\Component\Security\Core\User\UserInterface;
     {
         if( is_string($username)){
             $this->username=$username;
+            $this->username_canonical=$username;
         }else{
             $this->username="";
         }
         
         return $this;
     }
+
+    
+
+    
 
     public function getEmail(): string
     {
@@ -360,8 +366,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
     {   
         if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
             $this->email = "";
+            $this->emailCanonical = $email;
         }else{
             $this->email = $email;
+            $this->emailCanonical = $email;
+
         }
         return $this;
     }

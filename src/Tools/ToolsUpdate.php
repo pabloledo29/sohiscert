@@ -172,7 +172,7 @@ class ToolsUpdate extends AbstractController
 
         // Eliminar entidades
         //$opproductospae = $em->getRepository('AppBundle:ProductosPae')->findByPipNop($operator->getOpNop());
-        $em = $this->entityManager;
+        $em = $this->getDoctrine()->getManager();
         $em->getConnection()->getConfiguration()->setSQLLogger(null);
 
         /** @var CultivosRec2 $culrec2 */
@@ -1277,7 +1277,7 @@ class ToolsUpdate extends AbstractController
         $registersCreated = 0;
         $registersUpdated = 0;
 
-        $em = $this->entityManager;
+        $em = $this->getDoctrine()->getManager();
         $em->getConnection()->getConfiguration()->setSQLLogger(null);
 
         foreach ($em->getEventManager()->getListeners() as $event => $listeners) {

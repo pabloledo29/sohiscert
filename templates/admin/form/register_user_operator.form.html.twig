@@ -12,14 +12,14 @@
                     <div class="box-header">
                         <h3 class="box-title">Registro cliente</h3>
                     </div><!-- /.box-header -->
-                    {{ form_start(form, { attr: form.vars.attr|merge({ novalidate: 'novalidate' }) }) }}
+                    {{ form_start(form, { attr: form.vars.attr|merge({ }) }) }}
 
                     <div class="box-body">
 
                         <div class="form-group {% if form.username.vars.valid==false %}has-error{% endif %}">
                             {{ form_label(form.username, 'Usuario: ') }}
                             {{ form.vars.value.username }}
-                            {{ form_widget(form.username, {'attr': {'class': 'form-control', 'placeholder': 'CIF de Usuario' } }) }}
+                            
                             <div id="error_username" class="error-block"><span class="label label-danger" >{{ form.username.vars.errors }}</span></div>
                         </div>
 
@@ -30,20 +30,22 @@
                         </div>
 
 
-                        {% if form.Password is defined %}
-                            <div class="form-group {% if form.Password.first.vars.valid==false %}has-error{% endif %}">
-                                {{ form_label(form.Password.first, 'Password: ') }}
-                                {{ form_widget(form.Password.first, {'attr': {'class': 'form-control', 'placeholder': '*******'} }) }}
-                                <div id="error_password" class="error-block"><span class="label label-danger" >{{ form.Password.first.vars.errors }}</span></div>
+                        <div class="form-group {% if form.password.first.vars.valid==false %}has-error{% endif %}">
+                            {{form_row(form.password.first)}}
+
+                            <div id="error_password" class="error-block"><span
+                                        class="label label-danger">{{ form_errors(form.password.first) }}</span>
                             </div>
-                        {% endif %}
-                        {% if form.Password is defined %}
-                        <div class="form-group {% if form.Password.second.vars.valid==false %}has-error{% endif %}">
-                            {{ form_label(form.Password.second, 'Confirme password: ') }}
-                            {{ form_widget(form.Password.second, {'attr': {'class': 'form-control', 'placeholder': '********'} }) }}
-                            <div id="error_password" class="error-block"><span class="label label-danger" >{{ form.Password.second.vars.errors }}</span></div>
                         </div>
-                        {% endif %}
+            
+
+                        <div class="form-group {% if form.password.second.vars.valid==false %}has-error{% endif %}">
+                            {{form_row(form.password.second)}}
+
+                            <div id="error_password" class="error-block"><span
+                                        class="label label-danger">{{ form_errors(form.password.second) }}</span>
+                            </div>
+                        </div>
 
                         <div class="form-group {% if form.enabled.vars.valid==false %}has-error{% endif %}">
                             {{ form_label(form.enabled, 'Habilitado: ') }}
@@ -52,9 +54,9 @@
                         </div>
 
                         <div class="input-group-btn">
-                            <button id="save" class="btn btn-success"><i class="fa fa-save"></i> Añadir</button>
+                            <button id="save" name="save" class="btn btn-success"><i class="fa fa-save"></i> Añadir</button>
                         </div>
-
+                        
                         
                     </div>    
                     {{ form_end(form) }}

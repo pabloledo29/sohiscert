@@ -927,11 +927,12 @@ class DocExpController extends AbstractController
         }
         /** @var User $user */
         $user = $this->getUser();
-
-        if ($user->hasRole('ROLE_ADMIN') || $user->hasRole('ROLE_SUPER_ADMIN')) {
+        
+        if ($user->hasRole($user->getRoles()[0])) {
             /** @var UserAdmin $user */
             return $this->userAdminGeneralDocs();
         } else {
+            
             /** @var UserOperator $user */
             return $this->useroperatorGeneralDocs($user);
         }
@@ -945,6 +946,7 @@ class DocExpController extends AbstractController
     private function userAdminGeneralDocs()
     {
         $rootpath = $this->container->getParameter('web_root');
+    
         $docPath = 'docs/';
         $path = $rootpath . $docPath;
 
@@ -995,7 +997,7 @@ class DocExpController extends AbstractController
      */
     private function useroperatorGeneralDocs(UserOperator $user)
     {
-        $rootpath = $this->getParameter('web_root');
+        $rootpath = $this->container->getParameter('web_root');
         $docPath = 'docs/';
         $path = $rootpath . $docPath;
 
