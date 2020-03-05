@@ -5,7 +5,7 @@
  */
 
 namespace App\Controller;
-
+use Symfony\Component\HttpFoundation\RequestStack;
 use App\Entity\UpdateLog;
 use App\Entity\CultivosRec;
 use App\Entity\Ganaderias;
@@ -13,7 +13,6 @@ use App\Entity\Industrias;
 use App\Entity\Productos;
 use App\Entity\ProductosG;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Operator;
@@ -332,7 +331,7 @@ class OperatorController extends AbstractController
         if (!$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
             throw $this->createAccessDeniedException();
         }
-        
+       
         return $this->render('admin/searchoperator.html.twig', array(
             'productos' => $this->loadAllProducts(), 'actividades' => $this->loadAllActivities()
         ));
@@ -359,16 +358,15 @@ class OperatorController extends AbstractController
         $opReg = $request->getCurrentRequest('opreg');
         $prodDeno = $request->getCurrentRequest('idprod'); // Se recibe el nombre del producto
         $opAct = $request->getCurrentRequest('idAct');
-       
+
         $em = $this->getDoctrine()->getManager();
 
         if (strlen($opCIF) < 8 && strlen($opDenoop) < 5 &&
             strlen($opReg) < 1 && strlen($prodDeno) < 1 && strlen($opAct) < 1
         ) {
-            
             $allProducts = $this->loadAllProducts();
             $allActivities = $this->loadAllActivities();
-        
+
             return $this->render(
                 'admin/searchoperator.html.twig',
                 array(
@@ -427,19 +425,18 @@ class OperatorController extends AbstractController
         $operator = $em->getRepository(Operator::class)->find($id);
         $normativas = null;
         $info = null;
+
         //info a mostrar:
-        $relation = $em->getRepository(RelationshipRegister::class)->getRelationByRegSreg(
+        $relation = $this->getDoctrine()->getRepository(RelationshipRegister::class)->getRelationByRegSreg(
             $operator->getOpReg(),
             $operator->getOpSreg()
         );
-        
-     
-        $normativas = $em->getRepository(Operator::class)->getOperatorNormative($operator);
+        $normativas = $this->getDoctrine()->getRepository(Operator::class)->getOperatorNormative($operator);
 
         $info = $relation;
         $estado = $this->showState($operator->getOpEst());
-        $updateLog = $em->getRepository(UpdateLog::class)->getLastUpdateLog();
-      
+        $updateLog = $this->getDoctrine()->getManager()->getRepository(UpdateLog::class)->getLastUpdateLog();
+
         return $this->render(
             'admin/useroperator_expediente.html.twig',
             array(
