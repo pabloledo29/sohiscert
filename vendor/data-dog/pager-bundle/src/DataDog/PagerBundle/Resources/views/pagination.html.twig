@@ -1,0 +1,81 @@
+{% trans_default_domain "pager" %}
+{% set pager = pagination %}
+
+<ul class="pagination">
+  {% if pager.pagination.previous is defined %}
+    <li>
+      <a href="{{ path(pager.route, pager.query|merge({"page": pager.pagination.previous})) }}">&laquo;</a>
+    </li>
+  {% else %}
+    <li class="disabled">
+      <span>&laquo;</span>
+    </li>
+  {% endif %}
+
+  {% if pager.pagination.startPage > 1 %}
+    <li>
+      <a href="{{ path(pager.route, pager.query|merge({"page": 1})) }}">1</a>
+    </li>
+    {% if pager.pagination.startPage == 3 %}
+      <li>
+        <a href="{{ path(pager.route, pager.query|merge({"page": 2})) }}">2</a>
+      </li>
+    {% elseif pager.pagination.startPage != 2 %}
+      <li class="disabled">
+        <span>&hellip;</span>
+      </li>
+    {% endif %}
+  {% endif %}
+
+  {% for page in pager.pagination.pagesInRange %}
+    {% if page != pager.pagination.current %}
+      <li>
+        <a href="{{ path(pager.route, pager.query|merge({"page": page})) }}">{{ page }}</a>
+      </li>
+    {% else %}
+      <li class="active">
+        <span>{{ page }}</span>
+      </li>
+    {% endif %}
+  {% endfor %}
+
+  {% if pager.pagination.pageCount > pager.pagination.endPage %}
+    {% if pager.pagination.pageCount > (pager.pagination.endPage + 1) %}
+      {% if pager.pagination.pageCount > (pager.pagination.endPage + 2) %}
+        <li class="disabled">
+          <span>&hellip;</span>
+        </li>
+      {% else %}
+        <li>
+          <a href="{{ path(pager.route, pager.query|merge({"page": (pager.pagination.pageCount - 1)})) }}">{{ pager.pagination.pageCount -1 }}</a>
+        </li>
+      {% endif %}
+    {% endif %}
+    <li>
+      <a href="{{ path(pager.route, pager.query|merge({"page": pager.pagination.pageCount})) }}">{{ pager.pagination.pageCount }}</a>
+    </li>
+  {% endif %}
+
+  {% if pager.pagination.next is defined %}
+  <li>
+    <a href="{{ path(pager.route, pager.query|merge({"page": pager.pagination.next})) }}">&raquo;</a>
+  </li>
+  {% else %}
+  <li class="disabled">
+    <span>&raquo;</span>
+  </li>
+  {% endif %}
+</ul>
+
+<p class="pagination-summary">
+  {% if pager.total == 0 %}
+    {% trans %}no_records_found{% endtrans %}
+  {% else %}
+    {% set record_from = pager.itemsPerPage*(pager.currentPage-1) + 1 %}
+    {% set record_to = min(pager.itemsPerPage + pager.itemsPerPage*(pager.currentPage-1), pager.total) %}
+    {% set total_pages = pager.total %}
+
+    {% trans with {'FROM': record_from, 'TO': record_to, 'TOTAL_PAGES': total_pages} %}showing_records{% endtrans %}
+  {% endif %}
+</p>
+<div class="clearfix"></div>

@@ -1,0 +1,7 @@
+{% set class = "fa-sort" %}
+{% if className %}
+  {% set class = class ~ "-" ~ className %}
+{% endif %}
+<a href="{{ uri }}">
+  {{ title }} <i class="fa {{ class }}"></i>
+</a>

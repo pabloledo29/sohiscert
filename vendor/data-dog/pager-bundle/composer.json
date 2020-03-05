@@ -1,0 +1,62 @@
+{
+  "name": "data-dog/pager-bundle",
+  "type": "symfony-bundle",
+  "description": "Paginator bundle for symfony2 and doctrine orm, allows customization with filters and sorters",
+  "keywords": ["pager", "paginator", "pagination", "symfony2", "bundle", "doctrine", "orm"],
+  "homepage": "http://github.com/DATA-DOG/DataDogPagerBundle",
+  "license": "MIT",
+
+  "authors": [
+    {
+      "name": "DataDog Team",
+      "homepage": "http://datadog.lt"
+    },
+    {
+      "name": "Symfony2 Community",
+      "homepage": "http://github.com/DATA-DOG/DataDogPagerBundle/contributors"
+    }
+  ],
+
+  "require": {
+    "php": ">=5.4.0",
+    "symfony/framework-bundle": "2.3 - 5.0",
+    "doctrine/orm": "~2.3",
+    "twig/twig": "~1.34|~2.0|~3.0"
+  },
+
+  "require-dev": {
+    "ext-pdo": "*",
+    "ext-pdo_sqlite": "*",
+
+    "symfony/symfony": "~3.3.0",
+    "doctrine/orm": "~2.5.0",
+    "doctrine/doctrine-bundle": "^1.6",
+    "doctrine/doctrine-fixtures-bundle": "^2.3",
+    "sensio/framework-extra-bundle": "^3.0.9",
+    "fzaninotto/faker": "~1.5",
+
+    "phpunit/phpunit": "~6.0.0"
+  },
+
+  "autoload": {
+    "psr-4": {
+      "DataDog\\PagerBundle\\": "src/DataDog/PagerBundle"
+    }
+  },
+
+  "autoload-dev": {
+    "psr-4": {
+      "": "example/src/"
+    }
+  },
+
+  "archive": {
+    "exclude": ["vendor", "tests", "*phpunit.xml", ".travis.yml", "example", "Makefile", "screenshots"]
+  },
+
+  "extra": {
+    "branch-alias": {
+      "dev-master": "0.1.x-dev"
+    }
+  }
+}
