@@ -18,9 +18,12 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class UpdateProductosCommand extends Command
 {
     protected static $defaultName = 'gsbase:update:productos';
-    public function __construct(string $path_update_logs)
+    public function __construct(string $path_update_logs, $toolsupdate,$gsbase,$gsbasexml)
     {
-        $this->path_update_logs=$path_update_logs;
+        $this->path_update_logs= $path_update_logs;
+        $this->toolsupdate = $toolsupdate;
+        $this->gsbase =$gsbase;
+        $this->gsbase =$gsbasexml;
          // you *must* call the parent constructor
          parent::__construct();
     }
