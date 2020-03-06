@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Update de la db diario.
-sed -i 's/memory_limit = 128M/memory_limit = 512M/g' /etc/opt/rh/rh-php56/php.ini;
-sed -i 's/max_execution_time = 300/max_execution_time = 1200/g' /etc/opt/rh/rh-php56/php.ini;
+sed -i 's/memory_limit = 128M/memory_limit = 512M/g' /etc/opt/rh/rh-php72/php.ini;
+sed -i 's/max_execution_time = 300/max_execution_time = 1200/g' /etc/opt/rh/rh-php72/php.ini;
 if [ `TZ=Europe/Madrid date +%H` == "01" ]
 then
     ${OPENSHIFT_HOMEDIR}/app-root/runtime/bin/php ${OPENSHIFT_REPO_DIR}/htdocs/app/console gsbase:connect

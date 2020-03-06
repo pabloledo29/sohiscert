@@ -6,8 +6,8 @@
 #/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console swiftmailer:spool:send --message-limit=24 --env=prod
 #/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console swiftmailer:spool:send --message-limit=24 --env=dev
 
-sed -i 's/memory_limit = 128M/memory_limit = 512M/g' /etc/opt/rh/rh-php56/php.ini;
-sed -i 's/max_execution_time = 300/max_execution_time = 1200/g' /etc/opt/rh/rh-php56/php.ini;
+sed -i 's/memory_limit = 128M/memory_limit = 512M/g' /etc/opt/rh/rh-php72/php.ini;
+sed -i 's/max_execution_time = 300/max_execution_time = 1200/g' /etc/opt/rh/rh-php72/php.ini;
 
 set -e 
 set -o pipefail
