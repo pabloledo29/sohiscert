@@ -150,8 +150,8 @@ services:
     
     App\Command\EmaildocanaSendCommand:
         tags: { name: 'console.command', command: "email:emaildocana:send" }
-     string $ftp_user_pass, $em
-        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@doctrine.orm.entity_manager']   
+        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@doctrine.orm.entity_manager']
+
     App\Command\EmaildoccarSendCommand:
         tags: { name: 'console.command', command: "email:emaildoccar:send" }
 
