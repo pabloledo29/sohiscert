@@ -33,7 +33,7 @@ parameters:
         comunicacion: 'Comunicación incidencias ayudas agroambientales'
     plantilla_cartas: 'F155-02'
     #uploaddir: '/../../../app/logs/update/'
-    path_update_logs: '%kernel.root_dir%/logs/update/'
+    path_update_logs: 'var/log/update/'
     web_root: 'http://intranet-clientesshc.e4ff.pro-eu-west-1.openshiftapps.com/public/'
     repo_dir: '/opt/app-root/src/' #'http://intranet-clientesshc.e4ff.pro-eu-west-1.openshiftapps.com'
     email_from_address: 'noreply@sohiscert.com'
@@ -117,7 +117,12 @@ services:
     gsbase:
         class: App\GsBase\GsBase
         arguments: ["%gsbase_host%","%gsbase_port%","%gsbase_user%","%gsbase_pass%","%gsbase_corp%","%gsbase_apl%","%gsbase_ex%","%gsbase_accion%","%gsbase_ventana%"]
-       
+
+    toolsupdate:
+        class: App\Tools\ToolsUpdate
+        arguments: ["@service_container"]
+
+
     App\Command\GsBaseConnectCommand:
         tags:
             - { name: 'console.command', command: 'gsbase:connect'}
@@ -173,6 +178,7 @@ services:
 
     App\Command\UpdateCultivosRec2Command:
         tags: { name: 'console.command', command: "gsbase:update:cultivosrec2" }
+        arguments: ['%path_update_logs','@toolsupdate']
 
     App\Command\UpdateContactCommand:
         tags: { name: 'console.command', command: "gsbase:update:contact" }
@@ -205,10 +211,8 @@ services:
         class: App\GsBase\GsBaseXml
         arguments: ["@service_container"]
 
-    toolsupdate:
-        class: App\Tools\ToolsUpdate
-        arguments: ["@service_container"]
-    
+
+
     app.ftp.service:
         class: App\Ftp\Ftp
         arguments: [ '%nop_conversion%' ]

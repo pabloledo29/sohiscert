@@ -1195,7 +1195,7 @@ EOF
         # Archivo LOG con la Información Procesada
         #
         # Definimos la Ruta
-        $urlBase = $em->getParameter('path_update_logs');
+        $urlBase = $this->path_update_logs;
 
         # Definimos Variable de Fin de Ejecución 
         $end = date("Y-m-d H:i:s");

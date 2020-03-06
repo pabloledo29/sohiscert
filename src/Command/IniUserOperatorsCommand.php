@@ -16,8 +16,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class IniUserOperatorsCommand extends Command
 {
     protected static $defaultName = 'app:ini:batch:useroperators';
-    public function __construct()
+    public function __construct(string $path_update_logs)
     {
+        $this->path_update_logs= $path_update_logs;
          // you *must* call the parent constructor
          parent::__construct();
     }
@@ -60,9 +61,9 @@ class IniUserOperatorsCommand extends Command
 
                 $userOperator->setUsername($candidate['opCif']);
                 $userOperator->setEmail($candidate['opEma']);
-                $userOperator->setPlainPassword($password); // Password para pruebas.
+                $userOperator->setPassword($password); // Password para pruebas.
                 $userOperator->setEnabled(true);
-                $userOperator->addRole('ROLE_USER');
+                $userOperator->addRoles('ROLE_USER');
 //                dump($userOperator);
                 try {
                     $userManager->updateUser($userOperator, true);
@@ -80,7 +81,7 @@ class IniUserOperatorsCommand extends Command
         }
 
         /** Generación de fichero CSV */
-        $urlBase = $em->getParameter('path_update_logs');
+        $urlBase = $this->path_update_logs;
         $path_file = $urlBase . 'update/users_' . date("d_m_Y") . '.log';
         #$path_file = __DIR__ . '/../../../app/logs/update/users_' . date("d_m_Y") . '.csv';
 

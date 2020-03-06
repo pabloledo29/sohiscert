@@ -1,4 +1,0 @@
-RewriteEngine on
-RewriteCond %{HTTP_HOST} intranet2-intranetshc.e4ff.pro-eu-west-1.openshiftapps.com [NC, OC]
-RewriteCond %{REQUEST_URI} ^/$
-RewriteRule ^(.*)$ /public/$1 [L]

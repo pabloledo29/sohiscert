@@ -27,8 +27,9 @@ use Symfony\Component\Console\Command\Command;
 class UpdateDateDocumentsOperatorsClientCommand extends Command
 {
     protected static $defaultName = 'gsbase:update:datedocuments';
-    public function __construct()
+    public function __construct(string $path_update_logs)
     {
+        $this->path_update_logs= $path_update_logs;
          // you *must* call the parent constructor
          parent::__construct();
     }
@@ -364,7 +365,7 @@ class UpdateDateDocumentsOperatorsClientCommand extends Command
 
 
 
-        $urlBase = $em->getParameter('path_update_logs');
+        $urlBase = $this->path_update_logs;
 
         if ($updateDateDoc > 0 || $documentsCreated > 0) {
             $end = new \DateTime('now');

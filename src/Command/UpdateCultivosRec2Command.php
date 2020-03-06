@@ -7,6 +7,7 @@
 namespace App\Command;
 
 use App\Entity\Operator;
+
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -19,8 +20,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class UpdateCultivosRec2Command extends Command
 {
     protected static $defaultName = 'gsbase:update:cultivosrec2';
-    public function __construct()
+    public function __construct(string $path_update_logs)
     {
+        $this->path_update_logs= $path_update_logs;
          // you *must* call the parent constructor
          parent::__construct();
     }
@@ -40,7 +42,7 @@ class UpdateCultivosRec2Command extends Command
     {
         $updateStart = date("H:i:s") . substr((string)microtime(), 1, 6);
         $em = new ContainerBuilder();
-        $urlBase = $em->getParameter('path_update_logs');
+        $urlBase = $this->path_update_logs;
         $path_file = $urlBase . 'update_' . date("d_m_Y") . '.log';
         #$path_file = __DIR__ . '/../../../app/logs/update/update_' . date("d_m_Y") . '.log';
         $log = fopen($path_file, "a+");
@@ -54,9 +56,9 @@ class UpdateCultivosRec2Command extends Command
             fwrite($log, "NO\n");
         }
 
-        $toolsupdate = $em->container->get('toolsupdate');
-        $gsbase = $em->container->get('gsbase');
-        $gsbasexml = $em->container->get('gsbasexml');
+        $toolsupdate = $em->get('toolsupdate');
+        $gsbase = $em->get('gsbase');
+        $gsbasexml = $em->get('gsbasexml');
 
         if ($gsbase->getGsbase() == null) {
             $output->writeln("No se ha podido conectar con el servidor de GsBase");

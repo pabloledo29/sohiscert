@@ -28,13 +28,14 @@ use Symfony\Component\Finder\Finder;
 class EmailUpdateDocConcluCommand extends Command 
 {
     protected static $defaultName = 'email:emaildoccon:send';
-    public function __construct()
+    public function __construct(string $path_update_logs,string $ftp_server, string $ftp_user_name, string $ftp_user_pass)
     {
-        $this->ftp = new Finder();
+        $this->path_update_logs = $path_update_logs;
+        $this->finder = new Finder();
          # Datos Conexión FTP para poder Obtener Fecha Modificación de los Archivos
-        $this->ftp_server = 'sohiscert3.ddns.cyberoam.com';
-        $this->ftp_user_name = 'userftp1';
-        $this->ftp_user_pass = 'AtlIntTec.12';
+        $this->ftp_server = $ftp_server;
+        $this->ftp_user_name = $ftp_user_name;
+        $this->ftp_user_pass = $ftp_user_pass;
          // you *must* call the parent constructor
          parent::__construct();
     }
@@ -124,7 +125,7 @@ EOF
         $em = new ContainerBuilder();
 
         #MNN Creamos el archivo update de reccorridos de archivos de certificados
-        $urlBase = $em->getParameter('path_update_logs');
+        $urlBase = $this->path_update_logs;
 
         # Definimos Variable de Fin de Ejecución 
         $end = date("Y-m-d H:i:s");
@@ -682,7 +683,7 @@ EOF
         # Archivo LOG con la Información Procesada
         #
         # Definimos la Ruta
-        $urlBase = $em->getParameter('path_update_logs');
+        $urlBase = $this->path_update_logs;
 
         # Definimos Variable de Fin de Ejecución 
         $end = date("Y-m-d H:i:s");

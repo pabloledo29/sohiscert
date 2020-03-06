@@ -18,8 +18,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class UpdateProductosCommand extends Command
 {
     protected static $defaultName = 'gsbase:update:productos';
-    public function __construct()
+    public function __construct(string $path_update_logs)
     {
+        $this->path_update_logs=$path_update_logs;
          // you *must* call the parent constructor
          parent::__construct();
     }
@@ -39,7 +40,7 @@ class UpdateProductosCommand extends Command
     {
         $updateStart = date("H:i:s") . substr((string)microtime(), 1, 6);
         $em = new ContainerBuilder();
-        $urlBase = $em->getParameter('path_update_logs');
+        $urlBase = $this->path_update_logs;
         $path_file = $urlBase . 'update_' . date("d_m_Y") . '.log';
         #$path_file = __DIR__ . '/../../../app/logs/update/update_' . date("d_m_Y") . '.log';
         $log = fopen($path_file, "a+");
