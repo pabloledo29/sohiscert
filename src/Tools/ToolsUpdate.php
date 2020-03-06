@@ -652,17 +652,17 @@ class ToolsUpdate extends AbstractController
                     $register->setPtTi($registerXml->getPtTi());
                     //$register->setPtEst($registerXml->getPtEst());
                     $register->setPtTipoCultivo(
-                        $em->getRepository('AppBundle:TiposCultivos')->findOneBy(
+                        $em->getRepository(TiposCultivos::class)->findOneBy(
                             array('codigo' => $registerXml->getPtTc())
                         )
                     );
                     $register->setPtTiposProducto(
-                        $em->getRepository('AppBundle:TiposProducto')->findOneBy(
+                        $em->getRepository(TiposProducto::class)->findOneBy(
                             array('codigo' => $registerXml->getPtTi())
                         )
                     );
                     $register->setPtCultivos(
-                        $em->getRepository('AppBundle:Cultivos')->findOneBy(array('codigo' => $registerXml->getPtCu()))
+                        $em->getRepository(Cultivos::class)->findOneBy(array('codigo' => $registerXml->getPtCu()))
                     );
                     $em->flush();
                     $em->clear();
@@ -709,14 +709,14 @@ class ToolsUpdate extends AbstractController
 
         /** @var TiposCultivos $registerXml */
         foreach ($registers->Registro as $registerXml) {
-            $register = $this->getDoctrine()->getRepository('AppBundle:TiposCultivos')->findOneBy(
+            $register = $this->getDoctrine()->getRepository(TiposCultivos::class)->findOneBy(
                 array('codigo' => $registerXml->getCodigo())
             );
             if (!$register) {
                 $em->persist($registerXml);
                 array_push($registersCreated, $registerXml);
             } else {
-                $updateEntity = $em->getRepository('AppBundle:TiposCultivos')->compareEntities($registerXml, $register);
+                $updateEntity = $em->getRepository(TiposCultivos::class)->compareEntities($registerXml, $register);
                 if ($updateEntity) {
                     $register->setTcDeno($registerXml->getTcDeno());
                     $register->setTcRoae($registerXml->getTcRoae());
@@ -765,14 +765,14 @@ class ToolsUpdate extends AbstractController
 
         /** @var TiposProducto $registerXml */
         foreach ($registers->Registro as $registerXml) {
-            $register = $this->getDoctrine()->getRepository('AppBundle:TiposProducto')->findOneBy(
+            $register = $this->getDoctrine()->getRepository(TiposProducto::class)->findOneBy(
                 array('codigo' => $registerXml->getCodigo())
             );
             if (!$register) {
                 $em->persist($registerXml);
                 array_push($registersCreated, $registerXml);
             } else {
-                $updateEntity = $em->getRepository('AppBundle:TiposProducto')->compareEntities($registerXml, $register);
+                $updateEntity = $em->getRepository(TiposProducto::class)->compareEntities($registerXml, $register);
                 if ($updateEntity) {
                     $register->setTiDeno($registerXml->getTiDeno());
                     array_push($registersUpdated, $register);
@@ -817,14 +817,14 @@ class ToolsUpdate extends AbstractController
 
         /** @var Cultivos $registerXml */
         foreach ($registers->Registro as $registerXml) {
-            $register = $this->getDoctrine()->getRepository('AppBundle:Cultivos')->findOneBy(
+            $register = $this->getDoctrine()->getRepository(Cultivos::class)->findOneBy(
                 array('codigo' => $registerXml->getCodigo())
             );
             if (!$register) {
                 $em->persist($registerXml);
                 array_push($registersCreated, $registerXml);
             } else {
-                $updateEntity = $em->getRepository('AppBundle:Cultivos')->compareEntities($registerXml, $register);
+                $updateEntity = $em->getRepository(Cultivos::class)->compareEntities($registerXml, $register);
                 if ($updateEntity) {
                     $register->setCuDeno($registerXml->getCuDeno());
                     $register->setCuRoae($registerXml->getCuRoae());
@@ -871,14 +871,14 @@ class ToolsUpdate extends AbstractController
 
         /** @var Especies $registerXml */
         foreach ($registers->Registro as $registerXml) {
-            $register = $this->getDoctrine()->getRepository('AppBundle:Especies')->findOneBy(
+            $register = $this->getDoctrine()->getRepository(Especies::class)->findOneBy(
                 array('codigo' => $registerXml->getCodigo())
             );
             if (!$register) {
                 $em->persist($registerXml);
                 array_push($registersCreated, $registerXml);
             } else {
-                $updateEntity = $em->getRepository('AppBundle:Especies')->compareEntities($registerXml, $register);
+                $updateEntity = $em->getRepository(Especies::class)->compareEntities($registerXml, $register);
                 if ($updateEntity) {
                     $register->setEsDeno($registerXml->getEsDeno());
                     array_push($registersUpdated, $register);
@@ -924,7 +924,7 @@ class ToolsUpdate extends AbstractController
 
         /** @var ProductosG $registerXml */
         foreach ($registers->Registro as $registerXml) {
-            $register = $this->getDoctrine()->getRepository('AppBundle:ProductosG')->findOneBy(
+            $register = $this->getDoctrine()->getRepository(ProductosG::class)->findOneBy(
                 array('codigo' => $registerXml->getCodigo())
             );
             if (!$register) {
@@ -933,7 +933,7 @@ class ToolsUpdate extends AbstractController
                 array_push($registersCreated, $registerXml);
 
             } else {
-                $updateEntity = $em->getRepository('AppBundle:ProductosG')->compareEntities($registerXml, $register);
+                $updateEntity = $em->getRepository(ProductosG::class)->compareEntities($registerXml, $register);
                 if ($updateEntity) {
                     $register->setPnDeno($registerXml->getPnDeno());
                     array_push($registersUpdated, $register);
@@ -979,14 +979,14 @@ class ToolsUpdate extends AbstractController
 
         /** @var TiposProducc $registerXml */
         foreach ($registers->Registro as $registerXml) {
-            $register = $this->getDoctrine()->getRepository('AppBundle:TiposProducc')->findOneBy(
+            $register = $this->getDoctrine()->getRepository(TiposProducc::class)->findOneBy(
                 array('codigo' => $registerXml->getCodigo())
             );
             if (!$register) {
                 $em->persist($registerXml);
                 array_push($registersCreated, $registerXml);
             } else {
-                $updateEntity = $em->getRepository('AppBundle:TiposProducc')->compareEntities($registerXml, $register);
+                $updateEntity = $em->getRepository(TiposProducc::class)->compareEntities($registerXml, $register);
                 if ($updateEntity) {
                     $register->setTpnDeno($registerXml->getTpnDeno());
                     array_push($registersUpdated, $register);
@@ -1032,14 +1032,14 @@ class ToolsUpdate extends AbstractController
 
         /** @var ActividadesI $registerXml */
         foreach ($registers->Registro as $registerXml) {
-            $register = $this->getDoctrine()->getRepository('AppBundle:ActividadesI')->findOneBy(
+            $register = $this->getDoctrine()->getRepository(ActividadesI::class)->findOneBy(
                 array('codigo' => $registerXml->getCodigo())
             );
             if (!$register) {
                 $em->persist($registerXml);
                 array_push($registersCreated, $registerXml);
             } else {
-                $updateEntity = $em->getRepository('AppBundle:ActividadesI')->compareEntities($registerXml, $register);
+                $updateEntity = $em->getRepository(ActividadesI::class)->compareEntities($registerXml, $register);
                 if ($updateEntity) {
                     $register->setAinDeno($registerXml->getAinDeno());
                     array_push($registersUpdated, $register);
@@ -1098,7 +1098,7 @@ class ToolsUpdate extends AbstractController
         /** @var Industrias $in */
         foreach ($industriasxml->Registro as $in) {
 
-            $reg = $this->getDoctrine()->getRepository('AppBundle:Industrias')->findBy(
+            $reg = $this->getDoctrine()->getRepository(Industrias::class)->findBy(
                 array('codigo' => $in->getCodigo(), 'inNop' => $operator->getOpNop(), 'inAct' => $in->getInAct())
             );
 
@@ -1110,7 +1110,7 @@ class ToolsUpdate extends AbstractController
                 );
                 $in->setInNop($operator->getOpNop());
 
-                $inActividadesI = $em->getRepository('AppBundle:ActividadesI')->findOneBy(
+                $inActividadesI = $em->getRepository(ActividadesI::class)->findOneBy(
                     array('codigo' => $in->getInAct())
                 );
                 $in->setInActividadI($inActividadesI);
@@ -1119,9 +1119,9 @@ class ToolsUpdate extends AbstractController
                 $registersCreated++;
 
             } else {
-                $entity = $em->getRepository('AppBundle:Industrias')->find($reg[0]->getId());
+                $entity = $em->getRepository(Industrias::class)->find($reg[0]->getId());
 
-                if ($em->getRepository('AppBundle:Industrias')->compareEntities($in, $entity)) {
+                if ($em->getRepository(Industrias::class)->compareEntities($in, $entity)) {
 
                     $entity->setInAct($in->getInAct());
                     $entity->setInSit($in->getInSit());
@@ -1132,7 +1132,7 @@ class ToolsUpdate extends AbstractController
                     $entity->setInPob($in->getInPob());
 
                     $entity->setInActividadI(
-                        $em->getRepository('AppBundle:ActividadesI')->findOneBy(array('codigo' => $in->getInAct()))
+                        $em->getRepository(ActividadesI::class)->findOneBy(array('codigo' => $in->getInAct()))
                     );
                     //print_r($entity->getId().'/n');
                     $em->flush();
@@ -1197,22 +1197,22 @@ class ToolsUpdate extends AbstractController
         /** @var CultivosRec $culrec */
         foreach ($cultivosrecxml->Registro as $culrec) {
             $registersProcessed++;
-            $entity = $em->getRepository('AppBundle:CultivosRec')->findOneBy(
+            $entity = $em->getRepository(CultivosRec::class)->findOneBy(
                 array('codigo' => $culrec->getCodigo())
             );
             if (!$entity) {
                 $culrec->setRuOperator(
                     $em->getRepository(Operator::class)->findOneBy(array('opNop' => $operator->getOpNop()))
                 );
-                $ruTiposProducto = $em->getRepository('AppBundle:TiposProducto')->findOneBy(
+                $ruTiposProducto = $em->getRepository(TiposProducto::class)->findOneBy(
                     array('codigo' => $culrec->getRuTppr())
                 );
                 $culrec->setRuTiposProducto($ruTiposProducto);
-                $ruProducto = $em->getRepository('AppBundle:Productos')->findOneBy(
+                $ruProducto = $em->getRepository(Productos::class)->findOneBy(
                     array('codigo' => $culrec->getRuPro())
                 );
                 $culrec->setRuProducto($ruProducto);
-                $ruCultivos = $em->getRepository('AppBundle:Cultivos')->findOneBy(
+                $ruCultivos = $em->getRepository(Cultivos::class)->findOneBy(
                     array('codigo' => $culrec->getRuCul())
                 );
                 $culrec->setRuCultivos($ruCultivos);
@@ -1221,7 +1221,7 @@ class ToolsUpdate extends AbstractController
                 $registersCreated++;
 
             } else {
-                if ($em->getRepository('AppBundle:CultivosRec')->compareEntities($culrec, $entity)) {
+                if ($em->getRepository(CultivosRec::class)->compareEntities($culrec, $entity)) {
                     $entity->setRuTppr($culrec->getRuTppr());
                     $entity->setRuPro($culrec->getRuPro());
                     $entity->setRuSitr($culrec->getRuSitr());
@@ -1229,15 +1229,15 @@ class ToolsUpdate extends AbstractController
                     $entity->setRuAct($culrec->getRuAct());
                     $entity->setRuRc($culrec->getRuRc());
                     $entity->setRuTiposProducto(
-                        $em->getRepository('AppBundle:TiposProducto')->findOneBy(
+                        $em->getRepository(TiposProducto::class)->findOneBy(
                             array('codigo' => $culrec->getRuTppr())
                         )
                     );
                     $entity->setRuProducto(
-                        $em->getRepository('AppBundle:Productos')->findOneBy(array('codigo' => $culrec->getRuPro()))
+                        $em->getRepository(Productos::class)->findOneBy(array('codigo' => $culrec->getRuPro()))
                     );
                     $entity->setRuCultivos(
-                        $em->getRepository('AppBundle:Cultivos')->findOneBy(array('codigo' => $culrec->getRuCul()))
+                        $em->getRepository(Cultivos::class)->findOneBy(array('codigo' => $culrec->getRuCul()))
                     );
                     $registersUpdated++;
                 }
@@ -1291,7 +1291,7 @@ class ToolsUpdate extends AbstractController
             $registersProcessed++;
 
             /** @var Client $entity */
-            $entity = $em->getRepository('AppBundle:Client')->findOneBy(array('codigo' => $client->getCodigo()));
+            $entity = $em->getRepository(Client::class)->findOneBy(array('codigo' => $client->getCodigo()));
             if (!$entity) {
                 $em->persist($client);
                 $registersCreated++;
@@ -1300,7 +1300,7 @@ class ToolsUpdate extends AbstractController
                 $em->flush();
 
             } else {
-                if ($em->getRepository('AppBundle:Client')->compareEntities($client, $entity)) {
+                if ($em->getRepository(Client::class)->compareEntities($client, $entity)) {
                     $entity->setClDeno($client->getClDeno());
                     $entity->setClCif($client->getClCif());
                     $entity->setClCdp($client->getClCdp());
@@ -1360,7 +1360,7 @@ class ToolsUpdate extends AbstractController
         foreach ($clientxml->Registro as $clientXml) {
             $registersProcessed++;
 
-            if ($em->getRepository('AppBundle:Client')->compareEntities($client, $clientXml)) {
+            if ($em->getRepository(Client::class)->compareEntities($client, $clientXml)) {
                 $client->setClDeno($clientXml->getClDeno());
                 $client->setClCif($clientXml->getClCif());
                 $client->setClCdp($clientXml->getClCdp());
@@ -1416,7 +1416,7 @@ class ToolsUpdate extends AbstractController
             /** @var Contact $contact */
             $contact = $contacts->first();
             /** @var Contact $entity */
-            $entity = $em->getRepository('AppBundle:Contact')->findOneBy(array('codigo' => $contact->getCodigo()));
+            $entity = $em->getRepository(Contact::class)->findOneBy(array('codigo' => $contact->getCodigo()));
             if (!$entity) {
                 $em->persist($contact);
                 $em->flush();
@@ -1424,7 +1424,7 @@ class ToolsUpdate extends AbstractController
                 $em->flush();
                 $registersCreated++;
             } else {
-                if ($em->getRepository('AppBundle:Contact')->compareEntities($contact, $entity)) {
+                if ($em->getRepository(Contact::class)->compareEntities($contact, $entity)) {
                     $entity->setCnDeno($contact->getCnDeno());
                     $entity->setCnApe1($contact->getCnApe1());
                     $entity->setCnApe2($contact->getCnApe2());
