@@ -35,7 +35,7 @@ parameters:
     #uploaddir: '/../../../app/logs/update/'
     path_update_logs: 'var/log/update/'
     web_root: 'http://intranet-pre-intranetshc.e4ff.pro-eu-west-1.openshiftapps.com/public/'
-    repo_dir: '/opt/app-root/src/' #'http://intranet-clientesshc.e4ff.pro-eu-west-1.openshiftapps.com'
+    repo_dir: 'opt/app-root/src/' #'http://intranet-clientesshc.e4ff.pro-eu-west-1.openshiftapps.com'
     email_from_address: 'noreply@sohiscert.com'
     email_from_name: 'Area Privada Sohiscert'
     mail_to: 'sohiscert@sohiscert.com'

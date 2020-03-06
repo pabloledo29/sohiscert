@@ -248,7 +248,7 @@ class FtpController extends AbstractController
         dump($filename);
 
         $path_file = $this->getParameter('repo_dir') . // Path server
-            'web/docs/temp/' . date("d_m_Y_h_i_s") . $filename;
+            'public/docs/temp/' . date("d_m_Y_h_i_s") . $filename;
 
         $doc = $ftpWrapper->get($path_file, $path);
         if (!$doc) {

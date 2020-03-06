@@ -115,7 +115,7 @@ class Mailer
         <head>
             <title>Area Privada Sohiscert</title>
         </head>
-        <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" bgcolor="" background="http://intranet-clientesshc.e4ff.pro-eu-west-1.openshiftapps.com/web/images/img-bg-730x1024.jpg">
+        <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" bgcolor="" background="http://intranet-pre-intranetshc.e4ff.pro-eu-west-1.openshiftapps.com/public/ images/img-bg-730x1024.jpg">
             <table align="center" border="0" width="650" cellpadding="0" cellspacing="0">
                 <tr height="50">
                     <td width="100">
@@ -133,7 +133,7 @@ class Mailer
                         &nbsp;
                     </td>
                     <td>
-                        <img id="img2" class="center" valign="bottom" src="http://intranet-clientesshc.e4ff.pro-eu-west-1.openshiftapps.com/web/images/img-header-1024x691.jpg" width="550" height="400" >
+                        <img id="img2" class="center" valign="bottom" src="http://intranet-pre-intranetshc.e4ff.pro-eu-west-1.openshiftapps.com/public/ images/img-header-1024x691.jpg" width="550" height="400" >
                     </td>
                     <td width="100">
                         &nbsp;
@@ -155,7 +155,7 @@ class Mailer
                         &nbsp;
                     </td>
                     <td bgcolor="white" width="500" align="justify">
-                        <img id="txtwelcomeshc" valign="bottom" src="http://intranet-clientesshc.e4ff.pro-eu-west-1.openshiftapps.com/web/images/txtwelcomeshc.png" width="550" height="610" >
+                        <img id="txtwelcomeshc" valign="bottom" src="http://intranet-pre-intranetshc.e4ff.pro-eu-west-1.openshiftapps.com/public/ images/txtwelcomeshc.png" width="550" height="610" >
                     </td>
                     <td width="100">
                         &nbsp;
@@ -202,7 +202,7 @@ class Mailer
                     <td bgcolor="white" width="500" align="justify" style="padding-left:5%; padding-right:5%;">                 
                         <table width="100%" height="40px">
                             <tr>
-                                <td align="center"><a target="_blank" href="http://intranet-clientesshc.e4ff.pro-eu-west-1.openshiftapps.com/web/docs/ManualdeUsuarioWebAreaClientesSohiscert.pdf" style="text-decoration:none"><font size="3px" face="arial" color="#40733c" weight="500"><b> DESCARGAR EL MANUAL DE USUARIO</b></font></a></td>
+                                <td align="center"><a target="_blank" href="http://intranet-pre-intranetshc.e4ff.pro-eu-west-1.openshiftapps.com/public/docs/ManualdeUsuarioWebAreaClientesSohiscert.pdf" style="text-decoration:none"><font size="3px" face="arial" color="#40733c" weight="500"><b> DESCARGAR EL MANUAL DE USUARIO</b></font></a></td>
                             </tr>
                             <tr>
                                 <td bgcolor="white" border="white">&nbsp;</td>
@@ -298,7 +298,7 @@ class Mailer
         <head>
             <title>Area Privada Sohiscert</title>
         </head>
-        <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" bgcolor="" background="http://intranet-clientesshc.e4ff.pro-eu-west-1.openshiftapps.com/web/images/img-bg-730x1024.jpg">
+        <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" bgcolor="" background="http://intranet-pre-intranetshc.e4ff.pro-eu-west-1.openshiftapps.com/public/ images/img-bg-730x1024.jpg">
             <table align="center" border="0" width="650" cellpadding="0" cellspacing="0">
                 <tr height="50">
                     <td width="100">
@@ -316,7 +316,7 @@ class Mailer
                         &nbsp;
                     </td>
                     <td>
-                        <img id="img2" class="center" valign="bottom" src="http://intranet-clientesshc.e4ff.pro-eu-west-1.openshiftapps.com/web/images/img-header-1024x691.jpg" width="550" height="400" >
+                        <img id="img2" class="center" valign="bottom" src="http://intranet-pre-intranetshc.e4ff.pro-eu-west-1.openshiftapps.com/public/ images/img-header-1024x691.jpg" width="550" height="400" >
                     </td>
                     <td width="100">
                         &nbsp;
@@ -338,7 +338,7 @@ class Mailer
                         &nbsp;
                     </td>
                     <td bgcolor="white" width="500" align="justify">
-                        <img id="txtwelcomeshc" valign="bottom" src="http://intranet-clientesshc.e4ff.pro-eu-west-1.openshiftapps.com/web/images/txtwelcomeshc.png" width="550" height="610" >
+                        <img id="txtwelcomeshc" valign="bottom" src="http://intranet-pre-intranetshc.e4ff.pro-eu-west-1.openshiftapps.com/public/ images/txtwelcomeshc.png" width="550" height="610" >
                     </td>
                     <td width="100">
                         &nbsp;
@@ -385,7 +385,7 @@ class Mailer
                     <td bgcolor="white" width="500" align="justify" style="padding-left:5%; padding-right:5%;">                 
                         <table width="100%" height="40px">
                             <tr>
-                                <td align="center"><a target="_blank" href="http://intranet-clientesshc.e4ff.pro-eu-west-1.openshiftapps.com/web/docs/ManualdeUsuarioWebAreaClientesSohiscert.pdf" style="text-decoration:none"><font size="3px" face="arial" color="#40733c" weight="500"><b> DESCARGAR EL MANUAL DE USUARIO</b></font></a></td>
+                                <td align="center"><a target="_blank" href="http://intranet-pre-intranetshc.e4ff.pro-eu-west-1.openshiftapps.com/public/docs/ManualdeUsuarioWebAreaClientesSohiscert.pdf" style="text-decoration:none"><font size="3px" face="arial" color="#40733c" weight="500"><b> DESCARGAR EL MANUAL DE USUARIO</b></font></a></td>
                             </tr>
                             <tr>
                                 <td bgcolor="white" border="white">&nbsp;</td>
@@ -632,7 +632,7 @@ class Mailer
         <head>
             <title>Area Privada Sohiscert - Restaurar Contraseña Usuario</title>
         </head>
-        <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" bgcolor="" background="http://intranet-clientesshc.e4ff.pro-eu-west-1.openshiftapps.com/web/images/img-bg-730x1024.jpg">
+        <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" bgcolor="" background="http://intranet-pre-intranetshc.e4ff.pro-eu-west-1.openshiftapps.com/public/ images/img-bg-730x1024.jpg">
             <table align="center" border="0" width="650" cellpadding="0" cellspacing="0">
                 <tr height="50">
                     <td width="100">
@@ -650,7 +650,7 @@ class Mailer
                         &nbsp;
                     </td>
                     <td>
-                        <img id="img2" class="center" valign="bottom" src="http://intranet-clientesshc.e4ff.pro-eu-west-1.openshiftapps.com/web/images/img-header-1024x691.jpg" width="550" height="400" >
+                        <img id="img2" class="center" valign="bottom" src="http://intranet-pre-intranetshc.e4ff.pro-eu-west-1.openshiftapps.com/public/ images/img-header-1024x691.jpg" width="550" height="400" >
                     </td>
                     <td width="100">
                         &nbsp;
@@ -672,7 +672,7 @@ class Mailer
                         &nbsp;
                     </td>
                     <td bgcolor="white" width="500" align="justify">
-                        <img id="txtwelcomeshc" valign="bottom" src="http://intranet-clientesshc.e4ff.pro-eu-west-1.openshiftapps.com/web/images/txtwelcomeshc.png" width="550" height="610" >
+                        <img id="txtwelcomeshc" valign="bottom" src="http://intranet-pre-intranetshc.e4ff.pro-eu-west-1.openshiftapps.com/public/ images/txtwelcomeshc.png" width="550" height="610" >
                     </td>
                     <td width="100">
                         &nbsp;
@@ -719,7 +719,7 @@ class Mailer
                     <td bgcolor="white" width="500" align="justify" style="padding-left:5%; padding-right:5%;">                 
                         <table bgcolor="#40733c" width="100%" height="40px">
                             <tr>
-                                <td align="center"><a target="_blank" href="http://intranet-clientesshc.e4ff.pro-eu-west-1.openshiftapps.com/web/docs/ManualdeUsuarioWebAreaClientesSohiscert.pdf" style="text-decoration:none"><font size="3px" face="arial" color="white" weight="500"> DESCARGAR EL MANUAL DE USUARIO</font></a></td>
+                                <td align="center"><a target="_blank" href="http://intranet-pre-intranetshc.e4ff.pro-eu-west-1.openshiftapps.com/public/docs/ManualdeUsuarioWebAreaClientesSohiscert.pdf" style="text-decoration:none"><font size="3px" face="arial" color="white" weight="500"> DESCARGAR EL MANUAL DE USUARIO</font></a></td>
                             </tr>
                         </table>
                         <br>

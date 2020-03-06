@@ -131,7 +131,7 @@ class UserAdminController extends AbstractController
         if (!$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
             throw $this->createAccessDeniedException();
         }
-
+        
         $em = $this->getDoctrine()->getManager();
         $toolsupdate = $this->container->get('toolsupdate');
         $gsbase = $this->container->get('gsbase');

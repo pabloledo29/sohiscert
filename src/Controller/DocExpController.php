@@ -612,8 +612,8 @@ class DocExpController extends AbstractController
         $ftp_user_pass=$this->container->getParameter('ftp_user_pass');
         $ftp_user_name=$this->container->getParameter('ftp_user_name');
         $path_file = $this->container->getParameter('repo_dir') .
-            'web/docs/temp/' . date("d_m_Y_h_i_s") . $filename;
-            $finder->files()->in("ftp://$ftp_user_name:$ftp_user_pass@$ftp_server")->name($path_file . $doc->getFilePath());
+       $path_file = 'public/docs/temp/' . date("d_m_Y_h_i_s") . $filename;
+            $finder->files()->in("ftp://$ftp_user_name:$ftp_user_pass@$ftp_server/".$path_file)->name( $doc->getFilePath());
             if($this->finder->hasResults()){
                 $success=$this->finder->files();
             }else{

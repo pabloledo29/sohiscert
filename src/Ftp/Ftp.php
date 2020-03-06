@@ -96,11 +96,12 @@ class Ftp
      */
     public function retrieveFilesFromClients(array $clients, $query)
     {
-        $path = $this->determineQueryType($query);
+        $path = "/".$this->determineQueryType($query);
         $clientList = [];
 
         foreach ($clients as $client) {
             $this->finder->files()->in("ftp://$this->ftp_user_name:$this->ftp_user_pass@$this->ftp_server")->name($path . $client['codigo']);
+           
             if ($this->finder->hasResults()) {
                 array_push($clientList, $client['codigo']);
             }
@@ -133,7 +134,7 @@ class Ftp
         $path = $this->determineQueryType($query);
 
 
-        $fileList = $this->finder->files()->in("ftp://$this->ftp_user_name:$this->ftp_user_pass@$this->ftp_server")->name($path.'*.pdf');
+        $fileList = $this->finder->files()->in("ftp://$this->ftp_user_name:$this->ftp_user_pass@$this->ftp_server/"."$path")->name('*.pdf');
         $list = [];
         foreach ($fileList as $file) {
             $list[substr(strrchr($file, '/'), 1)] = $file;
@@ -191,7 +192,8 @@ class Ftp
         
         # Establecemos Conexión 
         //$conn_id = ftp_connect($ftp_server); 
-        $this->finder->files()->in("ftp://$this->ftp_user_name:$this->ftp_user_pass@$this->ftp_server")->name('*.pdf');
+        $this->finder->files()->in("ftp://$this->ftp_user_name:$this->ftp_user_pass@$this->ftp_server/")->name('*.pdf');
+
         if ($this->finder->hasResults()) {
             
         # Inciamos Sesión
