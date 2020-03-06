@@ -10,7 +10,7 @@ function enviar_emails_poco_a_poco()
 				while
 					: ${start=$send}
 					#Contar documetos
-					/opt/rh/rh-php56/root/usr/bin/php /opt/app-root/src/app/console swiftmailer:spool:send --message-limit=24 --env=prod
+					/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console swiftmailer:spool:send --message-limit=24 --env=prod
 					send=$(find $DIRECTORIO -maxdepth 1 -type f | wc -l)
 					sleep 5
 					[ "$send" -ne "0" ]
