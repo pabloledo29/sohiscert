@@ -46,7 +46,7 @@ class GsBaseConnectCommand extends Command
     {
         $em = new ContainerBuilder();
         $urlBase = $this->path_update_logs;
-        $path_file = "./" . 'update_' . date("d_m_Y") . '.log';
+        $path_file = $urlBase . 'update_' . date("d_m_Y") . '.log';
         #$path_file = __DIR__ . '/../../../app/logs/update/update_' . date("d_m_Y") . '.log';
         $log = fopen($path_file, "a+");
         $lines = file($path_file, FILE_SKIP_EMPTY_LINES);
@@ -60,6 +60,7 @@ class GsBaseConnectCommand extends Command
         }
         fwrite($log, $res);
         fclose($log);
+        
         return 0;
     }
 }
