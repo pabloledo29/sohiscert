@@ -141,19 +141,27 @@ services:
 
     App\Command\EmailUpdateDocFactuCommand:
         tags: { name: 'console.command', command: 'email:emaildocfactu:send'}
+        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@doctrine.orm.entity_manager']
 
     App\Command\EmailUpdateDocConcluCommand:
         tags: { name: 'console.command', command: 'email:emaildoccon:send'}
+        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@doctrine.orm.entity_manager']
 
     App\Command\EmailUpdateDocCommand:
         tags: { name: 'console.command', command: 'email:emaildoc:send'}
-    
+        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@doctrine.orm.entity_manager']
+
     App\Command\EmaildocanaSendCommand:
         tags: { name: 'console.command', command: "email:emaildocana:send" }
         arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@doctrine.orm.entity_manager']
 
     App\Command\EmaildoccarSendCommand:
         tags: { name: 'console.command', command: "email:emaildoccar:send" }
+        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@doctrine.orm.entity_manager']
+
+    App\Command\EmailUpdateDocCertiCommand:
+        tags: { name: 'console.command', command: "email:emaildoccerti:send" }
+        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@doctrine.orm.entity_manager']
 
     App\Command\UpdateProductosPaeCommand:
         tags: { name: 'console.command', command: "gsbase:update:productospae" }
@@ -230,8 +238,7 @@ services:
         tags: { name: 'console.command', command: "app:ini:batch:clientuseroperators" }
         arguments: ['%path_update_logs%','@toolsupdate','@gsbase', '@gsbasexml','@doctrine.orm.entity_manager']
 
-    App\Command\EmailUpdateDocCertiCommand:
-        tags: { name: 'console.command', command: "email:emaildoccerti:send" }
+    
 
     
     app.ftp.service:

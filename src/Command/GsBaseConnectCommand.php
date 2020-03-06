@@ -52,10 +52,8 @@ class GsBaseConnectCommand extends Command
 
         $gsbase = $this->gsbase;
         if ($gsbase->getGsbase() == null) {
-            var_dump("NO");
             $res = "\nNO";
         } else {
-            var_dump("SI");
             $res = "\nSI";
         }
         fwrite($log, $res);
