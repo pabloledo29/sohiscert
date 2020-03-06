@@ -143,10 +143,13 @@ class UserAdminController extends AbstractController
         $operators = $em->getRepository(Operator::class)->findBy(array('opCif' => $userOperator->getUsername()));
 
         if (count($operators) > 0) {
+            
             $operator = $operators[0];
             $opCcl = $operator->getOpCcl();
             $client = $toolsupdate->getClient($gsbase, $gsbasexml, $userOperator, $opCcl);
         } else {
+            var_dump("hola");
+            exit;
             $client['registersProcessed'] = 0;
         }
 

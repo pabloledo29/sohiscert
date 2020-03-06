@@ -150,7 +150,7 @@ class ToolsUpdate extends AbstractController
      */
     public function getCultivoRec2Operator(GsBase $gsbase, GsBaseXml $gsbasexml, Operator $operator)
     {
-//        $cultivosrec = $this->getDoctrine()->getRepository('AppBundle:CultivosRec2')->findAll();
+//        $cultivosrec = $this->getDoctrine()->getRepository('App\Entity\CultivosRec2')->findAll();
         $registersProcessed = 0;
         $registersCreated = 0;
         $registersUpdated = 0;
@@ -171,7 +171,7 @@ class ToolsUpdate extends AbstractController
         );
 
         // Eliminar entidades
-        //$opproductospae = $em->getRepository('AppBundle:ProductosPae')->findByPipNop($operator->getOpNop());
+        //$opproductospae = $em->getRepository('App\Entity\ProductosPae')->findByPipNop($operator->getOpNop());
         $em = $this->getDoctrine()->getManager();
         $em->getConnection()->getConfiguration()->setSQLLogger(null);
 
@@ -340,7 +340,7 @@ class ToolsUpdate extends AbstractController
         $em = $this->entityManager;
         $em->getConnection()->getConfiguration()->setSQLLogger(null);
         // Eliminar entidades
-        //$opproductospae = $em->getRepository('AppBundle:ProductosPae')->findByPipNop($operator->getOpNop());
+        //$opproductospae = $em->getRepository('App\Entity\ProductosPae')->findByPipNop($operator->getOpNop());
         $registersProcessed = 0;
         $registersCreated = 0;
         $registersUpdated = 0;

@@ -353,8 +353,8 @@ EOF
 
                                 #MNN consulta para versión PHP 5.6
                                 $query = $em->createQuery('SELECT ope.codigo, ope.opNop, ope.opEma, reg.reDeno
-                                                             FROM AppBundle:Operator ope
-                                                             INNER JOIN AppBundle:Register reg WITH ope.opRegistro=reg.id
+                                                             FROM App\Entity\Operator ope
+                                                             INNER JOIN App\Entity\Register reg WITH ope.opRegistro=reg.id
                                                             WHERE ope.opNop = :nom')->setParameter('nom', $nbop);
 
                                 $datosOp = $query->getResult();
@@ -493,8 +493,8 @@ EOF
                                             #$datosOp = $cons->getRepository(Operator::class)->findOneByOpNop($nbop);
                                             
                                             $query = $em->createQuery('SELECT ope.codigo, ope.opNop, ope.opEma, reg.reDeno
-                                                             FROM AppBundle:Operator ope
-                                                             INNER JOIN AppBundle:Register reg WITH ope.opRegistro=reg.id
+                                                             FROM App\Entity\Operator ope
+                                                             INNER JOIN App\Entity\Register reg WITH ope.opRegistro=reg.id
                                                             WHERE ope.opNop = :nom')->setParameter('nom', $nbop);
 
                                             $datosOp = $query->getResult();

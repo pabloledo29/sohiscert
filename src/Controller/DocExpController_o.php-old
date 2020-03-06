@@ -574,7 +574,7 @@ class DocExpController extends Controller
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
 
-        $docs = $em->getRepository("AppBundle:UploadedFileRegistry")->findBy(
+        $docs = $em->getRepository("App\Entity\UploadedFileRegistry")->findBy(
             array('userOperator' => $user),
             array('createdDate' => 'DESC')
         );
@@ -595,7 +595,7 @@ class DocExpController extends Controller
         $user = $this->getUser();
 
         $em = $this->getDoctrine()->getManager();
-        $doc = $em->getRepository("AppBundle:UploadedFileRegistry")->find($id);
+        $doc = $em->getRepository("App\Entity\UploadedFileRegistry")->find($id);
 
         if ($doc->getUserOperator() !== $user &&
             !$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')
@@ -646,7 +646,7 @@ class DocExpController extends Controller
         $user = $this->getUser();
 
         $em = $this->getDoctrine()->getManager();
-        $doc = $em->getRepository("AppBundle:UploadedFileRegistry")->find($id);
+        $doc = $em->getRepository("App\Entity\UploadedFileRegistry")->find($id);
 
         if ($doc->getUserOperator() !== $user &&
             !$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')
@@ -693,7 +693,7 @@ class DocExpController extends Controller
      */
     public function adminUploadedDocsListAction(Request $request)
     {
-        $qb = $this->getDoctrine()->getManager()->getRepository("AppBundle:UploadedFileRegistry")
+        $qb = $this->getDoctrine()->getManager()->getRepository("App\Entity\UploadedFileRegistry")
             ->createQueryBuilder('u')
             ->addSelect('uo')
             ->innerJoin('u.userOperator', 'uo');

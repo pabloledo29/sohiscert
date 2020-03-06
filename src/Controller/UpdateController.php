@@ -442,7 +442,7 @@ class UpdateController extends AbstractController
         $operatorsGanaderias = $this->getDoctrine()->getRepository(Operator::class)->findBy(
             array('opEntity' => 'Ganaderias', 'opEst' => 'C')
         );
-        //$cultivosrec = $this->getDoctrine()->getRepository('AppBundle:CultivosRec')->findAll();
+        //$cultivosrec = $this->getDoctrine()->getRepository('App\Entity\CultivosRec')->findAll();
         //$lastOperatorIdCultivoRec = end($cultivosrec)->getRuOperator()->getId();
         $toolsupdate = $this->get('toolsupdate');
         $gsbasexml = $this->get('gsbasexml');

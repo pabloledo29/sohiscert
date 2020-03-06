@@ -100,9 +100,9 @@ class UpdateDateDocumentsOperatorsClientCommand extends Command
 
                     $em = new ContainerBuilder();
                     $em =  $em->container->get('doctrine')->getManager();
-                    //$archivo = $em->getRepository('AppBundle:DocumentosFTP')->findOneBy(array('nbDoc' => ' . $lista[$i]->getNbDoc() . '));
+                    //$archivo = $em->getRepository('App\Entity\DocumentosFTP')->findOneBy(array('nbDoc' => ' . $lista[$i]->getNbDoc() . '));
                     $archivo = $em->getRepository(DocumentosFTP::class)->findOneByNbDoc($lista[$i]);
-                    //$archivo = $em->getRepository('AppBundle:DocumentosFTP')->findOneByNbDoc(' . $lista[$i] . ');
+                    //$archivo = $em->getRepository('App\Entity\DocumentosFTP')->findOneByNbDoc(' . $lista[$i] . ');
 
 
                     switch ($tipodoc) {

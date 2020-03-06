@@ -87,7 +87,7 @@ class UserOperatorController extends Controller
     {
         $userOperator = $this->getUser();
         $em = $this->getDoctrine()->getManager();
-        $updateLog = $em->getRepository('AppBundle:UpdateLog')->getLastUpdateLog();
+        $updateLog = $em->getRepository('App\Entity\UpdateLog')->getLastUpdateLog();
 
         return $this->render(
             'private/useroperator_profile.html.twig',

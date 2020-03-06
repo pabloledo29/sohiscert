@@ -189,7 +189,8 @@ class Ftp
         $certFmod = [];
 
        
-        
+        var_dump("HOLA");
+        exit;
         # Establecemos Conexión 
         //$conn_id = ftp_connect($ftp_server); 
         $this->finder->files()->in("ftp://$this->ftp_user_name:$this->ftp_user_pass@$this->ftp_server/")->name('*.pdf');

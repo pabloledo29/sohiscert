@@ -83,7 +83,7 @@ class ClientRepository extends ServiceEntityRepository
         $query = $this->getDoctrine()->getManager()
             ->createQuery(
                 'SELECT c.codigo
-                FROM AppBundle:Client c
+                FROM App\Entity\Client c
                 WHERE c.clCif = :cif
                 ORDER BY c.id DESC'
             )->setParameter('cif', $cif);

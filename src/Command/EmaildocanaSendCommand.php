@@ -269,7 +269,7 @@ EOF
                     
 
                     $em =  $em->get('doctrine')->getManager();
-                    $archivo = $em->getRepository('App/Entity/DocumentosFTP')->findOneByNbDoc($lista[$i]);
+                    $archivo = $em->getRepository(DocumentosFTP::class)->findOneByNbDoc($lista[$i]);
                     
                     switch ($tipodoc) {
                         
@@ -337,7 +337,7 @@ EOF
                                 #$cons = $this->container->get('doctrine')->getManager();
 
                                 #MNN Consulta para la versión inferior a PHP 7.0
-                                #$datosOp = $cons->getRepository('AppBundle:Operator')->findOneByOpNop($nbop);
+                                #$datosOp = $cons->getRepository('App\Entity\Operator')->findOneByOpNop($nbop);
 
                                 # Consultas
 
@@ -345,8 +345,8 @@ EOF
 
                                 #MNN consulta para versión PHP 5.6
                                  $query = $em->createQuery('SELECT ope.codigo, ope.opNop, ope.opEma, ope.opCdp, reg.reDeno, ope.opCif, ope.opDenoop
-                                                             FROM AppBundle:Operator ope
-                                                             INNER JOIN AppBundle:Register reg WITH ope.opRegistro=reg.id
+                                                             FROM App\Entity\Operator ope
+                                                             INNER JOIN App\Entity\Register reg WITH ope.opRegistro=reg.id
                                                             WHERE ope.opNop = :nom')->setParameter('nom', $nbop);
 
                                 $datosOp = $query->getResult();
@@ -489,11 +489,11 @@ EOF
 
                                             # Obtenemos los Datos del Operador a partir del Nombre para recuperar el Mail 
                                             #$cons = $this->container->get('doctrine')->getManager();
-                                            #$datosOp = $cons->getRepository('AppBundle:Operator')->findOneByOpNop($nbop);
+                                            #$datosOp = $cons->getRepository('App\Entity\Operator')->findOneByOpNop($nbop);
                                             
                                              $query = $em->createQuery('SELECT ope.codigo, ope.opNop, ope.opEma, ope.opCdp, reg.reDeno,ope.opCif, ope.opDenoop
-                                                             FROM AppBundle:Operator ope
-                                                             INNER JOIN AppBundle:Register reg WITH ope.opRegistro=reg.id
+                                                             FROM App\Entity\Operator ope
+                                                             INNER JOIN App\Entity\Register reg WITH ope.opRegistro=reg.id
                                                             WHERE ope.opNop = :nom')->setParameter('nom', $nbop);
 
                                             $datosOp = $query->getResult();

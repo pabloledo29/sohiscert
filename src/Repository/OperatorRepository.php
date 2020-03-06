@@ -132,7 +132,7 @@ class OperatorRepository extends ServiceEntityRepository
 //            ->createQuery(
 //                "
 //			SELECT e.id, e.opNop, e.codigo, e.opDenoop, e.opCif, r.reDeno, e.opEst, e.opTpex, e.opTel
-//			FROM AppBundle:Operator e INNER JOIN AppBundle:Register r WITH e.opRegistro = r.id
+//			FROM App\Entity\Operator e INNER JOIN App\Entity\Register r WITH e.opRegistro = r.id
 //			WHERE e.opCif like :cif and e.opDenoop like :denoop AND e.opSreg != :opsreg AND (e.opEst = :opest OR e.opEst = :opest2)
 //			order by e.id DESC"
 //            )

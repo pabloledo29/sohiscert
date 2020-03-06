@@ -373,8 +373,8 @@ EOF
 
                                 #MNN consulta para versión PHP 5.6
                                  $query = $em->createQuery('SELECT ope.codigo, ope.opNop, ope.opEma, reg.reDeno
-                                                             FROM AppBundle:Operator ope
-                                                             INNER JOIN AppBundle:Register reg WITH ope.opRegistro=reg.id
+                                                             FROM App\Entity\Operator ope
+                                                             INNER JOIN App\Entity\Register reg WITH ope.opRegistro=reg.id
                                                             WHERE ope.opNop = :nom')->setParameter('nom', $nbop);
 
                                 $datosOp = $query->getResult();
@@ -515,14 +515,14 @@ EOF
 
                                             /*
                                             SELECT e.id, e.opNop, e.codigo, e.opDenoop, e.opCif, r.reDeno, e.opEst, e.opTpex, e.opTel
-                                            FROM AppBundle:Operator e INNER JOIN AppBundle:Register r WITH e.opRegistro = r.id
+                                            FROM App\Entity\Operator e INNER JOIN App\Entity\Register r WITH e.opRegistro = r.id
                                             WHERE e.opCif like :cif and e.opDenoop like :denoop AND e.opTpex != :optpex
                                             order by e.id DESC"
                                             */
 
                                             $query = $em->createQuery('SELECT ope.codigo, ope.opNop, ope.opEma, reg.reDeno
-                                                             FROM AppBundle:Operator ope
-                                                             INNER JOIN AppBundle:Register reg WITH ope.opRegistro=reg.id
+                                                             FROM App\Entity\Operator ope
+                                                             INNER JOIN App\Entity\Register reg WITH ope.opRegistro=reg.id
                                                             WHERE ope.opNop = :nom')->setParameter('nom', $nbop);
 
                                             $datosOp = $query->getResult();

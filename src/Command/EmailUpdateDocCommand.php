@@ -308,7 +308,7 @@ EOF
                                 #$datosOp = $cons->getRepository(Operator::class)->findOneByOpNop($nbop);
                                 echo "\n ". $nbop;
                                 $query = $em->createQuery('SELECT ope.codigo, ope.opNop, ope.opEma
-                                                             FROM AppBundle:Operator ope
+                                                             FROM App\Entity\Operator ope
                                                             WHERE ope.opNop = :nom')->setParameter('nom', $nbop);
 
                                 $datosOp = $query->getResult();
@@ -442,7 +442,7 @@ EOF
                                             #$datosOp = $cons->getRepository(Operator::class)->findOneByOpNop($nbop);
                                             
                                             $query = $em->createQuery('SELECT ope.codigo, ope.opNop, ope.opEma
-                                                                         FROM AppBundle:Operator ope
+                                                                         FROM App\Entity\Operator ope
                                                                         WHERE ope.opNop = :nom')->setParameter('nom', $nbop);
 
                                             $datosOp = $query->getResult();
@@ -567,7 +567,7 @@ EOF
 
                                 #MNN consulta para versión PHP 5.6
                                 $query = $em->createQuery('SELECT ope.codigo, ope.opNop, ope.opEma
-                                                             FROM AppBundle:Operator ope
+                                                             FROM App\Entity\Operator ope
                                                             WHERE ope.opNop = :nom')->setParameter('nom', $nbop);
 
                                 $datosOp = $query->getResult();
@@ -705,7 +705,7 @@ EOF
                                             #$datosOp = $cons->getRepository(Operator::class)->findOneByOpNop($nbop);
                                             
                                             $query = $em->createQuery('SELECT ope.codigo, ope.opNop, ope.opEma
-                                                             FROM AppBundle:Operator ope
+                                                             FROM App\Entity\Operator ope
                                                             WHERE ope.opNop = :nom')->setParameter('nom', $nbop);
 
                                             $datosOp = $query->getResult();
@@ -809,7 +809,7 @@ EOF
                                 
 
                                 $query = $em->createQuery('SELECT ope.codigo, ope.opNop, ope.opEma
-                                                             FROM AppBundle:Operator ope
+                                                             FROM App\Entity\Operator ope
                                                             WHERE ope.opNop = :nom')->setParameter('nom', $nbop);
 
                                 $datosOp = $query->getResult();
@@ -938,7 +938,7 @@ EOF
                                             #$datosOp = $cons->getRepository(Operator::class)->findOneByOpNop($nbop);
                                             
                                             $query = $em->createQuery('SELECT ope.codigo, ope.opNop, ope.opEma
-                                                             FROM AppBundle:Operator ope
+                                                             FROM App\Entity\Operator ope
                                                             WHERE ope.opNop = :nom')->setParameter('nom', $nbop);
 
                                             $datosOp = $query->getResult();    
@@ -1023,7 +1023,7 @@ EOF
                                 #$datosOp = $cons->getRepository(Operator::class)->findOneByOpNop($nbop);
                                 
                                 $query = $em->createQuery('SELECT ope.codigo, ope.opNop, ope.opEma
-                                                             FROM AppBundle:Operator ope
+                                                             FROM App\Entity\Operator ope
                                                             WHERE ope.opNop = :nom')->setParameter('nom', $nbop);
 
                                 $datosOp = $query->getResult();
@@ -1154,7 +1154,7 @@ EOF
                                             #$datosOp = $cons->getRepository(Operator::class)->findOneByOpNop($nbop);
                                             
                                             $query = $em->createQuery('SELECT ope.codigo, ope.opNop, ope.opEma
-                                                             FROM AppBundle:Operator ope
+                                                             FROM App\Entity\Operator ope
                                                             WHERE ope.opNop = :nom')->setParameter('nom', $nbop);
 
                                             $datosOp = $query->getResult();

@@ -64,7 +64,7 @@ class RegisterRepository extends ServiceEntityRepository
         $query = $this->getEntityManager()
             ->createQuery('
 			SELECT r.reDeno 
-			FROM AppBundle:Register r
+			FROM App\Entity\Register r
 			WHERE r.reDeno like :deno and r.rePad = :empty
 			')
             ->setMaxResults(1)
