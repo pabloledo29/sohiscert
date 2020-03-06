@@ -216,7 +216,7 @@ services:
 
     App\Command\UpdateBasicInfoCommand:
         tags: { name: 'console.command', command: "gsbase:update:basicinfo" }
-        arguments: ['%path_update_logs%','@toolsupdate','@gsbase', '@gsbasexml']
+        arguments: ['%path_update_logs%','@toolsupdate','@gsbase', '@gsbasexml','@doctrine.orm.entity_manager']
 
     App\Command\UpdateAvesCorralCommand:
         tags: { name: 'console.command', command: "gsbase:update:avescorral" }

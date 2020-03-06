@@ -18,12 +18,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 class UpdateBasicInfoCommand extends Command
 {
     protected static $defaultName = 'gsbase:update:basicinfo';
-    public function __construct(string $path_update_logs, $toolsupdate,$gsbase,$gsbasexml)
+    public function __construct(string $path_update_logs, $toolsupdate,$gsbase,$gsbasexml,$em)
     {
         $this->path_update_logs= $path_update_logs;
         $this->toolsupdate = $toolsupdate;
         $this->gsbase =$gsbase;
         $this->gsbasexml =$gsbasexml;
+        $this->em = $em;
          // you *must* call the parent constructor
          parent::__construct();
     }
