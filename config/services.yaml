@@ -234,9 +234,6 @@ services:
         tags: { name: 'console.command', command: "email:emaildoccerti:send" }
 
     
-
-
-
     app.ftp.service:
         class: App\Ftp\Ftp
         arguments: [ '%nop_conversion%' ]
