@@ -75,8 +75,7 @@
                     <!-- /.box-header -->
                     <div class="box-body">
                         {% if userOperator.clientId is not null %}
-                        <form action="{{ path('admin_useroperator_update', {'id': userOperator.id }) }}"
-                                  method="post">
+                        
                             <strong><i class="fa fa-user margin-r-5"></i> Denominacion: </strong>
                             <p class="text-muted" id="deno"> {{ userOperator.clientId.clDeno }} </p>
 
@@ -101,7 +100,7 @@
                                                                                           id="fax"> {{ userOperator.clientId.clFax }} </p>
                             <strong><i class="fa fa-envelope-o margin-r-5"></i> Email: </strong><p class="text-muted"
                                                                                                    id="email"> {{ userOperator.clientId.clEma }} </p>
-                        </form>
+                        
 
                             <div align="right">
                                 {#<span>Actualizado el#}
