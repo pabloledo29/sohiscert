@@ -164,6 +164,7 @@ services:
 
     App\Command\UpdateProductosCommand:
         tags: { name: 'console.command', command: "gsbase:update:productos" }
+        arguments: ['%path_update_logs','@toolsupdate','@gsbase', '@gsbasexml']
 
     App\Command\UpdateOperatorEntityCommand:
         tags: { name: 'console.command', command: "gsbase:update:operatorentity" }
