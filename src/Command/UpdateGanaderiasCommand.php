@@ -19,9 +19,12 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class UpdateGanaderiasCommand extends Command
 {
     protected static $defaultName = 'gsbase:update:ganaderias';
-    public function __construct(string $path_update_logs)
+    public function __construct(string $path_update_logs, $toolsupdate,$gsbase,$gsbasexml)
     {
         $this->path_update_logs= $path_update_logs;
+        $this->toolsupdate = $toolsupdate;
+        $this->gsbase =$gsbase;
+        $this->gsbase =$gsbasexml;
          // you *must* call the parent constructor
          parent::__construct();
     }
@@ -55,9 +58,9 @@ class UpdateGanaderiasCommand extends Command
             fwrite($log, "NO\n");
         }
 
-        $toolsupdate = $em->container->get('ToolsUpdate');
-        $gsbase = $em->container->get('gsbase');
-        $gsbasexml = $em->container->get('gsbasexml');
+        $toolsupdate = $this->toolsupdate;
+        $gsbase = $this->gsbase;
+        $gsbasexml = $this->gsbasexml;
 
         if ($gsbase->getGsbase() == null) {
             $output->writeln("No se ha podido conectar con el servidor de GsBase");

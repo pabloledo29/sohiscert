@@ -269,7 +269,7 @@ EOF
                     
 
                     $em =  $em->get('doctrine')->getManager();
-                    $archivo = $em->getRepository('AppBundle:DocumentosFTP')->findOneByNbDoc($lista[$i]);
+                    $archivo = $em->getRepository('App/Entity/DocumentosFTP')->findOneByNbDoc($lista[$i]);
                     
                     switch ($tipodoc) {
                         

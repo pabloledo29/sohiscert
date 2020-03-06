@@ -55,9 +55,9 @@ class UpdateIndustriasCommand extends Command
             fwrite($log, "NO\n");
         }
 
-        $toolsupdate = $em->container->get('toolsupdate');
-        $gsbase = $em->container->get('gsbase');
-        $gsbasexml = $em->container->get('gsbasexml');
+        $toolsupdate = $this->toolsupdate;
+        $gsbase = $this->gsbase;
+        $gsbasexml = $this->gsbasexml;
         $em = $em->container->get('doctrine')->getManager();
 
         $operatorsIndustrias = $em->getRepository(Operator::class)->findBy(

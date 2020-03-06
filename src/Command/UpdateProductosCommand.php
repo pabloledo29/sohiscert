@@ -54,9 +54,9 @@ class UpdateProductosCommand extends Command
             fwrite($log, "NO\n");
         }
 
-        $toolsupdate = $em->container->get('toolsupdate');
-        $gsbase = $em->container->get('gsbase');
-        $gsbasexml = $em->container->get('gsbasexml');
+        $toolsupdate = $this->toolsupdate;
+        $gsbase = $this->gsbase;
+        $gsbasexml = $this->gsbasexml;
 //        $gsbasexml->getXmlUpdateOperator();
 
         if ($gsbase->getGsbase() == null) {

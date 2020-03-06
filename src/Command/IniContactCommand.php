@@ -23,9 +23,11 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class IniContactCommand extends Command
 {
     protected static $defaultName = 'app:ini:batch:clientscontact';
-    public function __construct(string $path_update_logs)
+    public function __construct(string $path_update_logs,$gsbase,$gsbasexml)
     {
         $this->path_update_logs= $path_update_logs;
+        $this->gsbase =$gsbase;
+        $this->gsbase =$gsbasexml;
          // you *must* call the parent constructor
          parent::__construct();
     }
@@ -60,9 +62,9 @@ class IniContactCommand extends Command
             fwrite($log, "NO\n");
         }
 
-//        $toolsupdate = $em->container->get('toolsupdate');
-        $gsbase = $em->container->get('gsbase');
-        $gsbasexml = $em->container->get('gsbasexml');
+//        $toolsupdate = $this->toolsupdate;
+        $gsbase = $this->gsbase;
+        $gsbasexml = $this->gsbasexml;
 
         if ($gsbase->getGsbase() == null) {
             $output->writeln("No se ha podido conectar con el servidor de GsBase");

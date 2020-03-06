@@ -33,9 +33,9 @@ parameters:
         comunicacion: 'Comunicación incidencias ayudas agroambientales'
     plantilla_cartas: 'F155-02'
     #uploaddir: '/../../../app/logs/update/'
-    path_update_logs: '/opt/app-root/src/var/log/update/'
+    path_update_logs: '/opt/app-root/src/var/update/'
     web_root: 'http://intranet-pre-intranetshc.e4ff.pro-eu-west-1.openshiftapps.com/public/'
-    repo_dir: '/opt/app-root/src/' #'http://intranet-clientesshc.e4ff.pro-eu-west-1.openshiftapps.com'
+    repo_dir: './' #'http://intranet-clientesshc.e4ff.pro-eu-west-1.openshiftapps.com'
     email_from_address: 'noreply@sohiscert.com'
     email_from_name: 'Area Privada Sohiscert'
     mail_to: 'sohiscert@sohiscert.com'
@@ -117,19 +117,27 @@ services:
     gsbase:
         class: App\GsBase\GsBase
         arguments: ["%gsbase_host%","%gsbase_port%","%gsbase_user%","%gsbase_pass%","%gsbase_corp%","%gsbase_apl%","%gsbase_ex%","%gsbase_accion%","%gsbase_ventana%"]
+        tags: [name: 'gsbase']
 
     toolsupdate:
         class: App\Tools\ToolsUpdate
         arguments: ["@service_container"]
+        tags: [name: 'toolsupdate']
+    
+    gsbasexml:
+        class: App\GsBase\GsBaseXml
+        arguments: ["@service_container"]
+        tags: [name: 'gsbasexml']
 
 
     App\Command\GsBaseConnectCommand:
         tags:
             - { name: 'console.command', command: 'gsbase:connect'}
-        arguments: ['%path_update_logs%']
+        arguments: ['%path_update_logs%', '@gsbase']
 
     App\Command\UpdateRegisterCommand:
         tags: { name: 'console.command', command: 'gsbase:update:registro'}
+        arguments: ['%path_update_logs','@toolsupdate','@gsbase', '@gsbasexml']
 
     App\Command\EmailUpdateDocFactuCommand:
         tags: { name: 'console.command', command: 'email:emaildocfactu:send'}
@@ -148,68 +156,81 @@ services:
 
     App\Command\UpdateProductosPaeCommand:
         tags: { name: 'console.command', command: "gsbase:update:productospae" }
+        arguments: ['%path_update_logs','@toolsupdate','@gsbase', '@gsbasexml']   
 
     App\Command\UpdateProductosIndusCommand:
         tags: { name: 'console.command', command: "gsbase:update:productosindus" }
+        arguments: ['%path_update_logs','@toolsupdate','@gsbase', '@gsbasexml']
 
     App\Command\UpdateProductosCommand:
         tags: { name: 'console.command', command: "gsbase:update:productos" }
 
     App\Command\UpdateOperatorEntityCommand:
         tags: { name: 'console.command', command: "gsbase:update:operatorentity" }
+        arguments: ['%path_update_logs']
 
     App\Command\UpdateOperatorCommand:
         tags: { name: 'console.command', command: "gsbase:update:operator" }
+        arguments: ['%path_update_logs','@gsbase', '@gsbasexml']
 
     App\Command\UpdateIndustriasCommand:
         tags: { name: 'console.command', command: "gsbase:update:industrias" }
+        arguments: ['%path_update_logs','@toolsupdate','@gsbase', '@gsbasexml']
 
     App\Command\UpdateGanaderiasCommand:
         tags: { name: 'console.command', command: "gsbase:update:ganaderias" }
+        arguments: ['%path_update_logs','@toolsupdate','@gsbase', '@gsbasexml']
 
     App\Command\UpdateDateDocumentsOperatorsClientCommand:
         tags: { name: 'console.command', command: "gsbase:update:datedocuments" }       
     
     App\Command\UpdateCultivosRecCommand:
-        tags: { name: 'console.command', command: "gsbase:update:cultivosrec" }         
+        tags: { name: 'console.command', command: "gsbase:update:cultivosrec" }
+        arguments: ['%path_update_logs','@toolsupdate','@gsbase', '@gsbasexml']         
 
     App\Command\UpdateCultivosRecBisCommand:
         tags: { name: 'console.command', command: "gsbase:update:cultivosrecbis" }
+        arguments: ['%path_update_logs','@toolsupdate','@gsbase', '@gsbasexml']
 
     App\Command\UpdateCultivosRec2Command:
         tags: { name: 'console.command', command: "gsbase:update:cultivosrec2" }
-        arguments: ['%path_update_logs','@toolsupdate']
+        arguments: ['%path_update_logs','@toolsupdate','@gsbase', '@gsbasexml']
 
     App\Command\UpdateContactCommand:
         tags: { name: 'console.command', command: "gsbase:update:contact" }
+        arguments: ['%path_update_logs','@toolsupdate','@gsbase', '@gsbasexml']
 
     App\Command\UpdateClientCommand:
         tags: { name: 'console.command', command: "gsbase:update:client" }
+        arguments: ['%path_update_logs','@toolsupdate','@gsbase', '@gsbasexml']
 
     App\Command\UpdateBasicInfoCommand:
         tags: { name: 'console.command', command: "gsbase:update:basicinfo" }
+        arguments: ['%path_update_logs','@toolsupdate','@gsbase', '@gsbasexml']
 
     App\Command\UpdateAvesCorralCommand:
         tags: { name: 'console.command', command: "gsbase:update:avescorral" }
+        arguments: ['%path_update_logs','@toolsupdate','@gsbase', '@gsbasexml']
 
     App\Command\RemoveOperatorCommand:
         tags: { name: 'console.command', command: "gsbase:remove:operator" }
+        arguments: ['%path_update_logs','@toolsupdate','@gsbase', '@gsbasexml']
 
     App\Command\IniUserOperatorsCommand:
         tags: { name: 'console.command', command: "app:ini:batch:useroperators" }
-
+        
     App\Command\IniContactCommand:
         tags: { name: 'console.command', command: "app:ini:batch:clientscontact" }
+        arguments: ['%path_update_logs','@gsbase', '@gsbasexml']
 
     App\Command\IniClientOperatorsCommand:
         tags: { name: 'console.command', command: "app:ini:batch:clientuseroperators" }
+        arguments: ['%path_update_logs','@toolsupdate','@gsbase', '@gsbasexml']
 
     App\Command\EmailUpdateDocCertiCommand:
         tags: { name: 'console.command', command: "email:emaildoccerti:send" }
 
-    gsbasexml:
-        class: App\GsBase\GsBaseXml
-        arguments: ["@service_container"]
+    
 
 
 

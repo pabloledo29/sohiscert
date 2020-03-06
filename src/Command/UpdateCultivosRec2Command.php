@@ -20,9 +20,12 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class UpdateCultivosRec2Command extends Command
 {
     protected static $defaultName = 'gsbase:update:cultivosrec2';
-    public function __construct(string $path_update_logs)
+    public function __construct(string $path_update_logs, $toolsupdate,$gsbase,$gsbasexml)
     {
         $this->path_update_logs= $path_update_logs;
+        $this->toolsupdate = $toolsupdate;
+        $this->gsbase =$gsbase;
+        $this->gsbase =$gsbasexml;
          // you *must* call the parent constructor
          parent::__construct();
     }
@@ -56,9 +59,9 @@ class UpdateCultivosRec2Command extends Command
             fwrite($log, "NO\n");
         }
 
-        $toolsupdate = $em->get('toolsupdate');
-        $gsbase = $em->get('gsbase');
-        $gsbasexml = $em->get('gsbasexml');
+        $toolsupdate = $this->toolsupdate;
+        $gsbase = $this->gsbase;
+        $gsbasexml = $this->gsbasexml;
 
         if ($gsbase->getGsbase() == null) {
             $output->writeln("No se ha podido conectar con el servidor de GsBase");

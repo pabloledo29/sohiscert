@@ -19,9 +19,12 @@ class UpdateRegisterCommand extends Command
 {
     protected static $defaultName = 'gsbase:update:registro';
 
-    public function __construct(string $path_update_logs)
+    public function __construct(string $path_update_logs, $toolsupdate,$gsbase,$gsbasexml)
     {
         $this->path_update_logs= $path_update_logs;
+        $this->toolsupdate = $toolsupdate;
+        $this->gsbase =$gsbase;
+        $this->gsbase =$gsbasexml;
          // you *must* call the parent constructor
          parent::__construct();
     }
@@ -55,15 +58,15 @@ class UpdateRegisterCommand extends Command
             fwrite($log, "NO\n");
         }
 
-        $gsbase = $em->container->get('gsbase');
-        $gsbasexml = $em->container->get('gsbasexml');
-        $toolsUpdate = $em->container->get('toolsupdate');
+        $gsbase = $this->gsbase;
+        $gsbasexml = $this->gsbasexml;
+        $toolsupdate = $this->toolsupdate;
 
         if ($gsbase->getGsbase() == null) {
             $output->writeln("No se ha podido conectar con el servidor de GsBase");
         }
 
-        $registers = $toolsUpdate->updateRegister($gsbase, $gsbasexml);
+        $registers = $toolsupdate->updateRegister($gsbase, $gsbasexml);
         $updateEnd = date("H:i:s") . substr((string)microtime(), 1, 6);
 
         fwrite($log, ("REGISTROS => Comienzo: " . $updateStart . " | Final: " . $updateEnd .

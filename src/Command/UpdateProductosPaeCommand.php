@@ -19,9 +19,12 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class UpdateProductosPaeCommand extends Command
 {
     protected static $defaultName = 'gsbase:update:productospae';
-    public function __construct(string $path_update_logs)
+    public function __construct(string $path_update_logs, $toolsupdate,$gsbase,$gsbasexml)
     {
         $this->path_update_logs= $path_update_logs;
+        $this->toolsupdate = $toolsupdate;
+        $this->gsbase =$gsbase;
+        $this->gsbase =$gsbasexml;
          // you *must* call the parent constructor
          parent::__construct();
     }
@@ -55,10 +58,10 @@ class UpdateProductosPaeCommand extends Command
             fwrite($log, "NO\n");
         }
 
-        $toolsupdate = $em->container->get('toolsupdate');
+        $toolsupdate = $this->toolsupdate;
         
-        $gsbase = $em->container->get('gsbase');
-        $gsbasexml = $em->container->get('gsbasexml');
+        $gsbase = $this->gsbase;
+        $gsbasexml = $this->gsbasexml;
         #var_dump($gsbasexml);
         #exit;
         if ($gsbase->getGsbase() == null) {

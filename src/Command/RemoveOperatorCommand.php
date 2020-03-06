@@ -21,9 +21,11 @@ use App\Entity\UserOperator;
 class RemoveOperatorCommand extends Command
 {
     protected static $defaultName = 'gsbase:remove:operator';
-    public function __construct(string $path_update_logs)
+    public function __construct(string $path_update_logs,$gsbase,$gsbasexml)
     {
         $this->path_update_logs= $path_update_logs;
+        $this->gsbase =$gsbase;
+        $this->gsbase =$gsbasexml;
          // you *must* call the parent constructor
          parent::__construct();
     }
@@ -57,8 +59,8 @@ class RemoveOperatorCommand extends Command
             fwrite($log, "NO\n");
         }
 
-        $gsbase = $em->container->get('gsbase');
-        $gsbasexml = $em->container->get('gsbasexml');
+        $gsbase = $this->gsbase;
+        $gsbasexml = $this->gsbasexml;
         $xml = $gsbasexml->getXmlRemoveOperator();
 
         if ($gsbase->getGsbase() == null) {

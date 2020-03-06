@@ -19,9 +19,10 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class GsBaseConnectCommand extends Command
 {
     protected static $defaultName = 'gsbase:connect';
-    public function __construct(string $path_update_logs)
+    public function __construct(string $path_update_logs,$gsbase)
     {
         $this->path_update_logs = $path_update_logs;
+        $this->gsbase=$gsbase;
  
 
         
@@ -45,13 +46,13 @@ class GsBaseConnectCommand extends Command
     {
         $em = new ContainerBuilder();
         $urlBase = $this->path_update_logs;
-        $path_file = $urlBase . 'update_' . date("d_m_Y") . '.log';
+        $path_file = "./" . 'update_' . date("d_m_Y") . '.log';
         #$path_file = __DIR__ . '/../../../app/logs/update/update_' . date("d_m_Y") . '.log';
         $log = fopen($path_file, "a+");
         $lines = file($path_file, FILE_SKIP_EMPTY_LINES);
         trim(array_pop($lines));
 
-        $gsbase = $em->get('gsbase');
+        $gsbase = $this->gsbase;
         if ($gsbase->getGsbase() == null) {
             $res = "\nNO";
         } else {

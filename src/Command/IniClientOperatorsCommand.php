@@ -16,9 +16,12 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class IniClientOperatorsCommand extends Command
 {
     protected static $defaultName = 'app:ini:batch:clientuseroperators';
-    public function __construct(string $path_update_logs)
+    public function __construct(string $path_update_logs, $toolsupdate,$gsbase,$gsbasexml)
     {
         $this->path_update_logs= $path_update_logs;
+        $this->toolsupdate = $toolsupdate;
+        $this->gsbase =$gsbase;
+        $this->gsbase =$gsbasexml;
          // you *must* call the parent constructor
          parent::__construct();
     }
@@ -75,9 +78,9 @@ class IniClientOperatorsCommand extends Command
                 $opCcl = $operator->getOpCcl();
 
                 /* Comprobación de client_id asociado creación */
-                $toolsupdate = $em->container->get('toolsupdate');
-                $gsbase = $em->container->get('gsbase');
-                $gsbasexml = $em->container->get('gsbasexml');
+                $toolsupdate = $this->toolsupdate;
+                $gsbase = $this->gsbase;
+                $gsbasexml = $this->gsbasexml;
                 $client = $toolsupdate->getClient($gsbase, $gsbasexml, $userOperator, $opCcl);
                 // <1 y no !=1 pues en la BBDD origen se pueden dar CIFs con mas de una ocurrencia.
                 if ($client['registersCreated'] >= 1) {
