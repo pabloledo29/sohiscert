@@ -6,7 +6,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+
 use Symfony\Component\Finder\Finder;
 use App\Entity\DocumentosFTP;
 /**
@@ -16,7 +16,7 @@ use App\Entity\DocumentosFTP;
 class EmaildocanaSendCommand extends Command
 {
     protected static $defaultName = 'email:emaildocana:send';
-    public function __construct(string $path_update_logs,string $ftp_server, string $ftp_user_name, string $ftp_user_pass)
+    public function __construct(string $path_update_logs,string $ftp_server, string $ftp_user_name, string $ftp_user_pass, $em)
     {
         $this->path_update_logs = $path_update_logs;
         $this->finder = new Finder();
@@ -24,6 +24,8 @@ class EmaildocanaSendCommand extends Command
         $this->ftp_server = $ftp_server;
         $this->ftp_user_name = $ftp_user_name;
         $this->ftp_user_pass = $ftp_user_pass;
+        $this->em = $em;
+        
          // you *must* call the parent constructor
          parent::__construct();
     }
@@ -98,7 +100,7 @@ EOF
 
 
         # Definimos Parámetros de Conexión FTP
-        $em = new ContainerBuilder();
+        $em = $this->em;
 
         # Obtener Fechas, Día Actual y Día de la Semana Atrás desde el día actual
         $diahoy = date('Y-m-d', time());
@@ -268,7 +270,7 @@ EOF
                     
                     
 
-                    $em =  $em->get('doctrine')->getManager();
+                    
                     $archivo = $em->getRepository(DocumentosFTP::class)->findOneByNbDoc($lista[$i]);
                     
                     switch ($tipodoc) {
@@ -591,7 +593,7 @@ EOF
                                 }
                             }
                             $mailerServiceName = sprintf('swiftmailer.mailer.%s', $input->getOption('mailer'));
-                            $em = new ContainerBuilder();
+                            $em = $this->em;
                             if (!$em->has($mailerServiceName)) {
                                 throw new \InvalidArgumentException(sprintf('The mailer "%s" does not exist', $input->getOption('mailer')));
                             }
@@ -745,7 +747,7 @@ EOF
      */
     /*public function isEnabled()
     {
-        $em = new ContainerBuilder();
+        $em = $this->em;
         return $em->has('swiftmailer.mailer.mailer_mail');
     }*/
 

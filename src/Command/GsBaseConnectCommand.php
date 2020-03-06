@@ -6,11 +6,10 @@
 
 namespace App\Command;
 
-use App\GsBase\GsBase;
+
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder; 
 
 /**
  * Class GsBaseConnectCommand
@@ -44,7 +43,6 @@ class GsBaseConnectCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $em = new ContainerBuilder();
         $urlBase = $this->path_update_logs;
         $path_file = $urlBase . 'update_' . date("d_m_Y") . '.log';
         #$path_file = __DIR__ . '/../../../app/logs/update/update_' . date("d_m_Y") . '.log';
@@ -54,8 +52,10 @@ class GsBaseConnectCommand extends Command
 
         $gsbase = $this->gsbase;
         if ($gsbase->getGsbase() == null) {
+            var_dump("NO");
             $res = "\nNO";
         } else {
+            var_dump("SI");
             $res = "\nSI";
         }
         fwrite($log, $res);

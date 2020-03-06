@@ -34,7 +34,6 @@ use App\Entity\Ganaderias;
 use App\Entity\Productos;
 use App\Entity\ProductosIndus;
 use App\Entity\ProductosPae;
-
 /**
  * Class ToolsUpdate
  * @package App\Tools
@@ -44,9 +43,11 @@ class ToolsUpdate extends AbstractController
 
     protected $container;
 
-    public function __construct(Container $c)
+    public function __construct(Container $c, $em, $jms_serializer)
     {
         $this->container = $c;
+        $this->em = $em;
+        $this->jms_serializer=$jms_serializer;
     }
 
     /**
@@ -66,7 +67,7 @@ class ToolsUpdate extends AbstractController
             },
             $xmlRes
         );
-        $cultivosrecxml = $this->get('jms_serializer')->deserialize(
+        $cultivosrecxml = $this->jms_serializer->deserialize(
             $newXml,
             'App\Entity\RegistroCultivosRec',
             'xml'
@@ -76,7 +77,7 @@ class ToolsUpdate extends AbstractController
         $registersCreated = 0;
         $registersUpdated = 0;
 
-        $em = $this->entityManager;
+        $em = $this->em;
         $em->getConnection()->getConfiguration()->setSQLLogger(null);
 
         /** @var CultivosRec $culrec */
@@ -150,7 +151,7 @@ class ToolsUpdate extends AbstractController
      */
     public function getCultivoRec2Operator(GsBase $gsbase, GsBaseXml $gsbasexml, Operator $operator)
     {
-//        $cultivosrec = $this->getDoctrine()->getRepository('App\Entity\CultivosRec2')->findAll();
+//        $cultivosrec = $this->get('doctrine')->getRepository('App\Entity\CultivosRec2')->findAll();
         $registersProcessed = 0;
         $registersCreated = 0;
         $registersUpdated = 0;
@@ -164,7 +165,7 @@ class ToolsUpdate extends AbstractController
             },
             $xmlRes
         );
-        $cultivosrec2xml = $this->get('jms_serializer')->deserialize(
+        $cultivosrec2xml = $this->jms_serializer->deserialize(
             $newXml,
             'App\Entity\RegistroCultivosRec2',
             'xml'
@@ -172,7 +173,7 @@ class ToolsUpdate extends AbstractController
 
         // Eliminar entidades
         //$opproductospae = $em->getRepository('App\Entity\ProductosPae')->findByPipNop($operator->getOpNop());
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->em;
         $em->getConnection()->getConfiguration()->setSQLLogger(null);
 
         /** @var CultivosRec2 $culrec2 */
@@ -238,14 +239,14 @@ class ToolsUpdate extends AbstractController
             },
             $xmlRes
         );
-        $ganaderiasxml = $this->get('jms_serializer')->deserialize(
+        $ganaderiasxml = $this->jms_serializer->deserialize(
             $newXml,
             'App\Entity\RegistroGanaderias',
             'xml'
         );
 
 
-        $em = $this->entityManager;
+        $em = $this->em;
         $em->getConnection()->getConfiguration()->setSQLLogger(null);
 
         $registersProcessed = 0;
@@ -330,14 +331,14 @@ class ToolsUpdate extends AbstractController
             },
             $xmlRes
         );
-        $productospaexml = $this->get('jms_serializer')->deserialize(
+        $productospaexml = $this->jms_serializer->deserialize(
             $newXml,
             'App\Entity\RegistroProductosPae',
             'xml'
         );
         #var_dump($productospaexml);
         #exit;
-        $em = $this->entityManager;
+        $em = $this->em;
         $em->getConnection()->getConfiguration()->setSQLLogger(null);
         // Eliminar entidades
         //$opproductospae = $em->getRepository('App\Entity\ProductosPae')->findByPipNop($operator->getOpNop());
@@ -397,13 +398,13 @@ class ToolsUpdate extends AbstractController
             },
             $xmlRes
         );
-        $productosindusxml = $this->get('jms_serializer')->deserialize(
+        $productosindusxml = $this->jms_serializer->deserialize(
             $newXml,
             'App\Entity\RegistroProductosIndus',
             'xml'
         );
 
-        $em = $this->entityManager;
+        $em = $this->em;
         $em->getConnection()->getConfiguration()->setSQLLogger(null);
 
         $registersProcessed = 0;
@@ -465,13 +466,13 @@ class ToolsUpdate extends AbstractController
             },
             $xmlRes
         );
-        $avesCorralXml = $this->get('jms_serializer')->deserialize(
+        $avesCorralXml = $this->jms_serializer->deserialize(
             $newXml,
             'App\Entity\RegistroAvesCorral',
             'xml'
         );
 
-        $em = $this->entityManager;
+        $em = $this->em;
         $em->getConnection()->getConfiguration()->setSQLLogger(null);
 
         $registersProcessed = 0;
@@ -528,13 +529,13 @@ class ToolsUpdate extends AbstractController
             },
             $xmlRes
         );
-        $iAvesCorralXml = $this->get('jms_serializer')->deserialize(
+        $iAvesCorralXml = $this->jms_serializer->deserialize(
             $newXml,
             'App\Entity\RegistroIAvesCorral',
             'xml'
         );
 
-        $em = $this->entityManager;
+        $em = $this->em;
         $id = null;
 
         /** @var IAvesCorral $avi */
@@ -588,9 +589,9 @@ class ToolsUpdate extends AbstractController
             },
             $xmlRes
         );
-        $registers = $this->get('jms_serializer')->deserialize($newXml, 'App\Entity\RegistroProductos', 'xml');
+        $registers = $this->jms_serializer->deserialize($newXml, 'App\Entity\RegistroProductos', 'xml');
 
-        $em = $this->entityManager;
+        $em = $this->em;
         $registersProcessed = 0;
         $registersCreated = 0;
         $registersUpdated = 0;
@@ -603,26 +604,26 @@ class ToolsUpdate extends AbstractController
             $ptTi = $registerXml->getPtTi();
 
             if ($ptTc != null) {
-                $tipoCultivo = $this->getDoctrine()->getRepository(TiposCultivos::class)->findOneBy(
+                $tipoCultivo = $this->get('doctrine')->getRepository(TiposCultivos::class)->findOneBy(
                     array('codigo' => $ptTc)
                 );
                 $registerXml->setPtTipoCultivo($tipoCultivo);
             }
             if ($ptCu != null) {
-                $cultivo = $this->getDoctrine()->getRepository(Cultivos::class)->findOneBy(
+                $cultivo = $this->get('doctrine')->getRepository(Cultivos::class)->findOneBy(
                     array('codigo' => $ptCu)
                 );
                 $registerXml->setPtCultivos($cultivo);
             }
             if ($ptTi != null) {
-                $tiposProducto = $this->getDoctrine()->getRepository(TiposProducto::class)->findOneBy(
+                $tiposProducto = $this->get('doctrine')->getRepository(TiposProducto::class)->findOneBy(
                     array('codigo' => $ptTi)
                 );
                 $registerXml->setPtTiposProducto($tiposProducto);
             }
 
             /** @var Productos $register */
-            $register = $this->getDoctrine()->getRepository(Productos::class)->findOneBy(
+            $register = $this->get('doctrine')->getRepository(Productos::class)->findOneBy(
                 array('codigo' => $registerXml->getCodigo())
             );
 
@@ -696,20 +697,20 @@ class ToolsUpdate extends AbstractController
             },
             $xmlRes
         );
-        $registers = $this->get('jms_serializer')->deserialize(
+        $registers = $this->jms_serializer->deserialize(
             $newXml,
             'App\Entity\RegistroTiposCultivos',
             'xml'
         );
 
-        $em = $this->entityManager;
+        $em = $this->em;
         $registersCreated = array();
         $registersUpdated = array();
         $registersNotUpdated = array();
 
         /** @var TiposCultivos $registerXml */
         foreach ($registers->Registro as $registerXml) {
-            $register = $this->getDoctrine()->getRepository(TiposCultivos::class)->findOneBy(
+            $register = $this->get('doctrine')->getRepository(TiposCultivos::class)->findOneBy(
                 array('codigo' => $registerXml->getCodigo())
             );
             if (!$register) {
@@ -752,20 +753,20 @@ class ToolsUpdate extends AbstractController
             },
             $xmlRes
         );
-        $registers = $this->get('jms_serializer')->deserialize(
+        $registers = $this->jms_serializer->deserialize(
             $newXml,
             'App\Entity\RegistroTiposProducto',
             'xml'
         );
 
-        $em = $this->entityManager;
+        $em = $this->em;
         $registersCreated = array();
         $registersUpdated = array();
         $registersNotUpdated = array();
 
         /** @var TiposProducto $registerXml */
         foreach ($registers->Registro as $registerXml) {
-            $register = $this->getDoctrine()->getRepository(TiposProducto::class)->findOneBy(
+            $register = $this->get('doctrine')->getRepository(TiposProducto::class)->findOneBy(
                 array('codigo' => $registerXml->getCodigo())
             );
             if (!$register) {
@@ -808,16 +809,16 @@ class ToolsUpdate extends AbstractController
             },
             $xmlRes
         );
-        $registers = $this->get('jms_serializer')->deserialize($newXml, 'App\Entity\RegistroCultivos', 'xml');
+        $registers = $this->jms_serializer->deserialize($newXml, 'App\Entity\RegistroCultivos', 'xml');
 
-        $em = $this->entityManager;
+        $em = $this->em;
         $registersCreated = array();
         $registersUpdated = array();
         $registersNotUpdated = array();
 
         /** @var Cultivos $registerXml */
         foreach ($registers->Registro as $registerXml) {
-            $register = $this->getDoctrine()->getRepository(Cultivos::class)->findOneBy(
+            $register = $this->get('doctrine')->getRepository(Cultivos::class)->findOneBy(
                 array('codigo' => $registerXml->getCodigo())
             );
             if (!$register) {
@@ -862,16 +863,16 @@ class ToolsUpdate extends AbstractController
             },
             $xmlRes
         );
-        $registers = $this->get('jms_serializer')->deserialize($newXml, 'App\Entity\RegistroEspecies', 'xml');
+        $registers = $this->jms_serializer->deserialize($newXml, 'App\Entity\RegistroEspecies', 'xml');
 
-        $em = $this->entityManager;
+        $em = $this->em;
         $registersCreated = array();
         $registersUpdated = array();
         $registersNotUpdated = array();
 
         /** @var Especies $registerXml */
         foreach ($registers->Registro as $registerXml) {
-            $register = $this->getDoctrine()->getRepository(Especies::class)->findOneBy(
+            $register = $this->get('doctrine')->getRepository(Especies::class)->findOneBy(
                 array('codigo' => $registerXml->getCodigo())
             );
             if (!$register) {
@@ -915,16 +916,16 @@ class ToolsUpdate extends AbstractController
             },
             $xmlRes
         );
-        $registers = $this->get('jms_serializer')->deserialize($newXml, 'App\Entity\RegistroProductosG', 'xml');
+        $registers = $this->jms_serializer->deserialize($newXml, 'App\Entity\RegistroProductosG', 'xml');
 
-        $em = $this->entityManager;
+        $em = $this->em;
         $registersCreated = array();
         $registersUpdated = array();
         $registersNotUpdated = array();
 
         /** @var ProductosG $registerXml */
         foreach ($registers->Registro as $registerXml) {
-            $register = $this->getDoctrine()->getRepository(ProductosG::class)->findOneBy(
+            $register = $this->get('doctrine')->getRepository(ProductosG::class)->findOneBy(
                 array('codigo' => $registerXml->getCodigo())
             );
             if (!$register) {
@@ -970,16 +971,16 @@ class ToolsUpdate extends AbstractController
             },
             $xmlRes
         );
-        $registers = $this->get('jms_serializer')->deserialize($newXml, 'App\Entity\RegistroTiposProducc', 'xml');
+        $registers = $this->jms_serializer->deserialize($newXml, 'App\Entity\RegistroTiposProducc', 'xml');
 
-        $em = $this->entityManager;
+        $em = $this->em;
         $registersCreated = array();
         $registersUpdated = array();
         $registersNotUpdated = array();
 
         /** @var TiposProducc $registerXml */
         foreach ($registers->Registro as $registerXml) {
-            $register = $this->getDoctrine()->getRepository(TiposProducc::class)->findOneBy(
+            $register = $this->get('doctrine')->getRepository(TiposProducc::class)->findOneBy(
                 array('codigo' => $registerXml->getCodigo())
             );
             if (!$register) {
@@ -1023,16 +1024,16 @@ class ToolsUpdate extends AbstractController
             },
             $xmlRes
         );
-        $registers = $this->get('jms_serializer')->deserialize($newXml, 'App\Entity\RegistroActividadesI', 'xml');
+        $registers = $this->jms_serializer->deserialize($newXml, 'App\Entity\RegistroActividadesI', 'xml');
 
-        $em = $this->entityManager;
+        $em = $this->em;
         $registersCreated = array();
         $registersUpdated = array();
         $registersNotUpdated = array();
 
         /** @var ActividadesI $registerXml */
         foreach ($registers->Registro as $registerXml) {
-            $register = $this->getDoctrine()->getRepository(ActividadesI::class)->findOneBy(
+            $register = $this->get('doctrine')->getRepository(ActividadesI::class)->findOneBy(
                 array('codigo' => $registerXml->getCodigo())
             );
             if (!$register) {
@@ -1082,13 +1083,13 @@ class ToolsUpdate extends AbstractController
             },
             $xmlRes
         );
-        $industriasxml = $this->get('jms_serializer')->deserialize(
+        $industriasxml = $this->jms_serializer->deserialize(
             $newXml,
             'App\Entity\RegistroIndustrias',
             'xml'
         );
 
-        $em = $this->entityManager;
+        $em = $this->em;
         $em->getConnection()->getConfiguration()->setSQLLogger(null);
 
         $registersProcessed = 0;
@@ -1098,7 +1099,7 @@ class ToolsUpdate extends AbstractController
         /** @var Industrias $in */
         foreach ($industriasxml->Registro as $in) {
 
-            $reg = $this->getDoctrine()->getRepository(Industrias::class)->findBy(
+            $reg = $this->get('doctrine')->getRepository(Industrias::class)->findBy(
                 array('codigo' => $in->getCodigo(), 'inNop' => $operator->getOpNop(), 'inAct' => $in->getInAct())
             );
 
@@ -1175,7 +1176,7 @@ class ToolsUpdate extends AbstractController
             },
             $xmlRes
         );
-        $cultivosrecxml = $this->get('jms_serializer')->deserialize(
+        $cultivosrecxml = $this->jms_serializer->deserialize(
             $newXml,
             'App\Entity\RegistroCultivosRec',
             'xml'
@@ -1185,7 +1186,7 @@ class ToolsUpdate extends AbstractController
         $registersCreated = 0;
         $registersUpdated = 0;
 
-        $em = $this->entityManager;
+        $em = $this->em;
         $em->getConnection()->getConfiguration()->setSQLLogger(null);
 
         foreach ($em->getEventManager()->getListeners() as $event => $listeners) {
@@ -1271,13 +1272,13 @@ class ToolsUpdate extends AbstractController
             },
             $xmlRes
         );
-        $clientxml = $this->get('jms_serializer')->deserialize($newXml, 'App\Entity\RegistroClient', 'xml');
+        $clientxml = $this->jms_serializer->deserialize($newXml, 'App\Entity\RegistroClient', 'xml');
 
         $registersProcessed = 0;
         $registersCreated = 0;
         $registersUpdated = 0;
 
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->em;
         $em->getConnection()->getConfiguration()->setSQLLogger(null);
 
         foreach ($em->getEventManager()->getListeners() as $event => $listeners) {
@@ -1348,13 +1349,13 @@ class ToolsUpdate extends AbstractController
             },
             $xmlRes
         );
-        $clientxml = $this->get('jms_serializer')->deserialize($newXml, 'App\Entity\RegistroClient', 'xml');
+        $clientxml = $this->jms_serializer->deserialize($newXml, 'App\Entity\RegistroClient', 'xml');
 
         $registersProcessed = 0;
         $registersCreated = 0;
         $registersUpdated = 0;
 
-        $em = $this->entityManager;
+        $em = $this->em;
 
         /** @var Client $clientXml */
         foreach ($clientxml->Registro as $clientXml) {
@@ -1403,12 +1404,12 @@ class ToolsUpdate extends AbstractController
             },
             $xmlRes
         );
-        $contactxml = $this->get('jms_serializer')->deserialize($newXml, 'App\Entity\RegistroContact', 'xml');
+        $contactxml = $this->jms_serializer->deserialize($newXml, 'App\Entity\RegistroContact', 'xml');
         $registersProcessed = 0;
         $registersCreated = 0;
         $registersUpdated = 0;
 
-        $em = $this->entityManager;
+        $em = $this->em;
 
         /** @var ArrayCollection $contacts */
         $contacts = $contactxml->Registro;
@@ -1458,19 +1459,19 @@ class ToolsUpdate extends AbstractController
             },
             $xmlRes
         );
-        $registers = $this->get('jms_serializer')->deserialize(
+        $registers = $this->jms_serializer->deserialize(
             $newXml,
             'App\Entity\RegistroRegister',
             'xml'
         );
-        $em = $this->entityManager;
+        $em = $this->em;
         $registersCreated = array();
         $registersUpdated = array();
         $registersNotUpdated = array();
 
         /** @var Register $registerXml */
         foreach ($registers->Registro as $registerXml) {
-            $register = $this->getDoctrine()->getRepository(Register::class)->findOneBy(
+            $register = $this->get('doctrine')->getRepository(Register::class)->findOneBy(
                 array('codigo' => $registerXml->getCodigo())
             );
             if (!$register) {

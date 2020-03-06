@@ -11,7 +11,7 @@ use App\Entity\Operator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder; 
+ 
 
 /**
  * Class UpdateProductosIndusCommand
@@ -20,12 +20,13 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class UpdateProductosIndusCommand extends Command
 {
     protected static $defaultName = 'gsbase:update:productosindus';
-    public function __construct(string $path_update_logs, $toolsupdate,$gsbase,$gsbasexml)
+    public function __construct(string $path_update_logs, $toolsupdate,$gsbase,$gsbasexml,$em)
     {
         $this->path_update_logs= $path_update_logs;
         $this->toolsupdate = $toolsupdate;
         $this->gsbase =$gsbase;
-        $this->gsbase =$gsbasexml;
+        $this->gsbasexml =$gsbasexml;
+        $this->em = $em;
          // you *must* call the parent constructor
          parent::__construct();
     }
@@ -44,7 +45,7 @@ class UpdateProductosIndusCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int 
     {
         $updateStart = date("H:i:s") . substr((string)microtime(), 1, 6);
-        $em = new ContainerBuilder();
+        $em = $this->em;
         $urlBase = $this->path_update_logs;
         $path_file = $urlBase . 'update_' . date("d_m_Y") . '.log';
         #$path_file = __DIR__ . '/../../../app/logs/update/update_' . date("d_m_Y") . '.log';
@@ -67,7 +68,7 @@ class UpdateProductosIndusCommand extends Command
             $output->writeln("No se ha podido conectar con el servidor de GsBase");
         }
 
-        $em = $em->container->get('doctrine')->getManager();
+        
         $operatorsProductosIndus = $em->getRepository(Operator::class)->findBy(
             array('opEntity' => 'ProductosIndus', 'opEst' => 'C')
         );

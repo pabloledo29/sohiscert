@@ -11,15 +11,16 @@ use App\Entity\UserOperator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder; 
+ 
 
 class IniUserOperatorsCommand extends Command
 {
     protected static $defaultName = 'app:ini:batch:useroperators';
-    public function __construct(string $path_update_logs)
+    public function __construct(string $path_update_logs,$em)
     {
         $this->path_update_logs= $path_update_logs;
          // you *must* call the parent constructor
+         $this->em =$em;
          parent::__construct();
     }
     /**
@@ -37,12 +38,10 @@ class IniUserOperatorsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $em = new ContainerBuilder();
-        $discriminator = $em->container->get('pugx_user.manager.user_discriminator');
-        $discriminator->setClass('App\Entity\UserOperator');
-        $userManager = $em->container->get('pugx_user_manager');
-
-        $em = $em->container->get('doctrine')->getManager();
+        $em = $this->em;
+    
+       
+        
         $userOperatorCandidates = $em->getRepository(Operator::class)->getOperatosConCifEmailNoUser();
 
         $usersCreados = 0;
@@ -53,11 +52,14 @@ class IniUserOperatorsCommand extends Command
             $entity = $em->getRepository(UserOperator::class)->findOneBy(array('username' => $candidate['opCif']));
             if (!$entity) {
                 /** @var UserOperator $userOperator */
-                $userOperator = $userManager->createUser();
+                $userOperator = new UserOperator();
 //                dump($candidate);
                 /* Generación de password aleatoria */
-                $tokenGenerator = $em->container->get('util.token_generator');
-                $password = substr($tokenGenerator->generateToken(), 0, 8); // 8 chars
+                $options = [
+                    'cost' => 12
+                ];
+             
+                $password = password_hash($this->generateRandomString(8),PASSWORD_BCRYPT,$options); // 8 chars
 
                 $userOperator->setUsername($candidate['opCif']);
                 $userOperator->setEmail($candidate['opEma']);
@@ -66,7 +68,8 @@ class IniUserOperatorsCommand extends Command
                 $userOperator->addRoles('ROLE_USER');
 //                dump($userOperator);
                 try {
-                    $userManager->updateUser($userOperator, true);
+                    $em->persist($userOperator);
+                    $em->flush();
                     $line = [$candidate['opEma'], $candidate['opDenoop'], $candidate['opCif'], $password];
 //                    dump($line);
                     array_push($users, $line);
@@ -79,7 +82,7 @@ class IniUserOperatorsCommand extends Command
 
             }
         }
-
+        exit;
         /** Generación de fichero CSV */
         $urlBase = $this->path_update_logs;
         $path_file = $urlBase . 'update/users_' . date("d_m_Y") . '.log';
@@ -103,4 +106,8 @@ class IniUserOperatorsCommand extends Command
 //        dump($users);
         return 0;
     }
+    //Método con str_shuffle() 
+    function generateRandomString($length = 8) { 
+        return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, $length); 
+    } 
 }

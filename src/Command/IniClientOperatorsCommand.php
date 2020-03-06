@@ -16,12 +16,13 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class IniClientOperatorsCommand extends Command
 {
     protected static $defaultName = 'app:ini:batch:clientuseroperators';
-    public function __construct(string $path_update_logs, $toolsupdate,$gsbase,$gsbasexml)
+    public function __construct(string $path_update_logs, $toolsupdate,$gsbase,$gsbasexml,$em)
     {
         $this->path_update_logs= $path_update_logs;
         $this->toolsupdate = $toolsupdate;
         $this->gsbase =$gsbase;
-        $this->gsbase =$gsbasexml;
+        $this->gsbasexml =$gsbasexml;
+        $this->em = $em;
          // you *must* call the parent constructor
          parent::__construct();
     }
@@ -41,7 +42,7 @@ class IniClientOperatorsCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $updateStart = date("H:i:s") . substr((string)microtime(), 1, 6);
-        $em = new ContainerBuilder();
+        $em = $this->em;
         $urlBase = $this->path_update_logs;
         $path_file = $urlBase . 'update_' . date("d_m_Y") . '.log';
         #$path_file = __DIR__ . '/../../../app/logs/update/update_' . date("d_m_Y") . '.log';
@@ -56,7 +57,7 @@ class IniClientOperatorsCommand extends Command
             fwrite($log, "NO\n");
         }
 
-        $em = $em->container->get('doctrine')->getManager();
+        
 
         //$userOperators = $em->getRepository(UserOperator::class)->findBy(array('client_id' => null),null,400);
         $userOperators = $em->getRepository(UserOperator::class)->findBy(array('client_id' => null));

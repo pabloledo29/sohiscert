@@ -9,7 +9,7 @@ namespace App\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder; 
+ 
 
 /**
  * Class UpdateRegisterCommand
@@ -24,7 +24,7 @@ class UpdateRegisterCommand extends Command
         $this->path_update_logs= $path_update_logs;
         $this->toolsupdate = $toolsupdate;
         $this->gsbase =$gsbase;
-        $this->gsbase =$gsbasexml;
+        $this->gsbasexml =$gsbasexml;
          // you *must* call the parent constructor
          parent::__construct();
     }
@@ -43,7 +43,7 @@ class UpdateRegisterCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $updateStart = date("H:i:s") . substr((string)microtime(), 1, 6);
-        $em = new ContainerBuilder();
+        
         $urlBase = $this->path_update_logs;
         $path_file = $urlBase . 'update_' . date("d_m_Y") . '.log';
         #$path_file = __DIR__ . '/../../../app/logs/update/update_' . date("d_m_Y") . '.log';

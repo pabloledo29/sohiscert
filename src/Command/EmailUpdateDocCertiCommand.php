@@ -15,7 +15,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder; 
+ 
 use Symfony\Component\Finder\Finder;
 use App\Entity\DocumentosFTP;
 /**
@@ -25,7 +25,7 @@ use App\Entity\DocumentosFTP;
 class EmailUpdateDocCertiCommand extends Command
 {
     protected static $defaultName = 'email:emaildoccerti:send';
-    public function __construct(string $path_update_logs,string $ftp_server, string $ftp_user_name, string $ftp_user_pass)
+    public function __construct(string $path_update_logs,string $ftp_server, string $ftp_user_name, string $ftp_user_pass, $em)
     {
         $this->path_update_logs = $path_update_logs;
         $this->finder = new Finder();
@@ -33,6 +33,7 @@ class EmailUpdateDocCertiCommand extends Command
         $this->ftp_server = $ftp_server;
         $this->ftp_user_name = $ftp_user_name;
         $this->ftp_user_pass = $ftp_user_pass;
+        $this->em = $em;
          // you *must* call the parent constructor
          parent::__construct();
     }

@@ -279,9 +279,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
     public function addRoles(string $roles): self
     {
-        if (!$this->roles->contains($roles)) {
+        if (!in_array($roles,$this->roles)) {
             $this->roles[] = $roles;
-            $roles->setAncestro($this);
         }
 
         return $this;
@@ -291,10 +290,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
     {
         if ($this->roles->contains($roles)) {
             $this->roles->removeElement($roles);
-            // set the owning side to null (unless already changed)
-            if ($roles->getAncestro() === $this) {
-                $roles->setAncestro(null);
-            }
         }
 
         return $this;

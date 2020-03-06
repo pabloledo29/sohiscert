@@ -39,5 +39,4 @@ class UserAdmin extends User
     
 
     
-    
 }

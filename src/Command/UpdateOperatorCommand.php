@@ -9,7 +9,6 @@ namespace App\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder; 
 
 use App\Entity\Operator;
 use App\Entity\UpdateLog;
@@ -23,11 +22,13 @@ use App\Entity\Register;
 class UpdateOperatorCommand extends Command
 {
     protected static $defaultName = 'gsbase:update:operator';
-    public function __construct(string $path_update_logs,$gsbase,$gsbasexml)
+    public function __construct(string $path_update_logs,$gsbase,$gsbasexml,$jms_serializer,$em)
     {
         $this->path_update_logs= $path_update_logs;
         $this->gsbase =$gsbase;
-        $this->gsbase =$gsbasexml;
+        $this->gsbasexml =$gsbasexml;
+        $this->jms_serializer=$jms_serializer;
+        $this->em = $em;
          // you *must* call the parent constructor
          parent::__construct();
     }
@@ -46,7 +47,7 @@ class UpdateOperatorCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $updateStart = date("H:i:s") . substr((string)microtime(), 1, 6);
-        $em = new ContainerBuilder();
+        
         $urlBase = $this->path_update_logs;
         $path_file = $urlBase . 'update_' . date("d_m_Y") . '.log';
         #$path_file = __DIR__ . '/../../../app/logs/update/update_' . date("d_m_Y") . '.log';
@@ -82,13 +83,13 @@ class UpdateOperatorCommand extends Command
             $xmlRes
         );
 
-        $operators = $em->container->get('jms_serializer')->deserialize(
+        $operators = $this->jms_serializer->deserialize(
             $newXml,
             'App\Entity\RegistroOperator',
             'xml'
         );
        
-        $em = $em->container->get('doctrine')->getManager();
+        $em = $this->em;
 
         $operatorsCreated = 0;
         $operatorsUpdated = 0;
@@ -218,6 +219,7 @@ class UpdateOperatorCommand extends Command
 		            $proceso = 2;
                 }
             }
+            $em->getManager();
             $em->flush();
             $em->clear();
             $operatorsProcessed++;

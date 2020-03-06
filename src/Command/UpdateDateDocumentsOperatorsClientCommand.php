@@ -10,7 +10,7 @@ namespace App\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder; 
+ 
 
 use App\Entity\DocumentosFTP;
 use App\Entity\Operator;
@@ -98,7 +98,7 @@ class UpdateDateDocumentsOperatorsClientCommand extends Command
                     # code...
                     $val++;
 
-                    $em = new ContainerBuilder();
+                    $em = $this->em;
                     $em =  $em->container->get('doctrine')->getManager();
                     //$archivo = $em->getRepository('App\Entity\DocumentosFTP')->findOneBy(array('nbDoc' => ' . $lista[$i]->getNbDoc() . '));
                     $archivo = $em->getRepository(DocumentosFTP::class)->findOneByNbDoc($lista[$i]);
@@ -388,7 +388,7 @@ class UpdateDateDocumentsOperatorsClientCommand extends Command
     
     /*public function isEnabled(): bool
     {
-        $em = new ContainerBuilder();
+        $em = $this->em;
         return $em->has("mailer");
     }*/
 

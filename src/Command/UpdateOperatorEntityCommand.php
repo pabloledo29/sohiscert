@@ -9,7 +9,7 @@ namespace App\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder; 
+ 
 
 use App\Entity\RelationshipRegister;
 use App\Entity\Operator;
@@ -21,9 +21,10 @@ use App\Entity\Operator;
 class UpdateOperatorEntityCommand extends Command
 {
     protected static $defaultName = 'gsbase:update:operatorentity';
-    public function __construct(string $path_update_logs)
+    public function __construct(string $path_update_logs,$em)
     {
         $this->path_update_logs= $path_update_logs;
+        $this->em = $em;
          // you *must* call the parent constructor
          parent::__construct();
     }
@@ -43,7 +44,7 @@ class UpdateOperatorEntityCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $updateStart = date("H:i:s") . substr((string)microtime(), 1, 6);
-        $em = new ContainerBuilder();
+        $em = $this->em;
         $urlBase = $this->path_update_logs;
         $path_file = $urlBase . 'update_' . date("d_m_Y") . '.log';
         #$path_file = __DIR__ . '/../../../app/logs/update/update_' . date("d_m_Y") . '.log';
@@ -57,7 +58,6 @@ class UpdateOperatorEntityCommand extends Command
             fwrite($log, "\n");
             fwrite($log, "NO\n");
         }
-        $em = $em->container->get('doctrine')->getManager();
         $operators = $em->getRepository(Operator::class)->findAll();
 
         $operatorsProcessed = 0;

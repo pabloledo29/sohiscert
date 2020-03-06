@@ -121,7 +121,7 @@ services:
 
     toolsupdate:
         class: App\Tools\ToolsUpdate
-        arguments: ["@service_container"]
+        arguments: ["@service_container",'@doctrine.orm.entity_manager','@jms_serializer']
         tags: [name: 'toolsupdate']
     
     gsbasexml:
@@ -137,7 +137,7 @@ services:
 
     App\Command\UpdateRegisterCommand:
         tags: { name: 'console.command', command: 'gsbase:update:registro'}
-        arguments: ['%path_update_logs','@toolsupdate','@gsbase', '@gsbasexml']
+        arguments: ['%path_update_logs%','@toolsupdate','@gsbase', '@gsbasexml']
 
     App\Command\EmailUpdateDocFactuCommand:
         tags: { name: 'console.command', command: 'email:emaildocfactu:send'}
@@ -150,83 +150,85 @@ services:
     
     App\Command\EmaildocanaSendCommand:
         tags: { name: 'console.command', command: "email:emaildocana:send" }
-
+     string $ftp_user_pass, $em
+        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@doctrine.orm.entity_manager']   
     App\Command\EmaildoccarSendCommand:
         tags: { name: 'console.command', command: "email:emaildoccar:send" }
 
     App\Command\UpdateProductosPaeCommand:
         tags: { name: 'console.command', command: "gsbase:update:productospae" }
-        arguments: ['%path_update_logs','@toolsupdate','@gsbase', '@gsbasexml']   
+        arguments: ['%path_update_logs%','@toolsupdate','@gsbase', '@gsbasexml','@doctrine.orm.entity_manager']   
 
     App\Command\UpdateProductosIndusCommand:
         tags: { name: 'console.command', command: "gsbase:update:productosindus" }
-        arguments: ['%path_update_logs','@toolsupdate','@gsbase', '@gsbasexml']
+        arguments: ['%path_update_logs%','@toolsupdate','@gsbase', '@gsbasexml','@doctrine.orm.entity_manager']
 
     App\Command\UpdateProductosCommand:
         tags: { name: 'console.command', command: "gsbase:update:productos" }
-        arguments: ['%path_update_logs','@toolsupdate','@gsbase', '@gsbasexml']
+        arguments: ['%path_update_logs%','@toolsupdate','@gsbase', '@gsbasexml']
 
     App\Command\UpdateOperatorEntityCommand:
         tags: { name: 'console.command', command: "gsbase:update:operatorentity" }
-        arguments: ['%path_update_logs']
+        arguments: ['%path_update_logs%','@doctrine.orm.entity_manager']
 
     App\Command\UpdateOperatorCommand:
         tags: { name: 'console.command', command: "gsbase:update:operator" }
-        arguments: ['%path_update_logs','@gsbase', '@gsbasexml']
+        arguments: ['%path_update_logs%','@gsbase', '@gsbasexml','@jms_serializer','@doctrine.orm.entity_manager']
 
     App\Command\UpdateIndustriasCommand:
         tags: { name: 'console.command', command: "gsbase:update:industrias" }
-        arguments: ['%path_update_logs','@toolsupdate','@gsbase', '@gsbasexml']
+        arguments: ['%path_update_logs%','@toolsupdate','@gsbase', '@gsbasexml','@doctrine.orm.entity_manager']
 
     App\Command\UpdateGanaderiasCommand:
         tags: { name: 'console.command', command: "gsbase:update:ganaderias" }
-        arguments: ['%path_update_logs','@toolsupdate','@gsbase', '@gsbasexml']
+        arguments: ['%path_update_logs%','@toolsupdate','@gsbase', '@gsbasexml','@doctrine.orm.entity_manager']
 
     App\Command\UpdateDateDocumentsOperatorsClientCommand:
         tags: { name: 'console.command', command: "gsbase:update:datedocuments" }       
     
     App\Command\UpdateCultivosRecCommand:
         tags: { name: 'console.command', command: "gsbase:update:cultivosrec" }
-        arguments: ['%path_update_logs','@toolsupdate','@gsbase', '@gsbasexml']         
+        arguments: ['%path_update_logs%','@toolsupdate','@gsbase', '@gsbasexml','@doctrine.orm.entity_manager']         
 
     App\Command\UpdateCultivosRecBisCommand:
         tags: { name: 'console.command', command: "gsbase:update:cultivosrecbis" }
-        arguments: ['%path_update_logs','@toolsupdate','@gsbase', '@gsbasexml']
+        arguments: ['%path_update_logs%','@toolsupdate','@gsbase', '@gsbasexml','@doctrine.orm.entity_manager']
 
     App\Command\UpdateCultivosRec2Command:
         tags: { name: 'console.command', command: "gsbase:update:cultivosrec2" }
-        arguments: ['%path_update_logs','@toolsupdate','@gsbase', '@gsbasexml']
+        arguments: ['%path_update_logs%','@toolsupdate','@gsbase', '@gsbasexml','@doctrine.orm.entity_manager']
 
     App\Command\UpdateContactCommand:
         tags: { name: 'console.command', command: "gsbase:update:contact" }
-        arguments: ['%path_update_logs','@toolsupdate','@gsbase', '@gsbasexml']
+        arguments: ['%path_update_logs%','@toolsupdate','@gsbase', '@gsbasexml','@doctrine.orm.entity_manager']
 
     App\Command\UpdateClientCommand:
         tags: { name: 'console.command', command: "gsbase:update:client" }
-        arguments: ['%path_update_logs','@toolsupdate','@gsbase', '@gsbasexml']
+        arguments: ['%path_update_logs%','@toolsupdate','@gsbase', '@gsbasexml','@doctrine.orm.entity_manager']
 
     App\Command\UpdateBasicInfoCommand:
         tags: { name: 'console.command', command: "gsbase:update:basicinfo" }
-        arguments: ['%path_update_logs','@toolsupdate','@gsbase', '@gsbasexml']
+        arguments: ['%path_update_logs%','@toolsupdate','@gsbase', '@gsbasexml']
 
     App\Command\UpdateAvesCorralCommand:
         tags: { name: 'console.command', command: "gsbase:update:avescorral" }
-        arguments: ['%path_update_logs','@toolsupdate','@gsbase', '@gsbasexml']
+        arguments: ['%path_update_logs%','@toolsupdate','@gsbase', '@gsbasexml']
 
     App\Command\RemoveOperatorCommand:
         tags: { name: 'console.command', command: "gsbase:remove:operator" }
-        arguments: ['%path_update_logs','@toolsupdate','@gsbase', '@gsbasexml']
+        arguments: ['%path_update_logs%','@gsbase', '@gsbasexml','@jms_serializer','@doctrine.orm.entity_manager']
 
     App\Command\IniUserOperatorsCommand:
         tags: { name: 'console.command', command: "app:ini:batch:useroperators" }
+        arguments: ['%path_update_logs%','@doctrine.orm.entity_manager']
         
     App\Command\IniContactCommand:
         tags: { name: 'console.command', command: "app:ini:batch:clientscontact" }
-        arguments: ['%path_update_logs','@gsbase', '@gsbasexml']
+        arguments: ['%path_update_logs%','@gsbase', '@gsbasexml','@jms_serializer','@doctrine.orm.entity_manager']
 
     App\Command\IniClientOperatorsCommand:
         tags: { name: 'console.command', command: "app:ini:batch:clientuseroperators" }
-        arguments: ['%path_update_logs','@toolsupdate','@gsbase', '@gsbasexml']
+        arguments: ['%path_update_logs%','@toolsupdate','@gsbase', '@gsbasexml','@doctrine.orm.entity_manager']
 
     App\Command\EmailUpdateDocCertiCommand:
         tags: { name: 'console.command', command: "email:emaildoccerti:send" }
@@ -262,6 +264,8 @@ services:
     App\Repository\RelationshipRegisterRepository:
         tags: ['doctrine.repository_service']
     App\Repository\UserRepository:
+        tags: ['doctrine.repository_service']
+    App\Repository\ClientRepository:
         tags: ['doctrine.repository_service']
     app.mailer.service:
         class: App\Mailer\Mailer
