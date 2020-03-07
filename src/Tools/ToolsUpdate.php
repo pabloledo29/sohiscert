@@ -34,6 +34,8 @@ use App\Entity\Ganaderias;
 use App\Entity\Productos;
 use App\Entity\ProductosIndus;
 use App\Entity\ProductosPae;
+use App\Entity\RegistroClient;
+
 /**
  * Class ToolsUpdate
  * @package App\Tools
@@ -43,7 +45,7 @@ class ToolsUpdate extends AbstractController
 
     protected $container;
 
-    public function __construct(Container $c, $em, $jms_serializer)
+    public function __construct($c, $em, $jms_serializer)
     {
         $this->container = $c;
         $this->em = $em;
@@ -1272,7 +1274,7 @@ class ToolsUpdate extends AbstractController
             },
             $xmlRes
         );
-        $clientxml = $this->jms_serializer->deserialize($newXml, 'App\Entity\RegistroClient', 'xml');
+        $clientxml = $this->jms_serializer->deserialize($newXml, RegistroClient::class, 'xml');
 
         $registersProcessed = 0;
         $registersCreated = 0;
@@ -1286,7 +1288,8 @@ class ToolsUpdate extends AbstractController
                 $em->getEventManager()->removeEventListener($event, $listener);
             }
         }
-
+        var_dump("LLEGA");
+        exit;
         /** @var Client $client */
         foreach ($clientxml->Registro as $client) {
             $registersProcessed++;
