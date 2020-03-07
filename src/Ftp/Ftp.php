@@ -189,23 +189,23 @@ class Ftp
         $certFmod = [];
 
        
-        var_dump("HOLA");
-        exit;
+        $path = $this->determineQueryType($query);
         # Establecemos Conexión 
         //$conn_id = ftp_connect($ftp_server); 
-        $this->finder->files()->in("ftp://$this->ftp_user_name:$this->ftp_user_pass@$this->ftp_server/")->name('*.pdf');
-
+        $this->finder->files()->in("ftp://$this->ftp_user_name:$this->ftp_user_pass@$this->ftp_server/$path")->name("*.pdf");
+        
         if ($this->finder->hasResults()) {
             
         # Inciamos Sesión
         //$login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass); 
 
-        $path = $this->determineQueryType($query);
-
-
+        
+        var_dump($this->finder);
+        var_dump($this->finder->files());
         /** @var array|false $listado */
         $listado = $this->finder->files();
-       
+        var_dump($listado);
+       exit;
         $numarch = count($listado);
         
         
