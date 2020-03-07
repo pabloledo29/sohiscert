@@ -21,8 +21,8 @@ class RegistroClient
      */
     public $Registro;
 
-    public function __construct()
+    public function __construct(ArrayCollection $Registro)
     {
-        $this->registro = new ArrayCollection();
+        $this->registro = $Registro;
     }
 }
