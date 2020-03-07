@@ -100,7 +100,7 @@ class Ftp
         $clientList = [];
 
         foreach ($clients as $client) {
-            $this->finder->files()->in("ftp://$this->ftp_user_name:$this->ftp_user_pass@$this->ftp_server")->name($path . $client['codigo']);
+            $this->finder->files()->in("ftp://$this->ftp_user_name:$this->ftp_user_pass@$this->ftp_server"."$path")->name($client['codigo']);
            
             if ($this->finder->hasResults()) {
                 array_push($clientList, $client['codigo']);
@@ -134,7 +134,7 @@ class Ftp
         $path = $this->determineQueryType($query);
 
 
-        $fileList = $this->finder->files()->in("ftp://$this->ftp_user_name:$this->ftp_user_pass@$this->ftp_server/"."$path")->name('*.pdf');
+        $fileList = $this->finder->files()->in("ftp://$this->ftp_user_name:$this->ftp_user_pass@$this->ftp_server"."$path")->name('*.pdf');
         $list = [];
         foreach ($fileList as $file) {
             $list[substr(strrchr($file, '/'), 1)] = $file;
@@ -156,7 +156,7 @@ class Ftp
         $valid = false;
         $dir = $this->determineQueryType($query);
 
-        $fileList = $this->finder->files()->in("ftp://$this->ftp_user_name:$this->ftp_user_pass@$this->ftp_server")->name($dir.'*.pdf');
+        $fileList = $this->finder->files()->in("ftp://$this->ftp_user_name:$this->ftp_user_pass@$this->ftp_server"."$dir")->name('*.pdf');
         if (in_array($path, $fileList)) {
             $valid = true;
         }
@@ -192,20 +192,20 @@ class Ftp
         $path = $this->determineQueryType($query);
         # Establecemos Conexión 
         //$conn_id = ftp_connect($ftp_server); 
-        $this->finder->files()->in("ftp://$this->ftp_user_name:$this->ftp_user_pass@$this->ftp_server/$path")->name("*.pdf");
-        
+        $this->finder->in("ftp://$this->ftp_user_name:$this->ftp_user_pass@$this->ftp_server"."$path")->name("AN1363F-21.pdf")->depth('== 0');;
+        var_dump($this->finder);
+        var_dump($this->finder->files());
+        exit;
         if ($this->finder->hasResults()) {
             
         # Inciamos Sesión
         //$login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass); 
 
         
-        var_dump($this->finder);
-        var_dump($this->finder->files());
+       
         /** @var array|false $listado */
         $listado = $this->finder->files();
-        var_dump($listado);
-       exit;
+        
         $numarch = count($listado);
         
         
