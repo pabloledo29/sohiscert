@@ -24,7 +24,7 @@ class Ftp
     const FTP_BILLING = "/facturasintranet"; # Directorio anterior: "/RAIZ/SOHISCERT-GERENCIA/DEPARTAMENTO DE CONTABILIDAD/FACTURAS 2016/";
     const FTP_DOC = "/Documentos/Documentos/";
     const FTP_GENERAL = "/Documentos/General/";
-    const FTP_CERTIFICADOS = "/TEST";
+    const FTP_CERTIFICADOS = "/sitio2";
     const FTP_ANALISIS = "/SITIO1";
     const FTP_CARTAS = "/SITIO3";
     const FTP_UPLOADS = "/";
@@ -192,10 +192,8 @@ class Ftp
         $path = $this->determineQueryType($query);
         # Establecemos Conexión 
         //$conn_id = ftp_connect($ftp_server); 
-        $this->finder->in("ftp://$this->ftp_user_name:$this->ftp_user_pass@$this->ftp_server"."$path")->name("AN1363F-21.pdf")->depth('== 0');;
-        var_dump($this->finder);
-        var_dump($this->finder->files());
-        exit;
+        $this->finder->in("ftp://$this->ftp_user_name:$this->ftp_user_pass@$this->ftp_server"."$path")->name("*.pdf")->depth('== 0');;
+        
         if ($this->finder->hasResults()) {
             
         # Inciamos Sesión
