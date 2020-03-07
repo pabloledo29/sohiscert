@@ -17,7 +17,7 @@ class RegistroOperator
 {
     /**
      * @JMS\Type("ArrayCollection<App\Entity\Operator>")
-     * @JMS\XmlList(entry="registro")
+     * @JMS\XmlList(entry="registro", inline=true)
      */
     public $Registro;
 

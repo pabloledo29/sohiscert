@@ -24,7 +24,7 @@ class RegistroDocExp
 {
     /**
      * @JMS\Type("ArrayCollection<App\Entity\DocExp>")
-     * @JMS\XmlList(entry="registro")
+     * @JMS\XmlList(entry="registro", inline=true)
      */
     public $Registro;
 

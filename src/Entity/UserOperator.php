@@ -101,4 +101,9 @@ class UserOperator extends User
     {
         return $this->client_id;
     }
+    public function setClientId(int $client_id ):self
+    {
+        $this->client_id = $client_id;
+        return $this->client_id;
+    }
 }

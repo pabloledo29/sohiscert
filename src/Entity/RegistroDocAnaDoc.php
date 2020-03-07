@@ -24,7 +24,7 @@ class RegistroDocAnaDoc
 {
     /**
      * @JMS\Type("ArrayCollection<App\Entity\DocAnaDoc>")
-     * @JMS\XmlList(entry="registro")
+     * @JMS\XmlList(entry="registro", inline=true)
      */
     public $Registro;
 

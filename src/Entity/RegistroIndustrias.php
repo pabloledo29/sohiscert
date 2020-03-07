@@ -17,12 +17,12 @@ class RegistroIndustrias
 {
     /**
      * @JMS\Type("ArrayCollection<App\Entity\Industrias>")
-     * @JMS\XmlList(entry="registro")
+     * @JMS\XmlList(entry="registro", inline=true)
      */
     public $Registro;
 
-    public function __construct()
+    public function __construct($Registro)
     {
-        $this->registro = new ArrayCollection();
+        $this->registro = $Registro;
     }
 }

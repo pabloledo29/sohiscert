@@ -17,7 +17,7 @@ class RegistroDocPresu
 {
     /**
      * @JMS\Type("ArrayCollection<App\Entity\DocPresu>")
-     * @JMS\XmlList(entry="registro")
+     * @JMS\XmlList(entry="registro", inline=true)
      */
     public $Registro;
 

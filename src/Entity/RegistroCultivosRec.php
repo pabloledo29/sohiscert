@@ -17,7 +17,7 @@ class RegistroCultivosRec
 {
     /**
      * @JMS\Type("ArrayCollection<App\Entity\CultivosRec>")
-     * @JMS\XmlList(entry="registro")
+     * @JMS\XmlList(entry="registro", inline=true)
      */
     public $Registro;
 

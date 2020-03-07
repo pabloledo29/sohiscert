@@ -17,7 +17,7 @@ class RegistroIAvesCorral
 {
     /**
      * @JMS\Type("ArrayCollection<App\Entity\IAvesCorral>")
-     * @JMS\XmlList(entry="registro")
+     * @JMS\XmlList(entry="registro", inline=true)
      */
     public $Registro;
 

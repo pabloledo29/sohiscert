@@ -17,12 +17,12 @@ class RegistroClient
 {
     /**
      * @JMS\Type("ArrayCollection<App\Entity\Client>")
-     * @JMS\XmlList(entry="registro")
+     * @JMS\XmlList(entry="registro", inline=true)
      */
     public $Registro;
 
-    public function __construct(ArrayCollection $Registro)
+    public function __construct()
     {
-        $this->registro = $Registro;
+        $this->registro = new ArrayCollection();
     }
 }

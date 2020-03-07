@@ -17,7 +17,7 @@ class RegistroProductosIndus
 {
     /**
      * @JMS\Type("ArrayCollection<App\Entity\ProductosIndus>")
-     * @JMS\XmlList(entry="registro")
+     * @JMS\XmlList(entry="registro, inline=true")
      */
     public $Registro;
 
