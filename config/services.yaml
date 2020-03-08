@@ -129,15 +129,11 @@ services:
         arguments: ["@service_container"]
         tags: [name: 'gsbasexml']
 
+    app.mailer.service:
+        class: App\Mailer\Mailer
+        arguments: ['%email_from_address%','%email_from_name%','%mail_to%']
 
-    App\Command\GsBaseConnectCommand:
-        tags:
-            - { name: 'console.command', command: 'gsbase:connect'}
-        arguments: ['%path_update_logs%', '@gsbase']
-
-    App\Command\UpdateRegisterCommand:
-        tags: { name: 'console.command', command: 'gsbase:update:registro'}
-        arguments: ['%path_update_logs%','@toolsupdate','@gsbase', '@gsbasexml']
+#===================================================================================================    
 
     App\Command\EmailUpdateDocFactuCommand:
         tags: { name: 'console.command', command: 'email:emaildocfactu:send'}
@@ -162,6 +158,17 @@ services:
     App\Command\EmailUpdateDocCertiCommand:
         tags: { name: 'console.command', command: "email:emaildoccerti:send" }
         arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@doctrine.orm.entity_manager']
+
+#=======================================================================================================================
+
+    App\Command\GsBaseConnectCommand:
+        tags:
+            - { name: 'console.command', command: 'gsbase:connect'}
+        arguments: ['%path_update_logs%', '@gsbase']
+
+    App\Command\UpdateRegisterCommand:
+        tags: { name: 'console.command', command: 'gsbase:update:registro'}
+        arguments: ['%path_update_logs%','@toolsupdate','@gsbase', '@gsbasexml']
 
     App\Command\UpdateProductosPaeCommand:
         tags: { name: 'console.command', command: "gsbase:update:productospae" }
@@ -220,11 +227,14 @@ services:
 
     App\Command\UpdateAvesCorralCommand:
         tags: { name: 'console.command', command: "gsbase:update:avescorral" }
-        arguments: ['%path_update_logs%','@toolsupdate','@gsbase', '@gsbasexml']
+        arguments: ['%path_update_logs%','@toolsupdate','@gsbase', '@gsbasexml','@doctrine.orm.entity_manager']
 
     App\Command\RemoveOperatorCommand:
         tags: { name: 'console.command', command: "gsbase:remove:operator" }
         arguments: ['%path_update_logs%','@gsbase', '@gsbasexml','@jms_serializer','@doctrine.orm.entity_manager']
+
+
+#=======================================================================================================================
 
     App\Command\IniUserOperatorsCommand:
         tags: { name: 'console.command', command: "app:ini:batch:useroperators" }
@@ -238,12 +248,11 @@ services:
         tags: { name: 'console.command', command: "app:ini:batch:clientuseroperators" }
         arguments: ['%path_update_logs%','@toolsupdate','@gsbase', '@gsbasexml','@doctrine.orm.entity_manager']
 
-    
-
+#===================================================================================================
     
     app.ftp.service:
         class: App\Ftp\Ftp
-        arguments: [ '%nop_conversion%' ]
+        arguments: [ '%nop_conversion%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%' ]
 
     App\Entity\AccessLog:
         class: App\Entity\AccessLog
@@ -252,7 +261,9 @@ services:
         class:  App\Security\LoginAuthenticator
         #arguments:
         arguments: [ '@doctrine.orm.entity_manager',"@router"] 
-    
+
+#===================================================================================================
+
     App\Repository\OperatorRepository:
         tags: ['doctrine.repository_service']
     App\Repository\UserOperatorRepository:
@@ -271,6 +282,28 @@ services:
         tags: ['doctrine.repository_service']
     App\Repository\ClientRepository:
         tags: ['doctrine.repository_service']
-    app.mailer.service:
-        class: App\Mailer\Mailer
-        arguments: ['%email_from_address%','%email_from_name%','%mail_to%']
+    App\Repository\TiposCultivosRepository:
+        tags: ['doctrine.repository_service']
+    App\Repository\TiposProductoRepository:
+        tags: ['doctrine.repository_service']
+    App\Repository\CultivosRecRepository:
+        tags: ['doctrine.repository_service']
+    App\Repository\CultivosRec2Repository:
+        tags: ['doctrine.repository_service']    
+    App\Repository\CultivosRepository:
+        tags: ['doctrine.repository_service']
+    App\Repository\EspeciesRepository:
+        tags: ['doctrine.repository_service']
+    App\Repository\TiposProduccRepository:
+        tags: ['doctrine.repository_service']
+    App\Repository\ActividadesIRepository:
+        tags: ['doctrine.repository_service']
+    App\Repository\RegisterRepository:
+        tags: ['doctrine.repository_service']
+    App\Repository\ProductosPaeRepository:
+        tags: ['doctrine.repository_service']
+    App\Repository\GanaderiasRepository:
+        tags: ['doctrine.repository_service']
+    App\Repository\ContactRepository:
+        tags: ['doctrine.repository_service']
+   

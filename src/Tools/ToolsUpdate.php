@@ -918,15 +918,17 @@ class ToolsUpdate extends AbstractController
             },
             $xmlRes
         );
+      
         $registers = $this->jms_serializer->deserialize($newXml, 'App\Entity\RegistroProductosG', 'xml');
 
         $em = $this->em;
         $registersCreated = array();
         $registersUpdated = array();
         $registersNotUpdated = array();
-
+       
         /** @var ProductosG $registerXml */
         foreach ($registers->Registro as $registerXml) {
+           
             $register = $this->get('doctrine')->getRepository(ProductosG::class)->findOneBy(
                 array('codigo' => $registerXml->getCodigo())
             );
@@ -1289,9 +1291,10 @@ class ToolsUpdate extends AbstractController
             }
         }
         var_dump("LLEGA");
-        exit;
+        
         /** @var Client $client */
         foreach ($clientxml->Registro as $client) {
+            exit;
             $registersProcessed++;
 
             /** @var Client $entity */
@@ -1323,7 +1326,8 @@ class ToolsUpdate extends AbstractController
             }
         }
 //        $em->getUnitOfWork()->clear();
-
+var_dump("MAL");
+exit;
         return array(
             'registersCreated' => $registersCreated,
             'registersUpdated' => $registersUpdated,

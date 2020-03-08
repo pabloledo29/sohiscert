@@ -7,8 +7,6 @@
 namespace App\Ftp;
 
 
-use Symfony\Component\Finder\Finder;
-
 /**
  * Class Ftp
  *
@@ -24,7 +22,7 @@ class Ftp
     const FTP_BILLING = "/facturasintranet"; # Directorio anterior: "/RAIZ/SOHISCERT-GERENCIA/DEPARTAMENTO DE CONTABILIDAD/FACTURAS 2016/";
     const FTP_DOC = "/Documentos/Documentos/";
     const FTP_GENERAL = "/Documentos/General/";
-    const FTP_CERTIFICADOS = "/sitio2";
+    const FTP_CERTIFICADOS = "/SITIO2";
     const FTP_ANALISIS = "/SITIO1";
     const FTP_CARTAS = "/SITIO3";
     const FTP_UPLOADS = "/";
@@ -37,19 +35,18 @@ class Ftp
 
     /**
      * Ftp constructor.
-     * @param \Finder $ftp
      * @param array $nopConversion Array von valores parametrizados para conversión de NOPs antiguos.
      */
-    public function __construct()
+    public function __construct($nop_conversion, $ftp_server, $ftp_user_name, $ftp_user_pass)
     { 
         $nop_conversion = ['RP'=> 'PAE', 'RI' => 'IAE','RC' => 'CAE', 'RG' => 'GAE', 'RF' => 'FAE', 'RT'=> 'TAE', 'RS' => 'SAE', 'RN' => 'NAE' ];
         
-        $this->finder = new Finder();
+       
         $this->nopConversion = $nop_conversion;
          # Datos Conexión FTP para poder Obtener Fecha Modificación de los Archivos
-        $this->ftp_server = 'sohiscert3.ddns.cyberoam.com';
-        $this->ftp_user_name = 'userftp1';
-        $this->ftp_user_pass = 'AtlIntTec.12';
+        $this->ftp_server = $ftp_server;
+        $this->ftp_user_name = $ftp_user_name;
+        $this->ftp_user_pass = $ftp_user_pass;
     }
 
     /**
@@ -78,7 +75,7 @@ class Ftp
             // MNN Añadimos la nueva Query     
             case $query == 'conclusiones':
                 return Ftp::FTP_CONCLUSIONES;
-            // FIN MNN    
+            // FIN MNN        
             default:
                 return null;
         }
@@ -94,24 +91,22 @@ class Ftp
      * @param $query
      * @return array
      */
-    public function retrieveFilesFromClients(array $clients, $query)
+    public function retrieveFilesFromClients($conn_id ,array $clients, $query)
     {
-        $path = "/".$this->determineQueryType($query);
+        $path = $this->determineQueryType($query);
         $clientList = [];
-
         foreach ($clients as $client) {
-            $this->finder->files()->in("ftp://$this->ftp_user_name:$this->ftp_user_pass@$this->ftp_server"."$path")->name($client['codigo']);
-           
-            if ($this->finder->hasResults()) {
+            if (is_dir("ftp://$this->ftp_user_name:$this->ftp_user_password@$this->ftp_server/".$path . $client['codigo'])) {
                 array_push($clientList, $client['codigo']);
             }
         }
 
         $operatorList = [];
         foreach ($clientList as $dir) {
-            $tempList = $this->finder->size($path . $dir);
+            $tempList = ftp_nlist($conn_id,$path . $dir);
             foreach ($tempList as $item) {
-                $fileList = $this->finder->size($item);
+                $fileList = ftp_nlist($conn_id, $item);
+                
                 $list = [];
                 foreach ($fileList as $file) {
                     $list[substr(strrchr($file, '/'), 1)] = $file;
@@ -119,7 +114,7 @@ class Ftp
                 $operatorList[substr(strrchr($item, '/'), 1)] = $list;
             }
         }
-
+        ftp_close($conn_id);
         return $operatorList;
     }
 
@@ -129,17 +124,18 @@ class Ftp
      * @param $query
      * @return array
      */
-    public function retrieveGeneralDocuments($query)
+    public function retrieveGeneralDocuments($conn_id,$query)
     {
+        $ftpWrapper = $this->ftpWrapper;
         $path = $this->determineQueryType($query);
 
 
-        $fileList = $this->finder->files()->in("ftp://$this->ftp_user_name:$this->ftp_user_pass@$this->ftp_server"."$path")->name('*.pdf');
+        $fileList = ftp_nlist($conn_id, $path);
         $list = [];
         foreach ($fileList as $file) {
             $list[substr(strrchr($file, '/'), 1)] = $file;
         }
-
+        ftp_close($conn_id);
         return $list;
     }
 
@@ -151,16 +147,18 @@ class Ftp
      * @param $query
      * @return bool
      */
-    public function validPath($path, $query)
+    public function validPath($conn_id, $path, $query)
     {
         $valid = false;
         $dir = $this->determineQueryType($query);
 
-        $fileList = $this->finder->files()->in("ftp://$this->ftp_user_name:$this->ftp_user_pass@$this->ftp_server"."$dir")->name('*.pdf');
+
+        $fileList = ftp_nlist($conn_id, $dir);
+
         if (in_array($path, $fileList)) {
             $valid = true;
         }
-
+        ftp_close($conn_id);
         return $valid;
     }
 
@@ -191,21 +189,28 @@ class Ftp
        
         $path = $this->determineQueryType($query);
         # Establecemos Conexión 
-        //$conn_id = ftp_connect($ftp_server); 
-        $this->finder->in("ftp://$this->ftp_user_name:$this->ftp_user_pass@$this->ftp_server"."$path")->name("*.pdf")->depth('== 0');;
-        
-        if ($this->finder->hasResults()) {
-            
+        # Establecemos Conexión 
+        $conn_id = ftp_connect($this->ftp_server); 
+
+        # Inciamos Sesión
+        $login_result = ftp_login($conn_id, $this->ftp_user_name, $this->ftp_user_pass); 
+
+        # Verificamos la Conexión
+        if ((!$conn_id) || (!$login_result)) {  
+            echo "\n ¡La conexión FTP ha fallado!";
+            echo "\n Se intentó conectar al $this->ftp_server por el usuario $this->ftp_user_name"; 
+            echo " \n";
+            exit(); 
+
+        } else {
+            echo "\n Conexión a $this->ftp_server realizada con éxito, por el usuario " . $this->ftp_user_name . " \n";
+        }
         # Inciamos Sesión
         //$login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass); 
-
-        
-       
         /** @var array|false $listado */
-        $listado = $this->finder->files();
-        
+        $listado = ftp_nlist($conn_id, $path);
         $numarch = count($listado);
-        
+               
         
         if (!$listado) {
             return $certList;
@@ -264,7 +269,7 @@ class Ftp
                         #$certList[substr(strrchr($listado[$i], '/'), 1)] = $listado[$i];
                       
                         # Obtenemos la Fecha de Modificación del Certificado
-                        $docftp = $this->finder->date('since today');
+                        $docftp = ftp_mdtm($conn_id, $listado[$i]);
                
                         $fechadoc = date("Y-m-d H:i:s", $docftp);
                 
@@ -311,7 +316,7 @@ class Ftp
                     #$certList[substr(strrchr($listado[$i], '/'), 1)] = $listado[$i];
                     
                     # Obtenemos la Fecha de Modificación del Certificado
-                    $docftp = $this->finder->date('since today');
+                    $docftp = ftp_mdtm($conn_id, $listado[$i]);;
                    
                     $fechadoc = date("Y-m-d H:i:s", $docftp);
                     
@@ -322,6 +327,7 @@ class Ftp
             } 
         }
     }
+    ftp_close($conn_id);
         # Ordenamos el Array certFmod ascendentemente por el Valor de la Fecha de Modificación
         
         # Recorremos el Array certFmod Ordenado
@@ -475,8 +481,8 @@ class Ftp
             # Devolvemos el Listado de las Facturas
             return $certList;
             // ...
-        }
     }
+    
 
     /**
      * Dada una expresión regular y un array asociativo.

@@ -219,7 +219,7 @@ class UpdateOperatorCommand extends Command
 		            $proceso = 2;
                 }
             }
-            $em->getManager();
+            //$em->getManager();
             $em->flush();
             $em->clear();
             $operatorsProcessed++;

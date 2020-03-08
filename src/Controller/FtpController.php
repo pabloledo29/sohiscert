@@ -44,9 +44,27 @@ class FtpController extends AbstractController
 
         $em = $this->getDoctrine()->getManager();
         $clients = $em->getRepository(Client::class)->findClients($cif);
+        $ftp_server = $this->getParameter('ftp_server');
+        $ftp_user_name = $this->getParameter('ftp_user_name');
+        $ftp_user_pass = $this->getParameter('ftp_user_pass');
+        
+        $conn_id = ftp_connect($ftp_server);
 
+        # Inciamos Sesión
+        $login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass); 
+
+        # Verificamos la Conexión
+        if ((!$conn_id) || (!$login_result)) {  
+            echo "\n ¡La conexión FTP ha fallado!";
+            echo "\n Se intentó conectar al $ftp_server por el usuario $ftp_user_name"; 
+            echo " \n";
+            exit(); 
+
+        } else {
+            echo "\n Conexión a $ftp_server realizada con éxito, por el usuario " . $ftp_user_name . " \n";
+        }
         //llamada a función que devuelve array con ficheros y rutas.
-        $operatorList = $this->get('app.ftp.service')->retrieveFilesFromClients($clients, $query);
+        $operatorList = $this->get('app.ftp.service')->retrieveFilesFromClients($conn_id, $clients, $query);
 
         return $this->render(
             "private/useroperator_billing_filelist.html.twig",
@@ -111,11 +129,29 @@ class FtpController extends AbstractController
             throw $this->createAccessDeniedException();
         }
         $query = "general"; // Parámetro de configuración
+        $ftp_server = $this->getParameter('ftp_server');
+        $ftp_user_name = $this->getParameter('ftp_user_name');
+        $ftp_user_pass = $this->getParameter('ftp_user_pass');
+        
+        $conn_id = ftp_connect($ftp_server);
 
+        # Inciamos Sesión
+        $login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass); 
+
+        # Verificamos la Conexión
+        if ((!$conn_id) || (!$login_result)) {  
+            echo "\n ¡La conexión FTP ha fallado!";
+            echo "\n Se intentó conectar al $ftp_server por el usuario $ftp_user_name"; 
+            echo " \n";
+            exit(); 
+
+        } else {
+            echo "\n Conexión a $ftp_server realizada con éxito, por el usuario " . $ftp_user_name . " \n";
+        }
         return $this->render(
             "private/useroperator_general_documents.html.twig",
             array(
-                'filelist' => $this->get('app.ftp.service')->retrieveGeneralDocuments($query),
+                'filelist' => $this->get('app.ftp.service')->retrieveGeneralDocuments($conn_id,$query),
             )
         );
     }
@@ -136,9 +172,29 @@ class FtpController extends AbstractController
             throw $this->createAccessDeniedException();
         }
         $path = $request->request->get('path');
+        
+        $ftp_server = $this->getParameter('ftp_server');
+        $ftp_user_name = $this->getParameter('ftp_user_name');
+        $ftp_user_pass = $this->getParameter('ftp_user_pass');
+        
+        $conn_id = ftp_connect($ftp_server);
+
+        # Inciamos Sesión
+        $login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass); 
+
+        # Verificamos la Conexión
+        if ((!$conn_id) || (!$login_result)) {  
+            echo "\n ¡La conexión FTP ha fallado!";
+            echo "\n Se intentó conectar al $ftp_server por el usuario $ftp_user_name"; 
+            echo " \n";
+            exit(); 
+
+        } else {
+            echo "\n Conexión a $ftp_server realizada con éxito, por el usuario " . $ftp_user_name . " \n";
+        }
 
         /* Validación del path para descarga */
-        if ($this->get('app.ftp.service')->validPath($path, 'general')) {
+        if ($this->get('app.ftp.service')->validPath($conn_id, $path, 'general')) {
             $this->downloadFileAction($path);
         } else {
             throw $this->createAccessDeniedException();
@@ -170,9 +226,27 @@ class FtpController extends AbstractController
 
         $em = $this->getDoctrine()->getManager();
         $clients = $em->getRepository(Client::class)->findClients($cif);
+        $ftp_server = $this->getParameter('ftp_server');
+        $ftp_user_name = $this->getParameter('ftp_user_name');
+        $ftp_user_pass = $this->getParameter('ftp_user_pass');
+        
+        $conn_id = ftp_connect($ftp_server);
 
+        # Inciamos Sesión
+        $login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass); 
+
+        # Verificamos la Conexión
+        if ((!$conn_id) || (!$login_result)) {  
+            echo "\n ¡La conexión FTP ha fallado!";
+            echo "\n Se intentó conectar al $ftp_server por el usuario $ftp_user_name"; 
+            echo " \n";
+            exit(); 
+
+        } else {
+            echo "\n Conexión a $ftp_server realizada con éxito, por el usuario " . $ftp_user_name . " \n";
+        }
         //llamada a función que devuelve array con ficheros y rutas.
-        $operatorList = $this->get('app.ftp.service')->retrieveFilesFromClients($clients, $query);
+        $operatorList = $this->get('app.ftp.service')->retrieveFilesFromClients($conn_id,$clients, $query);
 
         return $this->render(
             "admin/useroperator_billing_filelist.html.twig",
@@ -282,11 +356,29 @@ class FtpController extends AbstractController
             throw $this->createAccessDeniedException();
         }
         $query = "general"; // Parámetro de configuración
+        $ftp_server = $this->getParameter('ftp_server');
+        $ftp_user_name = $this->getParameter('ftp_user_name');
+        $ftp_user_pass = $this->getParameter('ftp_user_pass');
+        
+        $conn_id = ftp_connect($ftp_server);
 
+        # Inciamos Sesión
+        $login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass); 
+
+        # Verificamos la Conexión
+        if ((!$conn_id) || (!$login_result)) {  
+            echo "\n ¡La conexión FTP ha fallado!";
+            echo "\n Se intentó conectar al $ftp_server por el usuario $ftp_user_name"; 
+            echo " \n";
+            exit(); 
+
+        } else {
+            echo "\n Conexión a $ftp_server realizada con éxito, por el usuario " . $ftp_user_name . " \n";
+        }
         return $this->render(
             "admin/general_documents.html.twig",
             array(
-                'filelist' => $this->get('app.ftp.service')->retrieveGeneralDocuments($query),
+                'filelist' => $this->get('app.ftp.service')->retrieveGeneralDocuments($conn_id, $query),
             )
         );
     }
@@ -380,7 +472,7 @@ class FtpController extends AbstractController
         /** @var Operator $op */
         $op = $em->getRepository(Operator::class)->find($opId);
         $nop = $op->getOpNop();
-
+        
         $fileList = $this->get('app.ftp.service')->retrieveDocListFromFtpServer($nop, $query);
 
         #dump($fileList);

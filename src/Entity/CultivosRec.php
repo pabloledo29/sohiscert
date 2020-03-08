@@ -13,7 +13,7 @@ use JMS\Serializer\Annotation as JMS;
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks()
  * @ORM\Table(name="gs_cultivosrec")
- * @ORM\Entity(repositoryClass="App\Repository\CultivosRepositoryRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\CultivosRepository")
  * @JMS\XmlRoot("Registro")
  */
 class CultivosRec
