@@ -194,7 +194,7 @@ class Ftp
 
         # Inciamos Sesión
         $login_result = ftp_login($conn_id, $this->ftp_user_name, $this->ftp_user_pass); 
-
+        
         # Verificamos la Conexión
         if ((!$conn_id) || (!$login_result)) {  
             echo "\n ¡La conexión FTP ha fallado!";
