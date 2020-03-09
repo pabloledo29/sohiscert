@@ -35,7 +35,7 @@ parameters:
     #uploaddir: '/../../../app/logs/update/'
     path_update_logs: '%kernel.project_dir%/var/update/'
     web_root: 'http://intranet-pre-intranetshc.e4ff.pro-eu-west-1.openshiftapps.com/public/'
-    repo_dir: './' #'http://intranet-clientesshc.e4ff.pro-eu-west-1.openshiftapps.com'
+    repo_dir: '../' #'http://intranet-clientesshc.e4ff.pro-eu-west-1.openshiftapps.com'
     email_from_address: 'noreply@sohiscert.com'
     email_from_name: 'Area Privada Sohiscert'
     mail_to: 'sohiscert@sohiscert.com'
@@ -132,7 +132,7 @@ services:
 
     app.mailer.service:
         class: App\Mailer\Mailer
-        arguments: ['%email_from_address%','%email_from_name%','%mail_to%']
+        arguments: ["@mailer", "@twig",'%email_from_address%','%email_from_name%','%mail_to%']
 
 #===================================================================================================    
 
@@ -150,7 +150,7 @@ services:
 
     App\Command\EmaildocanaSendCommand:
         tags: { name: 'console.command', command: "email:emaildocana:send" }
-        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@doctrine.orm.entity_manager']
+        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@doctrine.orm.entity_manager','@app.mailer.service']
 
     App\Command\EmaildoccarSendCommand:
         tags: { name: 'console.command', command: "email:emaildoccar:send" }

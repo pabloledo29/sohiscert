@@ -55,14 +55,14 @@ class FtpController extends AbstractController
 
         # Verificamos la Conexión
         if ((!$conn_id) || (!$login_result)) {  
-            echo "\n ¡La conexión FTP ha fallado!";
+            /*echo "\n ¡La conexión FTP ha fallado!";
             echo "\n Se intentó conectar al $ftp_server por el usuario $ftp_user_name"; 
-            echo " \n";
+            echo " \n";*/
             exit(); 
 
-        } else {
+        } /*else {
             echo "\n Conexión a $ftp_server realizada con éxito, por el usuario " . $ftp_user_name . " \n";
-        }
+        } */
         //llamada a función que devuelve array con ficheros y rutas.
         $operatorList = $this->get('app.ftp.service')->retrieveFilesFromClients($conn_id, $clients, $query);
 
@@ -123,14 +123,14 @@ class FtpController extends AbstractController
 
         # Verificamos la Conexión
         if ((!$conn_id) || (!$login_result)) {  
-            echo "\n ¡La conexión FTP ha fallado!";
+            /*echo "\n ¡La conexión FTP ha fallado!";
             echo "\n Se intentó conectar al $ftp_server por el usuario $ftp_user_name"; 
-            echo " \n";
+            echo " \n";*/
             exit(); 
 
-        } else {
+        } /*else {
             echo "\n Conexión a $ftp_server realizada con éxito, por el usuario " . $ftp_user_name . " \n";
-        }
+        }*/
 
         $this->downloadFileAction($conn_id,$path);
     }
@@ -160,9 +160,9 @@ class FtpController extends AbstractController
 
         # Verificamos la Conexión
         if ((!$conn_id) || (!$login_result)) {  
-            echo "\n ¡La conexión FTP ha fallado!";
+/*            echo "\n ¡La conexión FTP ha fallado!";
             echo "\n Se intentó conectar al $ftp_server por el usuario $ftp_user_name"; 
-            echo " \n";
+            echo " \n";*/
             exit(); 
 
         } else {
@@ -204,9 +204,9 @@ class FtpController extends AbstractController
 
         # Verificamos la Conexión
         if ((!$conn_id) || (!$login_result)) {  
-            echo "\n ¡La conexión FTP ha fallado!";
+/*            echo "\n ¡La conexión FTP ha fallado!";
             echo "\n Se intentó conectar al $ftp_server por el usuario $ftp_user_name"; 
-            echo " \n";
+            echo " \n";*/
             exit(); 
 
         } else {
@@ -223,14 +223,14 @@ class FtpController extends AbstractController
 
         # Verificamos la Conexión
         if ((!$conn_id) || (!$login_result)) {  
-            echo "\n ¡La conexión FTP ha fallado!";
+/*            echo "\n ¡La conexión FTP ha fallado!";
             echo "\n Se intentó conectar al $ftp_server por el usuario $ftp_user_name"; 
-            echo " \n";
+            echo " \n";*/
             exit(); 
 
-        } else {
+        } /*else {
             echo "\n Conexión a $ftp_server realizada con éxito, por el usuario " . $ftp_user_name . " \n";
-        }
+        }*/
         /* Validación del path para descarga */
         if ($this->get('app.ftp.service')->validPath($conn_id, $path, 'general')) {
             $this->downloadFileAction($conn_id,$path);
@@ -275,14 +275,14 @@ class FtpController extends AbstractController
 
         # Verificamos la Conexión
         if ((!$conn_id) || (!$login_result)) {  
-            echo "\n ¡La conexión FTP ha fallado!";
+            /*echo "\n ¡La conexión FTP ha fallado!";
             echo "\n Se intentó conectar al $ftp_server por el usuario $ftp_user_name"; 
-            echo " \n";
+            echo " \n";*/
             exit(); 
 
-        } else {
+        } /*else {
             echo "\n Conexión a $ftp_server realizada con éxito, por el usuario " . $ftp_user_name . " \n";
-        }
+        }*/
         //llamada a función que devuelve array con ficheros y rutas.
         $operatorList = $this->get('app.ftp.service')->retrieveFilesFromClients($conn_id,$clients, $query);
 
@@ -325,14 +325,14 @@ class FtpController extends AbstractController
 
         # Verificamos la Conexión
         if ((!$conn_id) || (!$login_result)) {  
-            echo "\n ¡La conexión FTP ha fallado!";
+            /*echo "\n ¡La conexión FTP ha fallado!";
             echo "\n Se intentó conectar al $ftp_server por el usuario $ftp_user_name"; 
-            echo " \n";
+            echo " \n";*/
             exit(); 
 
-        } else {
+        } /*else {
             echo "\n Conexión a $ftp_server realizada con éxito, por el usuario " . $ftp_user_name . " \n";
-        }
+        }*/
         $this->downloadFileAction($conn_id,$path);
     }
 
@@ -367,14 +367,14 @@ class FtpController extends AbstractController
 
         # Verificamos la Conexión
         if ((!$conn_id) || (!$login_result)) {  
-            echo "\n ¡La conexión FTP ha fallado!";
+            /*echo "\n ¡La conexión FTP ha fallado!";
             echo "\n Se intentó conectar al $ftp_server por el usuario $ftp_user_name"; 
-            echo " \n";
+            echo " \n";*/
             exit(); 
 
-        } else {
+        }/* else {
             echo "\n Conexión a $ftp_server realizada con éxito, por el usuario " . $ftp_user_name . " \n";
-        }
+        }*/
 
         $this->downloadFileAction($conn_id,$path);
     }
@@ -398,22 +398,46 @@ class FtpController extends AbstractController
         $path_file = $this->container->getParameter('repo_dir') . // Path server
             'public/docs/temp/' . date("d_m_Y_h_i_s") . $filename;
 
-    
-        if (!ftp_get($conn_id,$path_file, $path,FTP_ASCII)) {
+        $file_open = fopen($path_file, "a+");
+        
+        if (!ftp_get($conn_id,$path_file, $path,$ftp_constant)) {
+            
+        }
+
+        $file_open = fopen($path_file, "a+");
+        fclose($file_open);
+        ftp_pasv($conn_id,true);
+            $ret = ftp_get($conn_id, $path_file, $path, FTP_BINARY);
+
+      
+        if($ret){
+            
+            
+            ftp_close($conn_id);
+            /*   Pruebas descarga  */
+            basename(__FILE__, '.php');
+            $response = new Response();
+           
+            $response->headers->set('Cache-Control', 'private');
+            
+            $response->headers->set('Content-type', finfo_file(finfo_open(FILEINFO_MIME_TYPE), $path_file));
+            
+            $response->headers->set('Content-Disposition', 'attachment; filename="' . basename($path_file) . '";');
+            
+            $response->headers->set('Content-length', filesize($path_file));
+            
+            $response->sendHeaders();
+            $file = fopen($path_file, 'rb');
+            if ( $file !== false ) {
+                fpassthru($file);
+                fclose($file);
+            }
+            $response->setContent($file);
+            
+            return $response;
+        }else{
             throw new FileNotFoundException;
         }
-        ftp_close($conn_id);
-        /*   Pruebas descarga  */
-        basename(__FILE__, '.php');
-        $response = new Response();
-        $response->headers->set('Cache-Control', 'private');
-        $response->headers->set('Content-type', finfo_file(finfo_open(FILEINFO_MIME_TYPE), $path_file));
-        $response->headers->set('Content-Disposition', 'attachment; filename="' . basename($path_file) . '";');
-        $response->headers->set('Content-length', filesize($path_file));
-        $response->sendHeaders();
-        $response->setContent(readfile($path_file));
-
-        return $response;
     }
 
     /**
@@ -441,14 +465,14 @@ class FtpController extends AbstractController
 
         # Verificamos la Conexión
         if ((!$conn_id) || (!$login_result)) {  
-            echo "\n ¡La conexión FTP ha fallado!";
+            /*echo "\n ¡La conexión FTP ha fallado!";
             echo "\n Se intentó conectar al $ftp_server por el usuario $ftp_user_name"; 
-            echo " \n";
+            echo " \n";*/
             exit(); 
 
-        } else {
+        }/* else {
             echo "\n Conexión a $ftp_server realizada con éxito, por el usuario " . $ftp_user_name . " \n";
-        }
+        }*/
         return $this->render(
             "admin/general_documents.html.twig",
             array(
@@ -514,15 +538,19 @@ class FtpController extends AbstractController
 
         # Verificamos la Conexión
         if ((!$conn_id) || (!$login_result)) {  
-            echo "\n ¡La conexión FTP ha fallado!";
+            /*echo "\n ¡La conexión FTP ha fallado!";
             echo "\n Se intentó conectar al $ftp_server por el usuario $ftp_user_name"; 
-            echo " \n";
+            echo " \n";*/
             exit(); 
 
-        } else {
+        } /*else {
             echo "\n Conexión a $ftp_server realizada con éxito, por el usuario " . $ftp_user_name . " \n";
-        }
-            return $this->downloadFileAction($conn_id,$path);
+        }*/
+    
+        return $this->downloadFileAction($conn_id,$path);
+
+     
+            
         } else {
             if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
                 return $this->render(

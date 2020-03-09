@@ -607,21 +607,30 @@ class DocExpController extends AbstractController
         }
 
         $filename = substr(strrchr($doc->getFilePath(), '/'), 1);
-        $finder = new Finder();
         $ftp_server=$this->container->getParameter('ftp_server');
         $ftp_user_pass=$this->container->getParameter('ftp_user_pass');
-        $ftp_user_name=$this->container->getParameter('ftp_user_name');
-        $path_file = $this->container->getParameter('repo_dir') .
-       $path_file = 'public/docs/temp/' . date("d_m_Y_h_i_s") . $filename;
-            $finder->files()->in("ftp://$ftp_user_name:$ftp_user_pass@$ftp_server/".$path_file)->name( $doc->getFilePath());
-            if($this->finder->hasResults()){
-                $success=$this->finder->files();
-            }else{
-                $success = false;
-            }
+        $ftp_user_name=$this->container->getParameter('ftp_user_name'); 
+        $path_file =  $this->container->getParameter('repo_dir') . 'public/docs/temp/' . date("d_m_Y_h_i_s") . $filename;
+        $conn_id = ftp_connect($ftp_server);
+        # Inciamos Sesión
+        $login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass); 
 
+        # Verificamos la Conexión
+        if ((!$conn_id) || (!$login_result)) {  
+            /*echo "\n ¡La conexión FTP ha fallado!";
+            echo "\n Se intentó conectar al $ftp_server por el usuario $ftp_user_name"; 
+            echo " \n";*/
+            exit(); 
 
-        if ($success) {
+        }/* else {
+            echo "\n Conexión a $ftp_server realizada con éxito, por el usuario " . $ftp_user_name . " \n";
+        }*/
+        $file_open = fopen($path_file, "a+");
+        fclose($file_open);
+
+        ftp_pasv($conn_id,true);
+        if (ftp_get($conn_id,$path_file, $doc->getFilePath(),FTP_BINARY)) {
+    
             basename(__FILE__, '.php');
             $response = new Response();
             $response->headers->set('Cache-Control', 'private');
@@ -631,10 +640,16 @@ class DocExpController extends AbstractController
             $response->headers->set('Content-length', filesize($path_file));
 
             $response->sendHeaders();
-            $response->setContent(readfile($path_file));
-
+            $file = fopen($path_file, 'rb');
+            if ( $file !== false ) {
+                fpassthru($file);
+                fclose($file);
+            }
+            $response->setContent($file);
+      
             return $response;
         } else {
+
             throw new AccessDeniedException();
         }
     }

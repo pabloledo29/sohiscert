@@ -16,7 +16,7 @@ use App\Entity\DocumentosFTP;
 class EmaildocanaSendCommand extends Command
 {
     protected static $defaultName = 'email:emaildocana:send';
-    public function __construct(string $path_update_logs,string $ftp_server, string $ftp_user_name, string $ftp_user_pass, $em)
+    public function __construct(string $path_update_logs,string $ftp_server, string $ftp_user_name, string $ftp_user_pass, $em, $swiftmailer)
     {
         $this->path_update_logs = $path_update_logs;
         $this->finder = new Finder();
@@ -25,6 +25,7 @@ class EmaildocanaSendCommand extends Command
         $this->ftp_user_name = $ftp_user_name;
         $this->ftp_user_pass = $ftp_user_pass;
         $this->em = $em;
+        $this->swiftmailer = $swiftmailer;
         
          // you *must* call the parent constructor
          parent::__construct();
@@ -112,7 +113,7 @@ EOF
 
         
         # Rutas para Pruebas
-        $rutasftp = array('analisis' => '/SITIO1');
+        $rutasftp = array('analisis' => '/sitio1');
         #$rutasftp = array('factura' => '/facturasintranet');
 
 
@@ -135,24 +136,29 @@ EOF
         # Recorremos los Directorios FTP definidos anteriormente en las rutas
         # Definimos la Ruta
         foreach ($rutasftp as $tipodoc => $ruta) {
-            $this->finder->files()->in("ftp://$this->ftp_user_name:$this->ftp_user_pass@$this->ftp_server")->name($ruta.'*.pdf');
-           
+            $conn_id = ftp_connect($this->ftp_server);
 
-            # Verificamos la Conexión FTP
-            if ( !$this->finder->hasResults()) {  
-                echo "\n ¡La conexión FTP ha fallado!\n";
-                echo "\n Se intentó conectar al $this->ftp_server por el usuario $this->ftp_user_name"; 
-                echo " \n";
+            # Inciamos Sesión
+            $login_result = ftp_login($conn_id, $this->ftp_user_name, $this->ftp_user_pass); 
+    
+            # Verificamos la Conexión
+            if ((!$conn_id) || (!$login_result)) {  
+                /*echo "\n ¡La conexión FTP ha fallado!";
+                echo "\n Se intentó conectar al $ftp_server por el usuario $ftp_user_name"; 
+                echo " \n";*/
                 exit(); 
-
+    
             } else {
                 echo "\n Conexión a $this->ftp_server realizada con éxito, por el usuario " . $this->ftp_user_name . " \n";
             }
-
-           
+            
+            
+        
+            # Habilitamos la Conexión Pasiva del FTP
+            ftp_pasv($conn_id, true);
 
             # Obtener el número de archivos contenidos en el directorio actual
-            $lista = $this->finder->files();
+            $lista= ftp_nlist($conn_id,$ruta);
             $numarch = count($lista);
 
 
@@ -198,21 +204,25 @@ EOF
 
                 # Obtenemos la Fecha de Modificación del Archivo FTP
                 unset($docftp);
-                $docftp = $this->finder->date('since today');
+                $docftp = ftp_mdtm($conn_id, $lista[$i]);
 
                 if ($docftp==-1){
                     unset($docftp);
-                    #unset($conn_id);
-                    $this->finder->closedir();
+                  
+                    ftp_close($conn_id);
+                    unset($conn_id);
                     
                    
                     
                     fwrite($log,("\n FALLO, INTENTANDO CONECTAR DE NUEVO"));
                     
+                    
+                    $conn_id = ftp_connect($this->ftp_server);
 
-                    $this->finder->files()->in("ftp://$this->ftp_user_name:$this->ftp_user_pass@$this->ftp_server")->name($lista[$i]);
+                    # Inciamos Sesión
+                    $login_result = ftp_login($conn_id, $this->ftp_user_name, $this->ftp_user_pass); 
 
-                    if ($this->finder->hasResults()) {  
+                    if (!$login_result) {  
                         echo "\n ¡La conexión FTP ha fallado DESPUES DEL ERROR!\n";
                         echo " \n"; 
                         exit(); 
@@ -222,8 +232,8 @@ EOF
                         fwrite($log,("\n FALLO, CONECTAMOS DE NUEVO Y SEGUIMOS"));
                     }
 
-                    $docftp = $this->finder->date('since today');
-                    #$docftp=filemtime("ftp://$ftp_user_name:$ftp_user_pass@sohiscert3.ddns.cyberoam.com/".$lista[$i]);
+                    $docftp = ftp_mdtm($conn_id, $lista[$i]);
+                    
                 }
                 
 
@@ -281,7 +291,7 @@ EOF
                         case 'analisis':
                             
                             # Obtenemos la Fecha de Modificación del Archivo FTP
-                            $docftp = $this->finder->date('since today');
+                            $docftp = ftp_mdtm($conn_id, $lista[$i]);
                             $fechadoc = date("Y-m-d H:i:s", $docftp);
 
                             #var_dump($archivo);
@@ -592,9 +602,11 @@ EOF
                                     }
                                 }
                             }
+                            var_dump($input->getOption('mailer'));
+                            exit;
                             $mailerServiceName = sprintf('swiftmailer.mailer.%s', $input->getOption('mailer'));
                             $em = $this->em;
-                            if (!$em->has($mailerServiceName)) {
+                            if (!$em->get($mailerServiceName)) {
                                 throw new \InvalidArgumentException(sprintf('The mailer "%s" does not exist', $input->getOption('mailer')));
                             }
 

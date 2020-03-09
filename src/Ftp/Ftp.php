@@ -23,8 +23,8 @@ class Ftp
     const FTP_DOC = "/Documentos/Documentos/";
     const FTP_GENERAL = "/Documentos/General/";
     const FTP_CERTIFICADOS = "/sitio2";
-    const FTP_ANALISIS = "/SITIO1";
-    const FTP_CARTAS = "/SITIO3";
+    const FTP_ANALISIS = "/sitio1";
+    const FTP_CARTAS = "/sitio3";
     const FTP_UPLOADS = "/";
     // MNN Nueva ruta para conclusiones
     const FTP_CONCLUSIONES = "/sitio4CON"; 
@@ -198,14 +198,14 @@ class Ftp
         
         # Verificamos la Conexión
         if ((!$conn_id) || (!$login_result)) {  
-            echo "\n ¡La conexión FTP ha fallado!";
+            /*echo "\n ¡La conexión FTP ha fallado!";
             echo "\n Se intentó conectar al $this->ftp_server por el usuario $this->ftp_user_name"; 
-            echo " \n";
+            echo " \n";*/
             exit(); 
 
-        } else {
+        } /*else {
             echo "\n Conexión a $this->ftp_server realizada con éxito, por el usuario " . $this->ftp_user_name . " \n";
-        }
+        }*/
 
         ftp_pasv($conn_id, true);
         # Inciamos Sesión
