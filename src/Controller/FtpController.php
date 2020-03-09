@@ -112,7 +112,27 @@ class FtpController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
-        $this->downloadFileAction($path);
+        $ftp_server = $this->getParameter('ftp_server');
+        $ftp_user_name = $this->getParameter('ftp_user_name');
+        $ftp_user_pass = $this->getParameter('ftp_user_pass');
+        
+        $conn_id = ftp_connect($ftp_server);
+
+        # Inciamos Sesión
+        $login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass); 
+
+        # Verificamos la Conexión
+        if ((!$conn_id) || (!$login_result)) {  
+            echo "\n ¡La conexión FTP ha fallado!";
+            echo "\n Se intentó conectar al $ftp_server por el usuario $ftp_user_name"; 
+            echo " \n";
+            exit(); 
+
+        } else {
+            echo "\n Conexión a $ftp_server realizada con éxito, por el usuario " . $ftp_user_name . " \n";
+        }
+
+        $this->downloadFileAction($conn_id,$path);
     }
 
     /**
@@ -192,10 +212,28 @@ class FtpController extends AbstractController
         } else {
             echo "\n Conexión a $ftp_server realizada con éxito, por el usuario " . $ftp_user_name . " \n";
         }
+        $ftp_server = $this->getParameter('ftp_server');
+        $ftp_user_name = $this->getParameter('ftp_user_name');
+        $ftp_user_pass = $this->getParameter('ftp_user_pass');
+        
+        $conn_id = ftp_connect($ftp_server);
 
+        # Inciamos Sesión
+        $login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass); 
+
+        # Verificamos la Conexión
+        if ((!$conn_id) || (!$login_result)) {  
+            echo "\n ¡La conexión FTP ha fallado!";
+            echo "\n Se intentó conectar al $ftp_server por el usuario $ftp_user_name"; 
+            echo " \n";
+            exit(); 
+
+        } else {
+            echo "\n Conexión a $ftp_server realizada con éxito, por el usuario " . $ftp_user_name . " \n";
+        }
         /* Validación del path para descarga */
         if ($this->get('app.ftp.service')->validPath($conn_id, $path, 'general')) {
-            $this->downloadFileAction($path);
+            $this->downloadFileAction($conn_id,$path);
         } else {
             throw $this->createAccessDeniedException();
         }
@@ -276,8 +314,26 @@ class FtpController extends AbstractController
         if (is_null($path)) {
             throw $this->createAccessDeniedException();
         }
+        $ftp_server = $this->getParameter('ftp_server');
+        $ftp_user_name = $this->getParameter('ftp_user_name');
+        $ftp_user_pass = $this->getParameter('ftp_user_pass');
+        
+        $conn_id = ftp_connect($ftp_server);
 
-        $this->downloadFileAction($path);
+        # Inciamos Sesión
+        $login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass); 
+
+        # Verificamos la Conexión
+        if ((!$conn_id) || (!$login_result)) {  
+            echo "\n ¡La conexión FTP ha fallado!";
+            echo "\n Se intentó conectar al $ftp_server por el usuario $ftp_user_name"; 
+            echo " \n";
+            exit(); 
+
+        } else {
+            echo "\n Conexión a $ftp_server realizada con éxito, por el usuario " . $ftp_user_name . " \n";
+        }
+        $this->downloadFileAction($conn_id,$path);
     }
 
     /**
@@ -300,8 +356,27 @@ class FtpController extends AbstractController
         if (is_null($path)) {
             throw $this->createAccessDeniedException();
         }
+        $ftp_server = $this->getParameter('ftp_server');
+        $ftp_user_name = $this->getParameter('ftp_user_name');
+        $ftp_user_pass = $this->getParameter('ftp_user_pass');
+        
+        $conn_id = ftp_connect($ftp_server);
 
-        $this->downloadFileAction($path);
+        # Inciamos Sesión
+        $login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass); 
+
+        # Verificamos la Conexión
+        if ((!$conn_id) || (!$login_result)) {  
+            echo "\n ¡La conexión FTP ha fallado!";
+            echo "\n Se intentó conectar al $ftp_server por el usuario $ftp_user_name"; 
+            echo " \n";
+            exit(); 
+
+        } else {
+            echo "\n Conexión a $ftp_server realizada con éxito, por el usuario " . $ftp_user_name . " \n";
+        }
+
+        $this->downloadFileAction($conn_id,$path);
     }
 
     /**
@@ -313,22 +388,21 @@ class FtpController extends AbstractController
      * @return Response
      * Descarga de documentos del servidor FTP.
      */
-    private function downloadFileAction($path)
+    private function downloadFileAction($conn_id,$path)
     {
-        $ftpWrapper = $this->get('ftp.wrapper');
-        $ftpWrapper->pasv(true);
+        
+        ftp_pasv($conn_id, true);
 
         $filename = substr(strrchr($path, '/'), 1);
-        dump($filename);
 
         $path_file = $this->getParameter('repo_dir') . // Path server
             'public/docs/temp/' . date("d_m_Y_h_i_s") . $filename;
 
-        $doc = $ftpWrapper->get($path_file, $path);
-        if (!$doc) {
+    
+        if (!ftp_get($conn_id,$path_file, $path,'FTP_ASCII')) {
             throw new FileNotFoundException;
         }
-
+        ftp_close($conn_id);
         /*   Pruebas descarga  */
         basename(__FILE__, '.php');
         $response = new Response();
@@ -429,8 +503,26 @@ class FtpController extends AbstractController
                 $fileList = array_reverse($fileList);
             }
             $path = reset($fileList);
+            $ftp_server = $this->getParameter('ftp_server');
+        $ftp_user_name = $this->getParameter('ftp_user_name');
+        $ftp_user_pass = $this->getParameter('ftp_user_pass');
+        
+        $conn_id = ftp_connect($ftp_server);
 
-            return $this->downloadFileAction($path);
+        # Inciamos Sesión
+        $login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass); 
+
+        # Verificamos la Conexión
+        if ((!$conn_id) || (!$login_result)) {  
+            echo "\n ¡La conexión FTP ha fallado!";
+            echo "\n Se intentó conectar al $ftp_server por el usuario $ftp_user_name"; 
+            echo " \n";
+            exit(); 
+
+        } else {
+            echo "\n Conexión a $ftp_server realizada con éxito, por el usuario " . $ftp_user_name . " \n";
+        }
+            return $this->downloadFileAction($conn_id,$path);
         } else {
             if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
                 return $this->render(

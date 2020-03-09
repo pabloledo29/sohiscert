@@ -159,6 +159,7 @@ class Ftp
             $valid = true;
         }
         ftp_close($conn_id);
+        
         return $valid;
     }
 
