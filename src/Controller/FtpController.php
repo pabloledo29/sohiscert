@@ -44,9 +44,9 @@ class FtpController extends AbstractController
 
         $em = $this->getDoctrine()->getManager();
         $clients = $em->getRepository(Client::class)->findClients($cif);
-        $ftp_server = $this->container->get('ftp_server');
-        $ftp_user_name = $this->container->get('ftp_user_name');
-        $ftp_user_pass = $this->container->get('ftp_user_pass');
+        $ftp_server = $this->container->getParameter('ftp_server');
+        $ftp_user_name = $this->container->getParameter('ftp_user_name');
+        $ftp_user_pass = $this->container->getParameter('ftp_user_pass');
         
         $conn_id = ftp_connect($ftp_server);
 
@@ -112,9 +112,9 @@ class FtpController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
-        $ftp_server = $this->getParameter('ftp_server');
-        $ftp_user_name = $this->getParameter('ftp_user_name');
-        $ftp_user_pass = $this->getParameter('ftp_user_pass');
+        $ftp_server = $this->container->getParameter('ftp_server');
+        $ftp_user_name = $this->container->getParameter('ftp_user_name');
+        $ftp_user_pass = $this->container->getParameter('ftp_user_pass');
         
         $conn_id = ftp_connect($ftp_server);
 
@@ -149,9 +149,9 @@ class FtpController extends AbstractController
             throw $this->createAccessDeniedException();
         }
         $query = "general"; // Parámetro de configuración
-        $ftp_server = $this->getParameter('ftp_server');
-        $ftp_user_name = $this->getParameter('ftp_user_name');
-        $ftp_user_pass = $this->getParameter('ftp_user_pass');
+        $ftp_server = $this->container->getParameter('ftp_server');
+        $ftp_user_name = $this->container->getParameter('ftp_user_name');
+        $ftp_user_pass = $this->container->getParameter('ftp_user_pass');
         
         $conn_id = ftp_connect($ftp_server);
 
@@ -193,9 +193,9 @@ class FtpController extends AbstractController
         }
         $path = $request->request->get('path');
         
-        $ftp_server = $this->getParameter('ftp_server');
-        $ftp_user_name = $this->getParameter('ftp_user_name');
-        $ftp_user_pass = $this->getParameter('ftp_user_pass');
+        $ftp_server = $this->container->getParameter('ftp_server');
+        $ftp_user_name = $this->container->getParameter('ftp_user_name');
+        $ftp_user_pass = $this->container->getParameter('ftp_user_pass');
         
         $conn_id = ftp_connect($ftp_server);
 
@@ -212,9 +212,9 @@ class FtpController extends AbstractController
         } else {
             echo "\n Conexión a $ftp_server realizada con éxito, por el usuario " . $ftp_user_name . " \n";
         }
-        $ftp_server = $this->getParameter('ftp_server');
-        $ftp_user_name = $this->getParameter('ftp_user_name');
-        $ftp_user_pass = $this->getParameter('ftp_user_pass');
+        $ftp_server = $this->container->getParameter('ftp_server');
+        $ftp_user_name = $this->container->getParameter('ftp_user_name');
+        $ftp_user_pass = $this->container->getParameter('ftp_user_pass');
         
         $conn_id = ftp_connect($ftp_server);
 
@@ -264,9 +264,9 @@ class FtpController extends AbstractController
 
         $em = $this->getDoctrine()->getManager();
         $clients = $em->getRepository(Client::class)->findClients($cif);
-        $ftp_server = $this->getParameter('ftp_server');
-        $ftp_user_name = $this->getParameter('ftp_user_name');
-        $ftp_user_pass = $this->getParameter('ftp_user_pass');
+        $ftp_server = $this->container->getParameter('ftp_server');
+        $ftp_user_name = $this->container->getParameter('ftp_user_name');
+        $ftp_user_pass = $this->container->getParameter('ftp_user_pass');
         
         $conn_id = ftp_connect($ftp_server);
 
@@ -314,9 +314,9 @@ class FtpController extends AbstractController
         if (is_null($path)) {
             throw $this->createAccessDeniedException();
         }
-        $ftp_server = $this->container->get('ftp_server');
-        $ftp_user_name = $this->container->get('ftp_user_name');
-        $ftp_user_pass = $this->container->get('ftp_user_pass');
+        $ftp_server = $this->container->getParameter('ftp_server');
+        $ftp_user_name = $this->container->getParameter('ftp_user_name');
+        $ftp_user_pass = $this->container->getParameter('ftp_user_pass');
         
         $conn_id = ftp_connect($ftp_server);
 
@@ -356,9 +356,9 @@ class FtpController extends AbstractController
         if (is_null($path)) {
             throw $this->createAccessDeniedException();
         }
-        $ftp_server = $this->getParameter('ftp_server');
-        $ftp_user_name = $this->getParameter('ftp_user_name');
-        $ftp_user_pass = $this->getParameter('ftp_user_pass');
+        $ftp_server = $this->container->getParameter('ftp_server');
+        $ftp_user_name = $this->container->getParameter('ftp_user_name');
+        $ftp_user_pass = $this->container->getParameter('ftp_user_pass');
         
         $conn_id = ftp_connect($ftp_server);
 
@@ -395,7 +395,7 @@ class FtpController extends AbstractController
 
         $filename = substr(strrchr($path, '/'), 1);
 
-        $path_file = $this->getParameter('repo_dir') . // Path server
+        $path_file = $this->container->getParameter('repo_dir') . // Path server
             'public/docs/temp/' . date("d_m_Y_h_i_s") . $filename;
 
     
@@ -430,9 +430,9 @@ class FtpController extends AbstractController
             throw $this->createAccessDeniedException();
         }
         $query = "general"; // Parámetro de configuración
-        $ftp_server = $this->getParameter('ftp_server');
-        $ftp_user_name = $this->getParameter('ftp_user_name');
-        $ftp_user_pass = $this->getParameter('ftp_user_pass');
+        $ftp_server = $this->container->getParameter('ftp_server');
+        $ftp_user_name = $this->container->getParameter('ftp_user_name');
+        $ftp_user_pass = $this->container->getParameter('ftp_user_pass');
         
         $conn_id = ftp_connect($ftp_server);
 
@@ -503,9 +503,9 @@ class FtpController extends AbstractController
                 $fileList = array_reverse($fileList);
             }
             $path = reset($fileList);
-            $ftp_server = $this->getParameter('ftp_server');
-        $ftp_user_name = $this->getParameter('ftp_user_name');
-        $ftp_user_pass = $this->getParameter('ftp_user_pass');
+            $ftp_server = $this->container->getParameter('ftp_server');
+        $ftp_user_name = $this->container->getParameter('ftp_user_name');
+        $ftp_user_pass = $this->container->getParameter('ftp_user_pass');
         
         $conn_id = ftp_connect($ftp_server);
 
