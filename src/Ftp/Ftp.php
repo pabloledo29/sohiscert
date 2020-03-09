@@ -205,12 +205,12 @@ class Ftp
         } else {
             echo "\n Conexión a $this->ftp_server realizada con éxito, por el usuario " . $this->ftp_user_name . " \n";
         }
+        var_dump("AAAA");
         # Inciamos Sesión
-        //$login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass); 
         /** @var array|false $listado */
         $listado = ftp_nlist($conn_id, $path);
         $numarch = count($listado);
-               
+        var_dump("BBBBBB");
         
         if (!$listado) {
             return $certList;
@@ -246,7 +246,7 @@ class Ftp
             $nop = '-' . $nop;
         }
         
-
+        var_dump("CCCCC");
         /*
         foreach ($listado as $doc) {
             if (strpos($doc, $nop)) {
@@ -327,7 +327,11 @@ class Ftp
             } 
         }
     }
+    var_dump("DDDDDDD");
     ftp_close($conn_id);
+
+    var_dump("EEEEEE");
+    exit;
         # Ordenamos el Array certFmod ascendentemente por el Valor de la Fecha de Modificación
         
         # Recorremos el Array certFmod Ordenado
