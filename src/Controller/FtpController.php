@@ -400,7 +400,7 @@ class FtpController extends AbstractController
 
         $file_open = fopen($path_file, "a+");
         
-        if (!ftp_get($conn_id,$path_file, $path,$ftp_constant)) {
+        if (!ftp_get($conn_id,$path_file, $path,FTP_BINARY)) {
             
         }
 

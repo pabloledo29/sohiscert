@@ -139,7 +139,7 @@ class UserOperatorController extends AbstractController
         if (!$this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
             throw $this->createAccessDeniedException();
         }
-        $user = new User();
+        $user = $this->getUser();
 
         /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
         $dispatcher = $this->get('event_dispatcher');
