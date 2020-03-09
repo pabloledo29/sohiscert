@@ -44,9 +44,9 @@ class FtpController extends AbstractController
 
         $em = $this->getDoctrine()->getManager();
         $clients = $em->getRepository(Client::class)->findClients($cif);
-        $ftp_server = $this->getParameter('ftp_server');
-        $ftp_user_name = $this->getParameter('ftp_user_name');
-        $ftp_user_pass = $this->getParameter('ftp_user_pass');
+        $ftp_server = $this->container->get('ftp_server');
+        $ftp_user_name = $this->container->get('ftp_user_name');
+        $ftp_user_pass = $this->container->get('ftp_user_pass');
         
         $conn_id = ftp_connect($ftp_server);
 
@@ -314,9 +314,9 @@ class FtpController extends AbstractController
         if (is_null($path)) {
             throw $this->createAccessDeniedException();
         }
-        $ftp_server = $this->getParameter('ftp_server');
-        $ftp_user_name = $this->getParameter('ftp_user_name');
-        $ftp_user_pass = $this->getParameter('ftp_user_pass');
+        $ftp_server = $this->container->get('ftp_server');
+        $ftp_user_name = $this->container->get('ftp_user_name');
+        $ftp_user_pass = $this->container->get('ftp_user_pass');
         
         $conn_id = ftp_connect($ftp_server);
 
