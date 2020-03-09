@@ -22,7 +22,7 @@ class Ftp
     const FTP_BILLING = "/facturasintranet"; # Directorio anterior: "/RAIZ/SOHISCERT-GERENCIA/DEPARTAMENTO DE CONTABILIDAD/FACTURAS 2016/";
     const FTP_DOC = "/Documentos/Documentos/";
     const FTP_GENERAL = "/Documentos/General/";
-    const FTP_CERTIFICADOS = "/SITIO2";
+    const FTP_CERTIFICADOS = "/sitio2";
     const FTP_ANALISIS = "/SITIO1";
     const FTP_CARTAS = "/SITIO3";
     const FTP_UPLOADS = "/";

@@ -399,7 +399,7 @@ class FtpController extends AbstractController
             'public/docs/temp/' . date("d_m_Y_h_i_s") . $filename;
 
     
-        if (!ftp_get($conn_id,$path_file, $path,'FTP_ASCII')) {
+        if (!ftp_get($conn_id,$path_file, $path,FTP_ASCII)) {
             throw new FileNotFoundException;
         }
         ftp_close($conn_id);
