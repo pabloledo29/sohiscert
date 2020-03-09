@@ -111,7 +111,7 @@ services:
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
-        arguments: ['%ftp_server%','%ftp_user_name%', '%ftp_user_pass%']
+        
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
