@@ -1290,11 +1290,11 @@ class ToolsUpdate extends AbstractController
                 $em->getEventManager()->removeEventListener($event, $listener);
             }
         }
-        var_dump("LLEGA");
+   
         
         /** @var Client $client */
         foreach ($clientxml->Registro as $client) {
-            exit;
+
             $registersProcessed++;
 
             /** @var Client $entity */
@@ -1326,8 +1326,7 @@ class ToolsUpdate extends AbstractController
             }
         }
 //        $em->getUnitOfWork()->clear();
-var_dump("MAL");
-exit;
+
         return array(
             'registersCreated' => $registersCreated,
             'registersUpdated' => $registersUpdated,

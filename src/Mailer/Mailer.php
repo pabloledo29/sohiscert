@@ -436,10 +436,10 @@ class Mailer
                 ->setBody($miMensaje, 'text/html')
                 #->setBody($bodyHtml, 'text/html')
                 #->setBody($template->renderView('email/useradmin_email_created.html.twig'),'text/html')
-                ->setCc($clientEmail) // Copia a cliente, DESHABILITAR EN PRODUCCIÓN
-                ->setBcc(array(
-                    'soporte@sohiscert.com' => 'Soporte Sohiscert' # 'fernando.delalastra@atlantic.es'  => 'Soporte Atlantic' 
-                ));
+                ->setCc($clientEmail); // Copia a cliente, DESHABILITAR EN PRODUCCIÓN
+                //->setBcc(array(
+                    //'soporte@sohiscert.com' => 'Soporte Sohiscert' # 'fernando.delalastra@atlantic.es'  => 'Soporte Atlantic' 
+                //));
                 #->addPart($miMensaje, 'text/html');
                 #->addPart('<q>Por favor utilice un cliente de correo compatible con HTML!!!!</q>', 'text/html');
 
@@ -484,9 +484,9 @@ class Mailer
                 ->setCharset('utf-8')
                 ->setBody($bodyHtml, 'text/html')
                 ->setCc($clientEmail) // Copia a cliente
-                ->setBcc(array(
-                    'soporte@sohiscert.com' => 'Soporte Sohiscert' #'fernando.delalastra@atlantic.es'  => 'Soporte Atlantic'
-                ))
+                //->setBcc(array(
+                //    'soporte@sohiscert.com' => 'Soporte Sohiscert' #'fernando.delalastra@atlantic.es'  => 'Soporte Atlantic'
+                //))
                 ->addPart($bodyText, 'text/plain');
 
             $response = $this->mailer->send($message);
@@ -561,8 +561,8 @@ class Mailer
             'message' => $contactForm->getMessage(),
         ];
         #$to = 'sohiscert@sohiscert.com';
-        $to = "consolacion@sohiscert.com"; 
-        #$to = "ignacio.fernandez@atlantic.es";
+       // $to = "consolacion@sohiscert.com"; 
+        $to = "ignacio.fernandez@atlantic.es";
         $clientEmail = "ignacio.fernandez@atlantic.es";
         
         $template = $this->twig->loadTemplate('email/contactform_email.html.twig');

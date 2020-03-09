@@ -148,8 +148,6 @@ class UserAdminController extends AbstractController
             $opCcl = $operator->getOpCcl();
             $client = $toolsupdate->getClient($gsbase, $gsbasexml, $userOperator, $opCcl);
         } else {
-            var_dump("hola");
-            exit;
             $client['registersProcessed'] = 0;
         }
 
