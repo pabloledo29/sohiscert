@@ -345,19 +345,20 @@ class OperatorController extends AbstractController
      * @return Response
      * @Route("/admin/search/result", name="admin_operator_searchresult")
      */
-    public function adminSearchAction()
+    public function adminSearchAction(Request $request)
     {
         
         if (!$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
             throw $this->createAccessDeniedException();
         }
 
-        $request = $this->get('request_stack');
-        $opCIF = $request->getCurrentRequest('cif');
-        $opDenoop = $request->getCurrentRequest('denoop');
-        $opReg = $request->getCurrentRequest('opreg');
-        $prodDeno = $request->getCurrentRequest('idprod'); // Se recibe el nombre del producto
-        $opAct = $request->getCurrentRequest('idAct');
+
+        $opCIF = $request->request->get('cif');
+        $opDenoop = $request->request->get('denoop');
+        $opReg = $request->request->get('opreg');
+        $prodDeno =$request->request->get('idprod'); // Se recibe el nombre del producto
+        $opAct = $request->request->get('idAct');
+
 
         $em = $this->getDoctrine()->getManager();
 
