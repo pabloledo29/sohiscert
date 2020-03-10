@@ -133,32 +133,32 @@ services:
     app.mailer.service:
         class: App\Mailer\Mailer
         arguments: ["@mailer", "@twig",'%email_from_address%','%email_from_name%','%mail_to%']
-
+        tags: ['app.mailer.service']
 #===================================================================================================    
 
     App\Command\EmailUpdateDocFactuCommand:
         tags: { name: 'console.command', command: 'email:emaildocfactu:send'}
-        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@doctrine.orm.entity_manager']
+        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@mailer','@doctrine.orm.entity_manager']
 
     App\Command\EmailUpdateDocConcluCommand:
         tags: { name: 'console.command', command: 'email:emaildoccon:send'}
-        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@doctrine.orm.entity_manager']
+        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@mailer','@doctrine.orm.entity_manager']
 
     App\Command\EmailUpdateDocCommand:
         tags: { name: 'console.command', command: 'email:emaildoc:send'}
-        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@doctrine.orm.entity_manager']
+        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@mailer','@doctrine.orm.entity_manager']
 
     App\Command\EmaildocanaSendCommand:
         tags: { name: 'console.command', command: "email:emaildocana:send" }
-        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@doctrine.orm.entity_manager','@app.mailer.service']
+        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@mailer','@doctrine.orm.entity_manager']
 
     App\Command\EmaildoccarSendCommand:
         tags: { name: 'console.command', command: "email:emaildoccar:send" }
-        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@doctrine.orm.entity_manager']
+        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@mailer','@doctrine.orm.entity_manager']
 
     App\Command\EmailUpdateDocCertiCommand:
         tags: { name: 'console.command', command: "email:emaildoccerti:send" }
-        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@doctrine.orm.entity_manager']
+        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@mailer','@doctrine.orm.entity_manager']
 
 #=======================================================================================================================
 

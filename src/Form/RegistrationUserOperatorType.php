@@ -61,6 +61,6 @@ class RegistrationUserOperatorType extends AbstractType
      */
     public function getName()
     {
-        return 'useroperator_registration';
+        return 'admin_useroperator_registration';
     }
 }

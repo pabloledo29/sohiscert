@@ -87,9 +87,11 @@ class LoginAuthenticator extends AbstractFormLoginAuthenticator implements Passw
 
     public function checkCredentials($credentials, UserInterface $user): bool
     {
-     
-        return password_verify($credentials['password'],$this->getPassword($credentials));
-        //return true;
+        if(password_verify($credentials['password'],$user->getPassword())){
+            return true;
+        }else{
+            throw new CustomUserMessageAuthenticationException('Username or Password is incorrect');
+        }
     }
 
     /**
@@ -97,10 +99,7 @@ class LoginAuthenticator extends AbstractFormLoginAuthenticator implements Passw
      */
     public function getPassword($credentials): ?string
     {
-        $options = [
-            'cost' => 12
-        ];
-        return password_hash($credentials['password'],PASSWORD_BCRYPT,$options);
+        return true;
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)

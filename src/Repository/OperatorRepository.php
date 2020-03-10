@@ -435,4 +435,27 @@ class OperatorRepository extends ServiceEntityRepository
 
         return $result;
     }
+
+    public function findOneByOpNop()
+    {
+        $em =  $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+
+        /**
+         * Select usando Expr() Class de Doctrine ->
+         * http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/query-builder.html#the-expr-class
+         */
+        $q = $qb->select(array('DISTINCT op.opAct'))
+            ->from('App\Entity\Operator', 'op')
+            ->where(
+                $qb->expr()->notLike('op.opAct', ':vacio')
+            )
+            ->setParameter('vacio', '')
+            ->addOrderBy('op.opAct')
+            ->getQuery();
+
+        $result = $q->getResult();
+
+        return $result;
+    }
 }

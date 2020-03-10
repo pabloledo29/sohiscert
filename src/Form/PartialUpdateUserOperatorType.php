@@ -50,6 +50,6 @@ class PartialUpdateUserOperatorType extends AbstractType
      */
     public function getName()
     {
-        return 'partial_update_user_operator_type';
+        return 'private_useroperator_edit_id';
     }
 }

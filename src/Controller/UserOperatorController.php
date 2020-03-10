@@ -139,8 +139,8 @@ class UserOperatorController extends AbstractController
         if (!$this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
             throw $this->createAccessDeniedException();
         }
-        /**@var $user App\Entity\UserOperator */
-        $user = $this->getUser();
+        
+        $user = new UserOperator();
         
         /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
         $dispatcher = $this->get('event_dispatcher');
@@ -149,18 +149,19 @@ class UserOperatorController extends AbstractController
         $dispatcher->dispatch('change_password_initialize', $event);
 
         $form = $this->createForm(PartialUpdateUserOperatorType::class, $user);
-
+        
         $form->handleRequest($request);
-
+        
+     
         if ($form->isSubmitted() && $form->isValid()) {
-            $userManager = $this->getDoctrine()->getManager();
-            var_dump($request->getCurrentPassword());
-            exit;
+   
             $event = new FormEvent($form, $request);
             $dispatcher->dispatch ('onChangePasswordSuccess', $event);
-
-            $userManager->persist($user);
-            $userManager->flush();
+            
+            
+            $userManager = $this->getDoctrine()->getManager();
+            $userManager->updateUser($user);
+     
 
             if (null === $response = $event->getResponse()) {
                 $url = $this->generateUrl('private_home');
@@ -173,7 +174,7 @@ class UserOperatorController extends AbstractController
 
             return $response;
         }
-
+       
         return $this->render(
             'private/Form/partial_update_useroperator_form.html.twig',
             array(
@@ -410,6 +411,50 @@ class UserOperatorController extends AbstractController
         
 
         return $this->render('admin/form/update_user_operator.form.html.twig', array('form' => $form->createView()));
+    }
+
+     /**
+     * Edición de UserOperator por parte privada
+     *
+     * Permite modificar datos de UserOperator por parte de los administraodres de la aplicación.
+     *
+     * @param Request $request
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @Route("/private/useroperator/edit/{id}", name="private_useroperator_edit_id")
+     */
+    public function updateActionId(Request $request, $id)
+    {
+        if (!$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository(UserOperator::class)->find($id);
+
+        if (!$user) {
+            throw $this->createNotFoundException('No se ha encontrado el usuario ' . $id);
+        }
+
+        $form = $this->createForm(PartialUpdateUserOperatorType::class, $user);
+       
+    
+       
+        $form->handleRequest($request);
+       
+        if ($form->isSubmitted() && $form->isValid()) {
+             
+            $userManager = $em;
+            $userManager->persist($user);
+            $userManager->flush();
+
+            $request->getSession()->getFlashBag()->add('msg', 'El usuario ha sido modificado correctamente');
+
+            return $this->redirect($this->generateUrl('private_useroperator_list'));
+        }
+        
+
+        return $this->render('private/form/update_user_operator.form.html.twig', array('form' => $form->createView()));
     }
 
     /**

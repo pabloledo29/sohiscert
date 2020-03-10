@@ -317,6 +317,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
         $this->password =$password;
         return $this;
     }
+    
 
 
      /**
