@@ -37,6 +37,7 @@ use App\Entity\DocExp;
 use App\Entity\Operator;
 use App\Entity\UserOperator;
 use App\Entity\UploadedFileRegistry;
+use Doctrine\Common\Collections\Expr\Value;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -422,7 +423,9 @@ class DocExpController extends AbstractController
         if ($form->isSubmitted() && $form->isValid() && $form['document']->getData() !== null) {
 
             $data = $form->getData();
-            $data['opNop'] = $choices[$data['operator']];
+            
+         
+            $data['opNop'] = $choices [(int)array_keys($choices,$data['operator'])[0]];
             
             // Subida a FTP
             $file = $this->uploadFile($data);
@@ -493,14 +496,29 @@ class DocExpController extends AbstractController
         $filename = '/subidas/' .
             $data['operator'] . '-' . $data['type'] . '-' . $filename . '.' . $file->guessExtension();
 
-        $ftp = $this->get('app.ftp.service');
-        $ftpWrapper = $ftp->ftpWrapper;
+            $ftp_server = $this->container->getParameter('ftp_server');
+            $ftp_user_name = $this->container->getParameter('ftp_user_name');
+            $ftp_user_pass = $this->container->getParameter('ftp_user_pass');
+            
+            $conn_id = ftp_connect($ftp_server);
+    
+            # Inciamos Sesión
+            $login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass); 
+    
+            # Verificamos la Conexión
+            if ((!$conn_id) || (!$login_result)) {  
+                /*echo "\n ¡La conexión FTP ha fallado!";
+                echo "\n Se intentó conectar al $ftp_server por el usuario $ftp_user_name"; 
+                echo " \n";*/
+                exit(); 
+    
+            }/* else {
+        
         /* Passive mode true for FTP server under IIS */
-        $ftpWrapper->pasv(true);
-//        $ftpWrapper->fput($filename, fopen($file->getRealPath(), 'r'));
+        ftp_pasv($conn_id,true);
 
         try {
-            $ftpWrapper->fput($filename, fopen($file->getRealPath(), 'r'));
+            ftp_fput($conn_id,$filename, fopen($file->getRealPath(), 'r'),FTP_BINARY);
             return array($file, $filename);
         } catch (FileException $e) {
             return null;
@@ -520,14 +538,14 @@ class DocExpController extends AbstractController
      */
     private function addUploadedFileToRegistry(UserOperator $user, array $data, array $file, UploadedFile $document)
     {
-        $choices = $this->getParameter('docexptypes');
+        $choices = $this->container->getParameter('docexptypes');
         $em = $this->getDoctrine()->getManager();
         $uploadedDocRegistry = new UploadedFileRegistry();
-
+     
         $uploadedDocRegistry->setUserOperator($user);
         $uploadedDocRegistry->setOpNop($data['opNop']);
         $uploadedDocRegistry->setDescription($data['description']);
-        $uploadedDocRegistry->setDocexptype($choices[$data['type']]);
+        $uploadedDocRegistry->setDocexptype($choices[array_keys($choices,$data['type'])[0]]);
         $uploadedDocRegistry->setFileName($file[1]);
         $uploadedDocRegistry->setFileOrigName($document->getClientOriginalName());
         $uploadedDocRegistry->setFilePath($file[1]);

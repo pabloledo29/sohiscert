@@ -15,7 +15,6 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Class RegistrationUserOperatorType
  * @package App\Form
@@ -33,7 +32,7 @@ class RegistrationUserOperatorType extends AbstractType
             ->add('email')
             ->add('password',RepeatedType::class,['type'=>PasswordType::class,
                                                           'required'=>false,
-                                                          'empty_data' => '@novale@',
+                                                          'empty_data' => '',
                                                           'invalid_message' => 'Las contraseñas deben coincidir',
                                                           'options' => ['attr' => [ 'class' => 'form-control','placeholder'=> '*******']],
                                                           'first_options'  => ['label' =>'Password:'],

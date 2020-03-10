@@ -49,7 +49,7 @@ class ContactFormController extends AbstractController
            
             $mailer->sendContactFormEmail($user, $contactForm);
 
-            $request->get('session')->getFlashBag()->add('msg', 'Su mensaje ha sido enviado correctamente');
+            $request->getSession()->getFlashBag()->add('msg', 'Su mensaje ha sido enviado correctamente');
             
             return $this->redirect($this->generateUrl('private_home'));
         }

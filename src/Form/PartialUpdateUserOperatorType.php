@@ -10,6 +10,10 @@ use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+
+
 /**
  * Class PartialUpdateUserOperatorType
  * @package App\Form
@@ -22,6 +26,14 @@ class PartialUpdateUserOperatorType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder->add('current_password',PasswordType::class)
+                ->add('password',RepeatedType::class,['type'=>PasswordType::class,
+                        'required'=>false,
+                        'empty_data' => '',
+                        'invalid_message' => 'Las contraseñas deben coincidir',
+                        'options' => ['attr' => [ 'class' => 'form-control','placeholder'=> '*******']],
+                        'first_options'  => ['label' =>'Password:'],
+                        'second_options' => ['label' => 'Confirmar password:']])->getForm() ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -32,14 +44,7 @@ class PartialUpdateUserOperatorType extends AbstractType
     }
 
 
-    /**
-     * @return string
-     */
-    public function getParent()
-    {
-        return 'change_password';
-    }
-
+  
     /**
      * @return string
      */

@@ -134,17 +134,18 @@ class UserOperatorController extends AbstractController
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      * @Route("/private/profile/edit", name="private_useroperator_edit")
      */
-    public function partialUpdateAction(Request $request)
+    public function partialUpdateAction(Request $request, HttpKernelInterface $kernel)
     {
         if (!$this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
             throw $this->createAccessDeniedException();
         }
+        /**@var $user App\Entity\UserOperator */
         $user = $this->getUser();
-
+        
         /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
         $dispatcher = $this->get('event_dispatcher');
-
-        $event = new ResponseEvent($user, $request);
+        $response = new Response();
+        $event = new ResponseEvent($kernel,$request,2,$response);
         $dispatcher->dispatch('change_password_initialize', $event);
 
         $form = $this->createForm(PartialUpdateUserOperatorType::class, $user);
@@ -153,9 +154,10 @@ class UserOperatorController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $userManager = $this->getDoctrine()->getManager();
-
+            var_dump($request->getCurrentPassword());
+            exit;
             $event = new FormEvent($form, $request);
-            $dispatcher->dispatch('onChangePasswordSuccess', $event);
+            $dispatcher->dispatch ('onChangePasswordSuccess', $event);
 
             $userManager->persist($user);
             $userManager->flush();
@@ -167,7 +169,7 @@ class UserOperatorController extends AbstractController
 
             $dispatcher->dispatch(
                 'change_password_complete',
-                new FilterUserResponseEvent($user, $request, $response));
+                new ResponseEvent($kernel, $request, 3,$response));
 
             return $response;
         }
@@ -218,7 +220,7 @@ class UserOperatorController extends AbstractController
     * @return null|\Symfony\Component\HttpFoundation\RedirectResponse|Response
     * @Route("/admin/useroperator/registerall", name="admin_useroperator_registerall")
     */
-    public function registerallAction()
+    public function registerallAction(HttpKernelInterface $kernel)
     {
         $em = $this->getDoctrine()->getManager();
         $notRegisteredUserOperators = $em->getRepository(Operator::class)->getOperatorsCifNotUser();
@@ -252,7 +254,8 @@ class UserOperatorController extends AbstractController
                 $request = new Request();
                 
                 $dispatcher = $this->get('event_dispatcher');
-                $event = new ResponseEvent($userOperator, $request);
+                $response = new Response();
+                $event = new ResponseEvent($kernel,$request,0,$response);
 
                 $dispatcher->dispatch('registration_initalize', $event);
 

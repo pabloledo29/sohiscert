@@ -15,6 +15,7 @@ use Symfony\Component\Security\Core\User;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Extension\EscaperExtension;
+use Twig\Environment;
 /**
  * Class Mailer
  * @package App\Mailer
@@ -26,7 +27,7 @@ class Mailer
      */
     protected $mailer;
     /**
-     * @var \Twig_Environment
+     * @var \Twig\Environment
      */
     protected $twig;
     /**
@@ -53,7 +54,7 @@ class Mailer
      */
     public function __construct(
         \Swift_Mailer $mailer,
-        \Twig_Environment $twig,
+        \Twig\Environment $twig,
         $email_from_address,
         $email_from_name,
         $mail_to
@@ -106,7 +107,7 @@ class Mailer
         //$to = $user->getEmail();
         $clientEmail = 'maria.gonzalez@atlantic.es'; // 'manuel.navarro@atlantic.es';
 
-        $template = $this->twig->loadTemplate('email/useroperator_created_email.html.twig');
+        $template = $this->twig->load('email/useroperator_created_email.html.twig');
         
         $miMensaje = '
         
@@ -289,7 +290,7 @@ class Mailer
         //$to = $userAdmin->getEmail();
         $clientEmail = 'manuel.navarro@atlantic.es';
 
-        $template = $this->twig->loadTemplate('email/useradmin_email_created.html.twig');
+        $template = $this->twig->load('email/useradmin_email_created.html.twig');
         
         $miMensaje = '
         
@@ -471,7 +472,7 @@ class Mailer
         //$to = $this->mail_to;
         $clientEmail = 'fernando.delalastra@atlantic.es';
 
-        $template = $this->twig->loadTemplate('email/uploadeddoc_email.html.twig');
+        $template = $this->twig->load('email/uploadeddoc_email.html.twig');
 
         $subject = $template->renderBlock('subject', $parameters);
         $bodyHtml = $template->renderBlock('body_html', $parameters);
@@ -518,7 +519,7 @@ class Mailer
         $to = 'co.ferrete@atlantic.es';
         //$to = $data["opEma"];
 
-        $template = $this->twig->loadTemplate('email/uploadfileoperator_email.html.twig');
+        $template = $this->twig->load('email/uploadfileoperator_email.html.twig');
 
         $subject = $template->renderBlock('subject', $parameters);
         $bodyHtml = $template->renderBlock('body_html', $parameters);
@@ -565,7 +566,7 @@ class Mailer
         $to = "ignacio.fernandez@atlantic.es";
         $clientEmail = "ignacio.fernandez@atlantic.es";
         
-        $template = $this->twig->loadTemplate('email/contactform_email.html.twig');
+        $template = $this->twig->load('email/contactform_email.html.twig');
         $subject = $template->renderBlock('subject', $parameters);
         
         $bodyHtml = $template->renderBlock('body_html', $parameters);
@@ -619,11 +620,11 @@ class Mailer
 
 
 
-        $to = 'co.ferrete@atlantic.es'; // 'manuel.navarro@atlantic.es'; // 'co.ferrete@atlantic.es';
+        $to = 'ignacio.fernandez@atlantic.es'; // 'manuel.navarro@atlantic.es'; // 'co.ferrete@atlantic.es';
         //$to = $user->getEmail();
-        $clientEmail = 'co.ferrete@atlantic.es'; // 'manuel.navarro@atlantic.es';
+        $clientEmail = 'ignacio.fernandez@atlantic.es'; // 'manuel.navarro@atlantic.es';
 
-        $template = $this->twig->loadTemplate('email/useroperator_created_email.html.twig');
+        $template = $this->twig->load('email/useroperator_created_email.html.twig');
         
         $miMensaje = '
         

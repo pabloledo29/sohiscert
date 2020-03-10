@@ -33,20 +33,20 @@
                         </div>
 
 
-                        <div class="form-group {% if form.Password.first.vars.valid==false %}has-error{% endif %}">
-                            {{ form_label(form.Password.first, 'Nueva password: ') }}
-                            {{ form_widget(form.Password.first, {'attr': {'class': 'form-control', 'placeholder': '*******'} }) }}
+                        <div class="form-group {% if form.password.first.vars.valid==false %}has-error{% endif %}">
+                            {{form_row(form.password.first)}}
+
                             <div id="error_password" class="error-block"><span
-                                        class="label label-danger">{{ form.Password.first.vars.errors }}</span>
+                                        class="label label-danger">{{ form_errors(form.password.first) }}</span>
                             </div>
                         </div>
+            
 
+                        <div class="form-group {% if form.password.second.vars.valid==false %}has-error{% endif %}">
+                            {{form_row(form.password.second)}}
 
-                        <div class="form-group {% if form.Password.second.vars.valid==false %}has-error{% endif %}">
-                            {{ form_label(form.Password.second, 'Confirme nueva password: ') }}
-                            {{ form_widget(form.Password.second, {'attr': {'class': 'form-control', 'placeholder': '********'} }) }}
                             <div id="error_password" class="error-block"><span
-                                        class="label label-danger">{{ form.Password.second.vars.errors }}</span>
+                                        class="label label-danger">{{ form_errors(form.password.second) }}</span>
                             </div>
                         </div>
 

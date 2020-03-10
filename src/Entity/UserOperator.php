@@ -42,7 +42,7 @@ class UserOperator extends User
     protected $operators;
 
     
-
+    protected $current_password = "";
     /**
      * Constructor
      */
@@ -86,6 +86,17 @@ class UserOperator extends User
     {
         $this->operators->removeElement($operators);
     }
+
+    public function getCurrentPassword(): string
+    {
+        return $this->current_password;
+    }
+    public function setCurrentPassword($current_password): self
+    {
+        $this->setPassword($current_password);
+        return $this;
+    }
+
 
     /**
      * Get operators

@@ -303,6 +303,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
     {
         return (string) $this->password;
     }
+
+    
     
     public function setPassword(string $password): self
     {
