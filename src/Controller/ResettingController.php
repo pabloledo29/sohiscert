@@ -12,7 +12,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\PartialUpdateUserOperatorType;
+use App\Form\PartialUpdUserOperatorType;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -89,7 +89,7 @@ class ResettingController extends AbstractController
     public function resetAction(Request $request, $token)
     {
        
-        $formFactory = $this->createForm(PartialUpdateUserOperatorType::class);
+        $formFactory = $this->createForm(PartialUpdUserOperatorType::class);
         /** @var $userManager \App\Model\UserManagerInterface */
         $userManager = $this->get('user_manager');
         /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */

@@ -104,6 +104,7 @@ EOF
         $anaNew = 0;
         $anaUpdate = 0;
         $anaSO = 0;
+        $totalAna = 0;
         $procAna = 0;
         $docNVAna = 0;
 

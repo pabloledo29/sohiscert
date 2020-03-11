@@ -16,7 +16,7 @@ use App\Entity\Operator;
 use App\Entity\UserOperator;
 use App\Entity\UpdateLog;
 use App\Repository\UserOperatorRepository;
-use App\Form\PartialUpdateUserOperatorType;
+use App\Form\PartialUpdUserOperatorType;
 use App\Form\RegistrationUserOperatorType;
 use App\Entity\User;
 use App\Mailer\Mailer;
@@ -136,47 +136,67 @@ class UserOperatorController extends AbstractController
      */
     public function partialUpdateAction(Request $request, HttpKernelInterface $kernel)
     {
+        
         if (!$this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
             throw $this->createAccessDeniedException();
         }
         
-        $user = new UserOperator();
+        $user = $this->getUser();
         
         /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
         $dispatcher = $this->get('event_dispatcher');
         $response = new Response();
         $event = new ResponseEvent($kernel,$request,2,$response);
         $dispatcher->dispatch('change_password_initialize', $event);
-
-        $form = $this->createForm(PartialUpdateUserOperatorType::class, $user);
+        $pass = $user->getPassword();
+        $form = $this->createForm(PartialUpdUserOperatorType::class, $user);
         
         $form->handleRequest($request);
         
-     
-        if ($form->isSubmitted() && $form->isValid()) {
-   
+        
+        
+        if ($form->isSubmitted()) {
+            
             $event = new FormEvent($form, $request);
             $dispatcher->dispatch ('onChangePasswordSuccess', $event);
             
-            
+           
             $userManager = $this->getDoctrine()->getManager();
-            $userManager->updateUser($user);
-     
-
+            
+            if(password_verify($form["current_password"]->getData(),$pass) )
+            {   $user->setPassword(password_hash($form["password"]->getData(), PASSWORD_BCRYPT,['cost'=>12])); 
+                $userManager->persist($user);
+                $userManager->flush();
+            }else{
+                
+                return $this->render(
+                    'private/Form/useroperatorform_partial.html.twig',
+                    array(
+                        'form' => $form->createView()
+                    )
+                );
+            }
+            $event = new ResponseEvent($kernel,$request,3,$response);
             if (null === $response = $event->getResponse()) {
+                
                 $url = $this->generateUrl('private_home');
                 $response = new RedirectResponse($url);
             }
-
+            
             $dispatcher->dispatch(
                 'change_password_complete',
-                new ResponseEvent($kernel, $request, 3,$response));
-
-            return $response;
+                $event);
+                $request->getSession()->getFlashBag()->add('msg', 'El usuario ha sido modificado correctamente');
+                return $this->render(
+                    'private/Form/useroperatorform_partial.html.twig',
+                    array(
+                        'form' => $form->createView()
+                    )
+                );
         }
        
         return $this->render(
-            'private/Form/partial_update_useroperator_form.html.twig',
+            'private/Form/useroperatorform_partial.html.twig',
             array(
                 'form' => $form->createView(),
             )
@@ -413,49 +433,6 @@ class UserOperatorController extends AbstractController
         return $this->render('admin/form/update_user_operator.form.html.twig', array('form' => $form->createView()));
     }
 
-     /**
-     * Edición de UserOperator por parte privada
-     *
-     * Permite modificar datos de UserOperator por parte de los administraodres de la aplicación.
-     *
-     * @param Request $request
-     * @param $id
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
-     * @Route("/private/useroperator/edit/{id}", name="private_useroperator_edit_id")
-     */
-    public function updateActionId(Request $request, $id)
-    {
-        if (!$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
-            throw $this->createAccessDeniedException();
-        }
-
-        $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository(UserOperator::class)->find($id);
-
-        if (!$user) {
-            throw $this->createNotFoundException('No se ha encontrado el usuario ' . $id);
-        }
-
-        $form = $this->createForm(PartialUpdateUserOperatorType::class, $user);
-       
-    
-       
-        $form->handleRequest($request);
-       
-        if ($form->isSubmitted() && $form->isValid()) {
-             
-            $userManager = $em;
-            $userManager->persist($user);
-            $userManager->flush();
-
-            $request->getSession()->getFlashBag()->add('msg', 'El usuario ha sido modificado correctamente');
-
-            return $this->redirect($this->generateUrl('private_useroperator_list'));
-        }
-        
-
-        return $this->render('private/form/update_user_operator.form.html.twig', array('form' => $form->createView()));
-    }
 
     /**
     *

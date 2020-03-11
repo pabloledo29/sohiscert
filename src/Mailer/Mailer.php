@@ -103,7 +103,7 @@ class Mailer
             'plainPassword' => $user->getPassword() # ESTABA PUESTO 'plainPassword' => $user->getPassword()
         ];
         
-        $to = 'manuel@sohiscert.com'; // 'co.ferrete@atlantic.es';
+        $to = 'ignacio.fernandez@atlantic.es'; // 'co.ferrete@atlantic.es';
         //$to = $user->getEmail();
         $clientEmail = 'maria.gonzalez@atlantic.es'; // 'manuel.navarro@atlantic.es';
 
@@ -286,7 +286,7 @@ class Mailer
             'plainPassword' => $data['plainPassword']
         ];
 
-        $to = 'co.ferrete@atlantic.es';
+        $to = 'ignacio.fernandez@atlantic.es';
         //$to = $userAdmin->getEmail();
         $clientEmail = 'manuel.navarro@atlantic.es';
 
@@ -468,7 +468,7 @@ class Mailer
             'type' => $file->getDocexptype()
         ];
 
-        $to = 'co.ferrete@atlantic.es';
+        $to = 'ignacio.fernandez@atlantic.es';
         //$to = $this->mail_to;
         $clientEmail = 'fernando.delalastra@atlantic.es';
 
@@ -507,7 +507,7 @@ class Mailer
      */
     public function sendFileNotificationTotheOperator(array $data)
     {
-        var_dump($data);
+        #var_dump($data);
         #exit('Parametros Mail');
 
         $parameters = [
@@ -516,7 +516,7 @@ class Mailer
             'documento' => $data["documento"]
         ];
 
-        $to = 'co.ferrete@atlantic.es';
+        $to = 'ignacio.fernandez@atlantic.es';
         //$to = $data["opEma"];
 
         $template = $this->twig->load('email/uploadfileoperator_email.html.twig');
@@ -582,7 +582,7 @@ class Mailer
                 ->setCc($clientEmail) // Copia a cliente
                 #->setCc($clientEmail) // Copia a cliente
                 #->setBcc(array(
-                #    'yoiiii121@gmail.com' => 'Soporte Sohiscert' # 'fernando.delalastra@atlantic.es'  => 'Soporte Atlantic'
+                #    '' => 'Soporte Sohiscert' # 'fernando.delalastra@atlantic.es'  => 'Soporte Atlantic'
                 #)) 
                 ->addPart($bodyText);
                 
@@ -606,8 +606,8 @@ class Mailer
      */
     public function sendResettingClientEmail(UserInterface $user)
     {
-        dump($user);
-        exit('Valores que recupero');
+        //dump($user);
+        //exit('Valores que recupero');
 
         
         //$url = $this->router->generate('fos_user_resetting_reset', array('token' => $user->getConfirmationToken()), UrlGeneratorInterface::ABSOLUTE_URL);

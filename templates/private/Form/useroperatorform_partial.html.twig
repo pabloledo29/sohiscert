@@ -12,18 +12,25 @@
                     <div class="box-header">
                         <h3 class="box-title">Edición cliente</h3>
                     </div>
+                    
                     <!-- /.box-header -->
-                    {{ form_start(form, { attr: form.vars.attr|merge({  }) }) }}
+                    {{ form_start(form, {'action': path('private_useroperator_edit'), 'method': 'POST'}) }}
 
                     <div class="box-body">
 
-                        {#<div class="form-group {% if form.email.vars.valid==false %}has-error{% endif %}">#}
-                            {#{{ form_label(form.email, 'Email: ') }}#}
-                            {#{{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'email@dominio.com'} }) }}#}
-                            {#<div id="error_email" class="error-block"><span#}
-                                        {#class="label label-danger">{{ form.email.vars.errors }}</span></div>#}
-                        {#</div>#}
-
+                        {% for type, messages in app.session.flashbag.all() %}
+                           {% for message in messages %}
+                                <div class="flash-{{ type }}">
+                                    <div class="form-box" id="login-box">
+                                        <div class="alert alert-success alert-dismissable">
+                                            <i class="fa fa-ban"></i>
+                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                            <b></b>{{ message }}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endfor %} 
                         <div class="form-group {% if form.current_password.vars.valid==false %}has-error{% endif %}">
                             {{ form_label(form.current_password, 'Password actual: ') }}
                             {{ form_widget(form.current_password, {'attr': {'class': 'form-control', 'placeholder': '*******'} }) }}

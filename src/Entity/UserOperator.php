@@ -40,7 +40,7 @@ class UserOperator extends User
      * )
      */
     protected $operators;
-
+    
     
     protected $current_password = "";
     /**
@@ -93,7 +93,8 @@ class UserOperator extends User
     }
     public function setCurrentPassword($current_password): self
     {
-        $this->setPassword($current_password);
+        $this->current_password = $current_password;    
+        
         return $this;
     }
 
