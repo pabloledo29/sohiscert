@@ -19,6 +19,10 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Form\FormEvent;
 class ResettingController extends AbstractController
 {
     /**
@@ -38,23 +42,23 @@ class ResettingController extends AbstractController
         $em =  $this->getDoctrine()->getManager();
        
         $user = $em->getRepository(User::class)->findByUsernameOrEmail($username);
-
+        
         if (null === $user) {
             return $this->render('Resetting/request.html.twig', array(
                 'invalid_username' => $username
             ));
         }
-
-        /*if ($user->isPasswordRequestNonExpired($this->getParameter('resetting.token_ttl'))) {
+       
+        if ($user->isPasswordRequestNonExpired(new \DateTime('now'))) {
             return $this->render('Resetting/passwordAlreadyRequested.html.twig');
         }
-
+        
         if (null === $user->getConfirmationToken()) {
-            $tokenGenerator = $this->get('util.token_generator');
-            $user->setConfirmationToken($tokenGenerator->generateToken());
+            $tokenGenerator = $this->generateRandomString(12);
+            $user->setConfirmationToken($tokenGenerator);
         }
 
-        $this->get('mailer')->sendResettingEmailMessage($user);*/
+        $this->get('app.mailer.service')->sendResettingClientEmail($user);
         
         $user->setPasswordRequestedAt(new \DateTime());
         $em->persist($user);
@@ -84,55 +88,58 @@ class ResettingController extends AbstractController
     }
 
     /**
-     * Reset user password
+     * @Route("/resetting/{token}", name="resetting_final")
      */
-    public function resetAction(Request $request, $token)
+    public function resetAction(Request $request,string $token,HttpKernelInterface $kernel)
     {
        
         $formFactory = $this->createForm(PartialUpdUserOperatorType::class);
-        /** @var $userManager \App\Model\UserManagerInterface */
-        $userManager = $this->get('user_manager');
+
         /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
         $dispatcher = $this->get('event_dispatcher');
-
-        $user = $userManager->findUserByConfirmationToken($token);
+       
+        $user = $this->getDoctrine()->getManager()->getRepository(User::class)->findUserByConfirmationToken($token);
 
         if (null === $user) {
             throw new NotFoundHttpException(sprintf('The user with "confirmation token" does not exist for value "%s"', $token));
         }
-
-        $event = new ResponseEvent($user, $request);
+        $response = new Response();
+        $event = new ResponseEvent($kernel,$request,6,$response);
         $dispatcher->dispatch('resetting_reset_initalize', $event);
-
-        if (null !== $event->getResponse()) {
-            return $event->getResponse();
-        }
-
-        $form = $formFactory->createForm();
-        $form->setData($user);
-
-
+     
+        /*if (null !== $response) {
+            return $response;
+        }*/
+        $form = $this->createForm(PartialUpdUserOperatorType::class, $user);
+        $form = $form->remove('current_password');
         $form->handleRequest($request);
         
-        dump($form);
         if ($form->isSubmitted() && $form->isValid()) {
             $event = new FormEvent($form, $request);
             
             $dispatcher->dispatch('resetting_reset_success', $event);
+            $em = $this->getDoctrine()->getManager();
+            
+            $user->setPassword(password_hash($user->getPassword(),PASSWORD_BCRYPT,['cost'=>12]));
+            $user->setConfirmationToken(null);
+            $user->setPasswordRequestedAt(null);
+            $em->persist($user);
+            $em->flush();
+            
+            $event = new ResponseEvent($kernel,$request, 9,$response);
+           
 
-            $userManager->updateUser($user);
-
-            if (null === $response = $event->getResponse()) {
-                $url = $this->generateUrl('fos_user_profile_show');
-                $response = new RedirectResponse($url);
-            }
-
-            $dispatcher->dispatch('resetting_reset_completed', new ResponseEvent($user, $request, $response));
-
-            return $response;
+            $dispatcher->dispatch('resetting_reset_completed', new ResponseEvent($kernel, $request,7, $response));
+            
+            $request->getSession()->getFlashBag()->add('msg', 'El usuario ha sido modificado correctamente');
+           
+            return $this->render('Resetting/reset.html.twig', array(
+                'token' => $token,
+                'form' => $form->createView(),
+            ));
         }
-
-        return $this->render('public/Resetting/reset.html.twig', array(
+        
+        return $this->render('Resetting/reset.html.twig', array(
             'token' => $token,
             'form' => $form->createView(),
         ));
@@ -155,5 +162,8 @@ class ResettingController extends AbstractController
         }
 
         return $email;
+    }
+    public function generateRandomString($length = 12) { 
+        return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, $length); 
     }
 }

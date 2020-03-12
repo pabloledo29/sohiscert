@@ -1268,6 +1268,7 @@ class ToolsUpdate extends AbstractController
     public function getClient(GsBase $gsbase, GsBaseXml $gsbasexml, UserOperator $user, $opCcl)
     {
         $xmlClient = $gsbasexml->getXmlUpdateClient($opCcl);
+        
         $xmlRes = $gsbase->gsbase_exec_no_close('consulta_xml', $xmlClient, 'consulta-xml');
         $newXml = preg_replace_callback(
             "#</?\w+#",
@@ -1276,6 +1277,7 @@ class ToolsUpdate extends AbstractController
             },
             $xmlRes
         );
+        
         $clientxml = $this->jms_serializer->deserialize($newXml, RegistroClient::class, 'xml');
 
         $registersProcessed = 0;
@@ -1296,7 +1298,7 @@ class ToolsUpdate extends AbstractController
         foreach ($clientxml->Registro as $client) {
 
             $registersProcessed++;
-
+        
             /** @var Client $entity */
             $entity = $em->getRepository(Client::class)->findOneBy(array('codigo' => $client->getCodigo()));
             if (!$entity) {
@@ -1305,7 +1307,8 @@ class ToolsUpdate extends AbstractController
                 $em->flush();
                 $user->setClientId($client);
                 $em->flush();
-
+                var_dump($user);
+                exit;
             } else {
                 if ($em->getRepository(Client::class)->compareEntities($client, $entity)) {
                     $entity->setClDeno($client->getClDeno());

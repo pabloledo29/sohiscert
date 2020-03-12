@@ -26,7 +26,7 @@
 </head>
     <body>
         <div>
-            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") == true %}
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED")  %}
                 {{ 'layout.logged_in_as'|trans({'%username%': username}, 'message') }} |
                 <a href="{{ path('security_logout') }}">
                     {{ 'layout.logout'|trans({}, 'message') }}

@@ -1,0 +1,85 @@
+{% extends ':email:baseemail.html.twig' %}
+
+{% block subject %}
+    Area Privada Sohiscert - Alta de Usuario
+{% endblock %}
+
+{% block body_text %}
+    {% autoescape false %}
+        Usuario : {{ userName }}
+        password: {{ plainPassword }}
+    {% endautoescape %}
+{% endblock %}
+
+{% block body_html %}
+    {% autoescape false %}
+        <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" class="background">
+            <tr>
+                <td align="center" valign="top" width="100%" class="background">
+                    <table cellpadding="0" cellspacing="0" width="600" class="wrap">
+                        <tr>
+                            <td valign="top" class="wrap-cell" style="padding-top:30px; padding-bottom:30px;">
+                                <table cellpadding="0" cellspacing="0" class="force-full-width">
+                                    <tr>
+                                        <td height="82" align="center" valign="top" class="header-cell">
+                                            <img width="322" height="80"
+                                                 src="http://sohiscert.com/wp-content/uploads/2015/04/logoretina1.png"
+                                                 alt="logo-Sohiscert">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><br><br></td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top" class="body-cell">
+                                            <table cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+                                                <tr>
+                                                    <td valign="top"
+                                                        style="padding-bottom:20px; background-color:#ffffff;">
+                                                        <h2>Alta de usuario</h2>
+                                                        Estimado/a cliente le ha sido generado su usuario
+                                                        en el Area Privada de Sohiscert.
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><br><br></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <h2>Credenciales</h2>
+                                                        <p>Usuario: {{ userName }}</p>
+                                                        <p>Password: {{ plainPassword }}</p>
+                                                        <br>
+                                                        <p><a href="http://clientes.sohiscert.com/public/">Area privada
+                                                                Sohiscert</a></p>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><br><br></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        Por favor guarde sus credenciales en lugar seguro y no las
+                                                        comparta con nadie.
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top" class="footer-cell">
+                                            <br>
+                                            <br>
+                                            <p>Email contacto: <a href="mailto:sohiscert@sohiscert.com">Sohiscert</a>
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    {% endautoescape %}
+{% endblock %}

@@ -87,7 +87,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
     private $expires_at = NULL;
 
     
-    /**
+    /**http://intranet-sohiscert.e4ff.pro-eu-west-1.openshiftapps.com/web/resetting/_-aYKu6BwUyMAl-GrqP_wmm5S57Rql0zRbcxQ93Ap-Y
      * @ORM\Column(name="credentials_expire_at",type="datetime", nullable=true)
      */
     private $credentials_expire_at;
@@ -153,6 +153,15 @@ use Symfony\Component\Security\Core\User\UserInterface;
         // your own logic
     }
 
+
+    public function setConfirmationToken($confirmation_token):self{
+        $this->confirmation_token = $confirmation_token;
+        return $this;
+    }
+
+    public function getConfirmationToken(){
+        return $this->confirmation_token;
+    }
     /**
      * @ORM\PrePersist
      */
@@ -161,6 +170,18 @@ use Symfony\Component\Security\Core\User\UserInterface;
         $this->createdDate = new \DateTime(date('Y-m-d H:i:s'));
     }
 
+    public function isPasswordRequestNonExpired(){
+        return new \Datetime('now') <= $this->password_requested_at;
+    }
+    public function setPasswordRequestedAt($password_requested_at):self{
+        if(!$password_requested_at){
+            $this->password_requested_at = new \Datetime('tomorrow');
+        }else{
+            $this->password_requested_at = null;
+        }
+        
+        return $this;
+    }
     /**
      * @ORM\PreUpdate
      * @ORM\PostUpdate
@@ -209,11 +230,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
         return $this;
     }
 
-    public function setPasswordRequestedAt(\DateTime $password_requested_at): self{
-        $this->password_requested_at = $password_requested_at;
-
-        return $this;
-    }
+    
 
     /**
      * Get password_requested_at

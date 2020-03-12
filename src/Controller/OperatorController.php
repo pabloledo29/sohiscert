@@ -160,15 +160,18 @@ class OperatorController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $operators = array();
         $operatorsCod = array();
-
+        
         //Sacamos todos los operadores de cultivosRec que tengan ese producto
         $producto = $em->getRepository(Productos::class)->findOneBy(
             array('ptDeno' => $prodDeno)
         );
+        
         if ($producto) {
+            
             $cultivosRecProducto = $em->getRepository(CultivosRec::class)->findBy(
                 array('ruProducto' => $producto)
             );
+            
             /* Para Operadores de CultivosRec */
             /** @var CultivosRec $item */
             foreach ($cultivosRecProducto as $item) {
@@ -192,6 +195,7 @@ class OperatorController extends AbstractController
                 }
             }
         }
+        
         /* Para productos de Ganadería */
         $productoG = $em->getRepository(ProductosG::class)->findOneBy(
             array('pnDeno' => $prodDeno)
@@ -223,7 +227,8 @@ class OperatorController extends AbstractController
                 }
             }
         }
-
+        
+    
         return $operators;
     }
 
@@ -356,15 +361,18 @@ class OperatorController extends AbstractController
         $opCIF = $request->request->get('cif');
         $opDenoop = $request->request->get('denoop');
         $opReg = $request->request->get('opreg');
+        if($opReg ==null){
+            $opReg = '';
+        }
         $prodDeno =$request->request->get('idprod'); // Se recibe el nombre del producto
         $opAct = $request->request->get('idAct');
-
-
+     
         $em = $this->getDoctrine()->getManager();
 
         if (strlen($opCIF) < 8 && strlen($opDenoop) < 5 &&
             strlen($opReg) < 1 && strlen($prodDeno) < 1 && strlen($opAct) < 1
         ) {
+            
             $allProducts = $this->loadAllProducts();
             $allActivities = $this->loadAllActivities();
 
@@ -381,30 +389,45 @@ class OperatorController extends AbstractController
         }
 
         $operators = array();
+        
+        /*var_dump($opCIF);
+        var_dump($opDenoop);
+        var_dump($opReg);
+        var_dump($prodDeno);
+        var_dump($opAct);
+*/
         if ($prodDeno === '' && ($opCIF !== '' || $opDenoop !== '' || $opReg != '')) {
+            
             // Caso en el que se busque por nombre o cif solo
             $operators = $em->getRepository(Operator::class)->findOperator($opCIF, $opDenoop, $opReg);
-
+            
         } elseif ($prodDeno !== '' && ($opCIF === '' && $opDenoop === '' && $opReg == '' && $opAct === '')) {
+            //var_dump("3");
+            //exit;
             // Caso que solo se busque por productos, y CIF y DENO esten vacios.
             // Se devuelven todos los operadores que tengan ese producto
             $operators = $this->getOperatorsByProduct($prodDeno);
         } elseif ($opAct !== '') {
+            
             // Caso en que se busque solo por actividad.
             $operators = $this->searchByAct($opAct, $opCIF, $opDenoop);
+            
         } else {
+           
             // Caso que o Deno o Cif o los dos esten rellenos
             // y se busque tambien por producto. La interseccion de las busqueda
-
+        
             $operatorsCifDeno = $em->getRepository(Operator::class)->findOperator($opCIF, $opDenoop, $opReg);
             if (sizeof($operatorsCifDeno) > 0) {
                 $operators = $this->getOperatorsByProductCifDeno($prodDeno, $operatorsCifDeno);
             }
         }
-
+       
+       if($operators){
         $response = new Response(json_encode($operators));
-        $response->headers->set('Content-Type', 'application/json');
-
+        $response->headers->set('Content-Type', 'application/json');   
+       }
+   
         return $response;
     }
 

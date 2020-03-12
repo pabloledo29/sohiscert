@@ -35,7 +35,16 @@ class UserRepository extends ServiceEntityRepository
         ;
     }
     
+    
 
+    public function findUserByConfirmationToken($token)
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.confirmation_token = :token')
+            ->setParameter('token', $token)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
     /*
     public function findOneBySomeField($value): ?User
     {

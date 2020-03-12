@@ -149,6 +149,7 @@ class OperatorRepository extends ServiceEntityRepository
             ->setParameter('optpex', 'P');
 //            ->setParameter('opest', 'C')
 //            ->setParameter('opest2', 'P');
+           
         try {
             return $query->getResult();
         } catch (NoResultException $e) {

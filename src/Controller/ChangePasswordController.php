@@ -20,12 +20,14 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ChangePasswordController extends AbstractController
 {
    
-    public function changePasswordAction(Request $request)
+    public function changePasswordAction(Request $request,HttpKernelInterface $kernel)
     {
         
         $user = $this->getUser();
@@ -61,11 +63,11 @@ class ChangePasswordController extends AbstractController
             $userManager->updateUser($user);
 
             if (null === $response = $event->getResponse()) {
-                $url = $this->generateUrl('fos_user_profile_show');
+                $url = $this->generateUrl('user_profile_show');
                 $response = new RedirectResponse($url);
             }
 
-            $dispatcher->dispatch('change_password_completed', new FilterUserResponseEvent($user, $request, $response));
+            $dispatcher->dispatch('change_password_completed', new ResponseEvent($kernel,$user, $request, $response));
 
             return $response;
         }

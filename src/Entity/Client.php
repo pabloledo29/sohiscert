@@ -37,7 +37,7 @@ class Client
      * @ORM\Column(name="clDeno", type="string", length=255)
      * @JMS\Type("string")
      */
-    private $clDeno;
+    protected $clDeno;
 
     /**
      * @ORM\Column(name="opCif", type="string", length=20)

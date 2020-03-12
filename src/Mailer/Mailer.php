@@ -8,6 +8,7 @@ namespace App\Mailer;
 
 use App\Entity\ContactForm;
 use App\Entity\UploadedFileRegistry;
+use App\Entity\User as EntityUser;
 use App\Entity\UserAdmin;
 use App\Entity\UserOperator;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -601,165 +602,175 @@ class Mailer
 
 
     /**
-     * @param UserInterface $user
+     * @param User $user
      * @return int|string
      */
-    public function sendResettingClientEmail(UserInterface $user)
+    public function sendResettingClientEmail(EntityUser $user)
     {
-        //dump($user);
-        //exit('Valores que recupero');
-
-        
-        //$url = $this->router->generate('fos_user_resetting_reset', array('token' => $user->getConfirmationToken()), UrlGeneratorInterface::ABSOLUTE_URL);
-
-
+       /** @var $user App\Entity\User*/
         $parameters = [
             'user' => $user,
-            'confirmationUrl' => '$url'
+            'confirmationUrl' => $user->getConfirmationToken()
         ];
-
-
+        
 
         $to = 'ignacio.fernandez@atlantic.es'; // 'manuel.navarro@atlantic.es'; // 'co.ferrete@atlantic.es';
         //$to = $user->getEmail();
         $clientEmail = 'ignacio.fernandez@atlantic.es'; // 'manuel.navarro@atlantic.es';
 
-        $template = $this->twig->load('email/useroperator_created_email.html.twig');
+        $template = $this->twig->load('email/useroperator_reset_email.html.twig');
         
         $miMensaje = '
         
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>Area Privada Sohiscert - Restaurar Contraseña Usuario</title>
-        </head>
-        <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" bgcolor="" background="http://intranet-pre-intranetshc.e4ff.pro-eu-west-1.openshiftapps.com/public/ images/img-bg-730x1024.jpg">
-            <table align="center" border="0" width="650" cellpadding="0" cellspacing="0">
-                <tr height="50">
-                    <td width="100">
-                        &nbsp;
-                    </td>
-                    <td>
-                        &nbsp;
-                    </td>
-                    <td width="100">
-                        &nbsp;
-                    </td>
-                </tr>
-                <tr>
-                    <td width="100">
-                        &nbsp;
-                    </td>
-                    <td>
-                        <img id="img2" class="center" valign="bottom" src="http://intranet-pre-intranetshc.e4ff.pro-eu-west-1.openshiftapps.com/public/ images/img-header-1024x691.jpg" width="550" height="400" >
-                    </td>
-                    <td width="100">
-                        &nbsp;
-                    </td>
-                </tr>
-                <tr>
-                    <td width="100">
-                        &nbsp;
-                    </td>
-                    <td bgcolor="white" padding="5px" style="padding-left:5%;">
-                        <h1><br><font size="50px" face="arial">¡Bienvenido!</font></h1>
-                    </td>
-                    <td width="100">
-                        &nbsp;
-                    </td>
-                </tr>
-                <tr>
-                    <td width="100">
-                        &nbsp;
-                    </td>
-                    <td bgcolor="white" width="500" align="justify">
-                        <img id="txtwelcomeshc" valign="bottom" src="http://intranet-pre-intranetshc.e4ff.pro-eu-west-1.openshiftapps.com/public/ images/txtwelcomeshc.png" width="550" height="610" >
-                    </td>
-                    <td width="100">
-                        &nbsp;
-                    </td>
-                </tr>
-                <tr>
-                    <td width="100">
-                        &nbsp;
-                    </td>
-                    <td bgcolor="white" width="500" align="justify" style="padding-left:5%; padding-right:5%;">                 
-                        <table width="100%" height="40px">
-                            <tr>
-                                <td bgcolor="#40733c" align="middle" width="150">
-                                    <font size="3px" face="arial" color="white" weight="500">Usuario<br>' . $parameters['user'] . '</font>
-                                </td>
-                                <td width="100">
-                                    &nbsp;
-                                </td>
-                                <td bgcolor="#40733c" align="middle" width="150">
-                                    <font size="3px" face="arial" color="white" weight="500">Contraseña<br>' . $parameters['confirmationUrl'] . '</font>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td width="100">
-                        &nbsp;
-                    </td>
-                </tr>
-                <tr>
-                    <td width="100">
-                        &nbsp;
-                    </td>
-                    <td bgcolor="white" width="500" align="justify" style="padding-left:5%; padding-right:5%;">
-                        &nbsp;
-                    </td>
-                    <td width="100">
-                        &nbsp;
-                    </td>
-                </tr>
-                <tr>
-                    <td width="100">
-                        &nbsp;
-                    </td>
-                    <td bgcolor="white" width="500" align="justify" style="padding-left:5%; padding-right:5%;">                 
-                        <table bgcolor="#40733c" width="100%" height="40px">
-                            <tr>
-                                <td align="center"><a target="_blank" href="http://intranet-pre-intranetshc.e4ff.pro-eu-west-1.openshiftapps.com/public/docs/ManualdeUsuarioWebAreaClientesSohiscert.pdf" style="text-decoration:none"><font size="3px" face="arial" color="white" weight="500"> DESCARGAR EL MANUAL DE USUARIO</font></a></td>
-                            </tr>
-                        </table>
-                        <br>
-                    </td>
-                    <td width="100">
-                        &nbsp;
-                    </td>
-                </tr>
-                <tr>
-                    <td width="100">
-                        &nbsp;
-                    </td>
-                    <td bgcolor="white" width="500" align="justify" style="padding-left:5%; padding-right:5%;">
-                        &nbsp;
-                    </td>
-                    <td width="100">
-                        &nbsp;
-                    </td>
-                </tr>
-                <tr height="50">
-                    <td width="100">
-                        &nbsp;
-                    </td>
-                    <td>
-                        &nbsp;
-                    </td>
-                    <td width="100">
-                        &nbsp;
-                    </td>
-                </tr>
-            </table>
-        </body>
-        </html>
+        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>Area Privada Sohiscert</title>
+        <style type="text/css" media="screen">
+            .sombras2{
+            -webkit-box-shadow: 10px 10px 152px -30px rgba(0,0,0,0.75);
+            -moz-box-shadow: 10px 10px 152px -30px rgba(0,0,0,0.75);
+            box-shadow: 10px 10px 152px -30px rgba(0,0,0,0.75);
+            }
+         
+             #anuncio{
+            
+             }
+             #contain{
+             overflow:hidden;
+                background-color:white!important;
+        /*   display:flex;
+             justify-content:center;
+             flex-direction:column;
+             align-items:center;*/
+            
+               width:650px;
+             min-width:650px;
+             max-width:650px;
+             
+               
+             
+               /*max-height:1185px;*/
+               height:auto;
+             }
+            
+             
+             
+             #fondo{
+                      background-image: url("https://sohiscert.com/wp-content/uploads/2018/07/img-bg-730x1024.jpg");
+                    
+                     background-size: cover;
+                width:650px;
+             min-width:650px;
+             max-width:650px;
+             
+               height:auto;
+                 padding-right:5%;
+                 padding-left:5%;
+                 
+               padding-top:3%;
+               padding-bottom:3%;
+             }
+             #mensaje{
+             text-align: justify;
+             text-justify: inter-word;
+            
+             padding:5%;
+             padding-left:10%;
+             padding-right:10%;
+             margin-bottom:3%;
+             padding-bottom:3%;
+             margin: 0;
+             overflow: auto;
+             height: auto;
+             }
+            
+            #mensaje p{
+            color:grey;
+            font-weight:500;
+            
+            }
+            
+            #mensaje h1{
+            font-size:50px;
+            font-weight:500;
+            }
+            
+             #boton1{
+             float:left;
+             width:35%;
+             height:40px;
+             background-color:#40733c;
+             text-align:center;
+             border-radius: 50px;
+             color:white;
+             font-weight:bold;
+             }
+             #boton2{
+             float:right;
+             width:35%;
+             height:40px;
+             background-color:#40733c;
+             text-align:center;
+            border-radius: 50px;
+            color:white;
+            font-weight:bold;
+             }
+             #boton3 {
+             width:100%;
+             height:40px;
+             background-color:#40733c;
+             text-align:center;
+            color:white;
+            font-weight:bold;
+             }
+             #img2{
+             width:100%;
+             min-width:100%;
+             max-width:100%;
+             min-height:350px;
+             max-height:350px;
+             height:350px;
+             
+             }
+        </style>
+    </head>
+    <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" bgcolor="" class="background">
+        <div id="fondodefondo">
+            <div id="fondo">
+                <div id="contain" class="sombras2">
+
+                    <div id="imagen">
+                        <img id="img2" class=" center" src="https://sohiscert.com/wp-content/uploads/2018/07/img-header-1024x691.jpg" />
+
+                    </div>
+
+                    <div id="mensaje">
+                        <h1>Estimado operador</h1>
+
+                       <p>Para restablecer su contraseña por favor pinche el siguiente enlace: <a href="{{path(http://intranet-sohiscert.e4ff.pro-eu-west-1.openshiftapps.com/web/resetting/' . $parameters['confirmationUrl'].')}}">http://intranet-sohiscert.e4ff.pro-eu-west-1.openshiftapps.com/resetting/' . $parameters['confirmationUrl'] .'</a></p> 
+
+                       <p>Atentamente,</p>
+                       <p>Sohiscert.</p>
+                
+                    </div>
+                    
+                </div>
+                    
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>     
         ';
         
         $subject = $template->renderBlock('subject', $parameters);
-        #$bodyHtml = $template->renderBlock('body_html', $parameters);
-        #$bodyText = $template->renderBlock('body_text', $parameters);
-
+        //$bodyHtml = $template->renderBlock('body_html', $parameters);
+        //$bodyText = $template->renderBlock('body_text', $parameters);
+        
         try {
             $message = (new \Swift_Message($subject))
                 ->setFrom($this->email_from_address, $this->email_from_name)
