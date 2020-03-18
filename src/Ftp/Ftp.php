@@ -231,6 +231,7 @@ class Ftp
    
         /** Para limitar el filtrado */
         if ($query === 'cartas') {
+            $nopcarta =$nop;
             $nop = 'F155-03-' . $nop . '-';
             #$nop = 'F155-02-' . $nop . '-';
         } elseif ($query === 'certificados') {
@@ -239,11 +240,8 @@ class Ftp
             $nop = $nop;
         // MNN. añadimos la nueva nomemclatura 
         } elseif ($query === 'conclusiones'){  
-            //Comprobamos si tiene texto o no. lo contamos
             $nop = $nop; 
-            //$nop3 = 'F194-' . $nop . '-';  
-            #$nop = $nop;  
-        // FIN       
+        // FIN      
         } else {
             $nop = '-' . $nop;
         }
@@ -282,53 +280,72 @@ class Ftp
                 }
 
             }else{
-            //FIN MNN
-            $lista_nop_alternativos = ['F','P','C','I', 'C','G','T', 'S','N'];
-            # Comprobamos SI el Certificado contiene el Nombre del Operador
-            $pos =strpos($listado[$i],$nop,0);
-            
-            $filename =explode('-',substr ($listado[$i],(int)$pos))[0];
-            /*
-            * CASO 1
-            * %LLNNNL%
-            * LLNNNLLL
-            * CASO 2
-            * %LLNNNLLL%
-            * LLNNNL
-            * CASO 3
-            * %LLNNNLLL%
-            * LLNNNLLL
-            * o
-            * %LLNNNL%
-            * LLNNNL
-            */
-            if ($pos!==false || (
-                in_array(substr($filename,strlen($filename)-3,1),$lista_nop_alternativos)
-                 && (!is_numeric(substr($filename,strlen($filename)-3,1))) &&
-                    substr($filename,strlen($filename)-3,1) == substr($nop,strlen($nop)-2,1))||
-                    (   in_array(substr($nop,strlen($nop)-4,1),$lista_nop_alternativos)
-                         && !is_numeric(substr($nop,strlen($nop)-4,1)) &&
-                            substr($filename,strlen($filename)-1,1) == substr($nop,strlen($nop)-4,1))){
+                //FIN MNN
+                $lista_nop_alternativos = ['F','P','C','I', 'C','G','T', 'S','N'];
+                # Comprobamos SI el Certificado contiene el Nombre del Operador
                 
-                $nop_aux= str_replace('AE','', $nop);
-                $nop_aux= substr($nop_aux, 0,-2);
+                 
+                $filename = explode("-", $listado[$i]);
+                $filename_aux = substr(strrchr($filename[0], "/"),1);
+                if(strlen($filename_aux) <=4 ){                    
+                    if(count($filename)>2){
+                        if(!is_null($filename[2])){
+                            $filename_aux=$filename[2];
+                            if ($query === 'cartas')
+                            {
+                                $nop_aux=$nopcarta;
+                            }
+                        }
+                    }
+                } else if(strlen($filename_aux)==7 && is_numeric($filename_aux)){
+                    if(count($filename)>1){
+                        if(!is_null($filename[1])){
+                            $filename_aux=$filename[1];
+                            $filename_aux= str_replace('.pdf','',$filename_aux);
+                        }
+                    }
+                }      
                 
-                if(strpos($listado[$i],$nop_aux)!==false){
-                
-                    #$certList[substr(strrchr($listado[$i], '/'), 1)] = $listado[$i];
-                    
-                    # Obtenemos la Fecha de Modificación del Certificado
-                    $docftp = ftp_mdtm($conn_id, $listado[$i]);;
-                   
-                    $fechadoc = date("Y-m-d H:i:s", $docftp);
-                    
-                    # Almacenamos los Valores obtenidos en Dos Arrays
-                    $certOrig[$listado[$i]] = $fechadoc;
-                    $certFmod[$listado[$i]] = $fechadoc;
+                if ($query !== 'cartas'){
+                    $nop_aux= str_replace('-','',$nop);
+                }else{
+                    $nop_aux= str_replace('-','',$nopcarta);
                 }
-            } 
+                $nop_aux= str_replace('AE','', $nop_aux);
+                $filename_aux = str_replace('AE','', $filename_aux);
+                $pos = strcmp($filename_aux,$nop_aux);
+                /*
+                * CASO 1
+                * %LLNNNL%
+                * LLNNNLLL
+                * CASO 2
+                * %LLNNNLLL%
+                * LLNNNL
+                * CASO 3
+                * %LLNNNLLL%
+                * LLNNNLLL
+                * o
+                * %LLNNNL%
+                * LLNNNL
+                */
+                #var_dump($filename_aux);
+                #var_dump($nop_aux);
+                if ($pos==0){
+    
+                        #$certList[substr(strrchr($listado[$i], '/'), 1)] = $listado[$i];
+                        
+                        # Obtenemos la Fecha de Modificación del Certificado
+                        $docftp = ftp_mdtm($conn_id, $listado[$i]);
+                       
+                        $fechadoc = date("Y-m-d H:i:s", $docftp);
+                        
+                        # Almacenamos los Valores obtenidos en Dos Arrays
+                        $certOrig[$listado[$i]] = $fechadoc;
+                        $certFmod[$listado[$i]] = $fechadoc;
+                    
+                } 
+            }
         }
-    }
 
     ftp_close($conn_id);
 
