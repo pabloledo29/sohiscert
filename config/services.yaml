@@ -34,7 +34,7 @@ parameters:
     plantilla_cartas: 'F155-02'
     #uploaddir: '/../../../app/logs/update/'
     path_update_logs: '%kernel.project_dir%/var/update/'
-    web_root: 'http://intranet-pre-intranetshc.e4ff.pro-eu-west-1.openshiftapps.com/public/'
+    web_root: 'http://intranet-sohiscert4.e4ff.pro-eu-west-1.openshiftapps.com/public/'
     repo_dir: '../' #'http://intranet-clientesshc.e4ff.pro-eu-west-1.openshiftapps.com'
     email_from_address: 'noreply@sohiscert.com'
     email_from_name: 'Area Privada Sohiscert'
