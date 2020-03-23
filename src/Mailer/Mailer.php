@@ -13,10 +13,7 @@ use App\Entity\UserAdmin;
 use App\Entity\UserOperator;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Twig\Extension\EscaperExtension;
-use Twig\Environment;
+
 /**
  * Class Mailer
  * @package App\Mailer
@@ -97,16 +94,14 @@ class Mailer
      * @param UserInterface $user
      * @return int|string
      */
-    public function sendCreatedUserOperatorEmail(UserInterface $user)
+    public function sendCreatedUserOperatorEmail(EntityUser $user)
     {
         $parameters = [
             'userName' => $user->getUsername(),
-            'plainPassword' => $user->getPassword() # ESTABA PUESTO 'plainPassword' => $user->getPassword()
+            'plainPassword' => $user->getPassword()
         ];
         
-        $to = 'ignacio.fernandez@atlantic.es'; // 'co.ferrete@atlantic.es';
-        //$to = $user->getEmail();
-        $clientEmail = 'maria.gonzalez@atlantic.es'; // 'manuel.navarro@atlantic.es';
+        $to = $user->getEmail();
 
         $template = $this->twig->load('email/useroperator_created_email.html.twig');
         
@@ -258,9 +253,9 @@ class Mailer
                 #->setBody($bodyHtml, 'text/html')
                 ->setBody($miMensaje, 'text/html')
                 #->setBody($template->renderView('email/useroperator_created_email.html.twig'),'text/html')
-                ->setCc($clientEmail) // Copia a cliente, DESHABILITAR EN PRODUCCIÓN
+                //->setCc($clientEmail) // Copia a cliente, DESHABILITAR EN PRODUCCIÓN
                 ->setBcc(array(
-                    'co.ferrete@atlantic.es' => 'Soporte AIT' # 'fernando.delalastra@atlantic.es'  => 'Soporte Atlantic'
+                    'soporte@sohiscert.com' => 'Soporte Sohiscert' # 'fernando.delalastra@atlantic.es'  => 'Soporte Atlantic'
                 ));
                 #->addPart($miMensaje, 'text/html');
                 #->addPart('<q>Por favor utilice un cliente de correo compatible con HTML!!!!</q>', 'text/html');
@@ -287,10 +282,8 @@ class Mailer
             'plainPassword' => $data['plainPassword']
         ];
 
-        $to = 'ignacio.fernandez@atlantic.es';
-        //$to = $userAdmin->getEmail();
-        $clientEmail = 'manuel.navarro@atlantic.es';
-
+        $to = $userAdmin->getEmail();
+        
         $template = $this->twig->load('email/useradmin_email_created.html.twig');
         
         $miMensaje = '
@@ -438,10 +431,10 @@ class Mailer
                 ->setBody($miMensaje, 'text/html')
                 #->setBody($bodyHtml, 'text/html')
                 #->setBody($template->renderView('email/useradmin_email_created.html.twig'),'text/html')
-                ->setCc($clientEmail); // Copia a cliente, DESHABILITAR EN PRODUCCIÓN
-                //->setBcc(array(
-                    //'soporte@sohiscert.com' => 'Soporte Sohiscert' # 'fernando.delalastra@atlantic.es'  => 'Soporte Atlantic' 
-                //));
+                //->setCc($clientEmail) // Copia a cliente, DESHABILITAR EN PRODUCCIÓN
+                ->setBcc(array(
+                    'soporte@sohiscert.com' => 'Soporte Sohiscert' # 'fernando.delalastra@atlantic.es'  => 'Soporte Atlantic' 
+                ));
                 #->addPart($miMensaje, 'text/html');
                 #->addPart('<q>Por favor utilice un cliente de correo compatible con HTML!!!!</q>', 'text/html');
 
@@ -469,9 +462,7 @@ class Mailer
             'type' => $file->getDocexptype()
         ];
 
-        $to = 'ignacio.fernandez@atlantic.es';
-        //$to = $this->mail_to;
-        $clientEmail = 'fernando.delalastra@atlantic.es';
+        $to = $this->mail_to;
 
         $template = $this->twig->load('email/uploadeddoc_email.html.twig');
 
@@ -485,10 +476,10 @@ class Mailer
                 ->setTo($to)
                 ->setCharset('utf-8')
                 ->setBody($bodyHtml, 'text/html')
-                ->setCc($clientEmail) // Copia a cliente
-                //->setBcc(array(
-                //    'soporte@sohiscert.com' => 'Soporte Sohiscert' #'fernando.delalastra@atlantic.es'  => 'Soporte Atlantic'
-                //))
+                //->setCc($clientEmail) // Copia a cliente
+                ->setBcc(array(
+                    'soporte@sohiscert.com' => 'Soporte Sohiscert' #'fernando.delalastra@atlantic.es'  => 'Soporte Atlantic'
+                ))
                 ->addPart($bodyText, 'text/plain');
 
             $response = $this->mailer->send($message);
@@ -508,17 +499,13 @@ class Mailer
      */
     public function sendFileNotificationTotheOperator(array $data)
     {
-        #var_dump($data);
-        #exit('Parametros Mail');
-
         $parameters = [
             'operator' => $data["operator"],
             'tipo' => $data["tipo"],
             'documento' => $data["documento"]
         ];
 
-        $to = 'ignacio.fernandez@atlantic.es';
-        //$to = $data["opEma"];
+        $to = $data["opEma"];
 
         $template = $this->twig->load('email/uploadfileoperator_email.html.twig');
 
@@ -532,9 +519,9 @@ class Mailer
                 ->setTo($to)
                 ->setCharset('utf-8')
                 ->setBody($bodyHtml, 'text/html')
-                #->setBcc(array(
-                #    'soporte@sohiscert.com' => 'Soporte Sohiscert' #'fernando.delalastra@atlantic.es'  => 'Soporte Atlantic'
-                #))
+                ->setBcc(array(
+                    'soporte@sohiscert.com' => 'Soporte Sohiscert' #'fernando.delalastra@atlantic.es'  => 'Soporte Atlantic'
+                ))
                 ->addPart($bodyText, 'text/plain');
 
             $response = $this->mailer->send($message);
@@ -562,10 +549,9 @@ class Mailer
             'description' => $contactForm->getDescription(),
             'message' => $contactForm->getMessage(),
         ];
-        #$to = 'sohiscert@sohiscert.com';
-       // $to = "consolacion@sohiscert.com"; 
-        $to = "ignacio.fernandez@atlantic.es";
-        $clientEmail = "ignacio.fernandez@atlantic.es";
+        $to = 'sohiscert@sohiscert.com';
+        //$to = "consolacion@sohiscert.com"; 
+        //$clientEmail = "ignacio.fernandez@atlantic.es";
         
         $template = $this->twig->load('email/contactform_email.html.twig');
         $subject = $template->renderBlock('subject', $parameters);
@@ -581,10 +567,9 @@ class Mailer
                 ->setCharset('utf-8')
                 ->setBody($bodyHtml, 'text/html') 
                 ->setCc($clientEmail) // Copia a cliente
-                #->setCc($clientEmail) // Copia a cliente
-                #->setBcc(array(
-                #    '' => 'Soporte Sohiscert' # 'fernando.delalastra@atlantic.es'  => 'Soporte Atlantic'
-                #)) 
+                ->setBcc(array(
+                    'soporte@sohiscert.com' => 'Soporte Sohiscert' # 'fernando.delalastra@atlantic.es'  => 'Soporte Atlantic'
+                )) 
                 ->addPart($bodyText);
                 
             $response = $this->mailer->send($message);
@@ -614,9 +599,9 @@ class Mailer
         ];
         
 
-        $to = 'ignacio.fernandez@atlantic.es'; // 'manuel.navarro@atlantic.es'; // 'co.ferrete@atlantic.es';
-        //$to = $user->getEmail();
-        $clientEmail = 'ignacio.fernandez@atlantic.es'; // 'manuel.navarro@atlantic.es';
+        //$to = 'ignacio.fernandez@atlantic.es'; // 'manuel.navarro@atlantic.es'; // 'co.ferrete@atlantic.es';
+        $to = $user->getEmail();
+        //$clientEmail = 'ignacio.fernandez@atlantic.es'; // 'manuel.navarro@atlantic.es';
 
         $template = $this->twig->load('email/useroperator_reset_email.html.twig');
         
@@ -777,12 +762,12 @@ class Mailer
                 ->setTo($to)
                 ->setCharset('utf-8')
                 #->setBody($bodyHtml, 'text/html')
-                ->setBody($miMensaje, 'text/html');
+                ->setBody($miMensaje, 'text/html')
                 #->setBody($template->renderView('email/useroperator_created_email.html.twig'),'text/html')
                 #->setCc($clientEmail) // Copia a cliente, DESHABILITAR EN PRODUCCIÓN
-                #->setBcc(array(
-                #    'soporte@sohiscert.com' => 'Soporte Sohiscert' # 'fernando.delalastra@atlantic.es'  => 'Soporte Atlantic'
-                #));
+                ->setBcc(array(
+                    'soporte@sohiscert.com' => 'Soporte Sohiscert' # 'fernando.delalastra@atlantic.es'  => 'Soporte Atlantic'
+                ));
                 #->addPart($miMensaje, 'text/html');
                 #->addPart('<q>Por favor utilice un cliente de correo compatible con HTML!!!!</q>', 'text/html');
                 
