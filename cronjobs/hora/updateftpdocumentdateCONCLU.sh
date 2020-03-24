@@ -115,7 +115,7 @@ function execute_command()
 #MNN. Añadimos en elvio de conclusiones
 tried=0;
 total_tried=2
-execution_string=/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console appbundle:emaildoccon:send
+execution_string=/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console email:emaildoccon:send
 state_task=$(execute_command $tried)
 echo $"$state_task"
 if [ -d ${DIRECTORIO} ]; then	

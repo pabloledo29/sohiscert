@@ -115,7 +115,7 @@ function execute_command()
 
 tried=0;
 total_tried=2
-execution_string=/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console appbundle:emaildoccerti:send
+execution_string=/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console email:emaildoccerti:send
 state_task=$(execute_command $tried)
 echo $"$state_task"
 if [ -d ${DIRECTORIO} ]; then	
