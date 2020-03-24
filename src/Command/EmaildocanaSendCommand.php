@@ -903,7 +903,7 @@ EOF
                                                         <td align="center">
                                                             <br>
                                                             <br>
-                                                            <p><a target="_blank" href="https://intranet-sohiscert.e4ff.pro-eu-west-1.openshiftapps.com/web/login" style="text-decoration:none"><font size="3px" face="arial" color="#40733c" weight="500"><b> ACCEDER AL ÁREA PRIVADA DE CLIENTES</b></font></a>
+                                                            <p><a target="_blank" href="https://intranet-sohiscert4.e4ff.pro-eu-west-1.openshiftapps.com/public/login" style="text-decoration:none"><font size="3px" face="arial" color="#40733c" weight="500"><b> ACCEDER AL ÁREA PRIVADA DE CLIENTES</b></font></a>
                                                             </p>
                                                         </td>
                                                     </tr>
