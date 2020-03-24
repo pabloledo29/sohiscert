@@ -1433,8 +1433,8 @@ EOF
         
 
         $from  = 'noreply@sohiscert.com';
-        # $to = $destino;
-        $to = 'manuel.navarro@atlantic.es';
+         $to = $destino;
+        //$to = 'manuel.navarro@atlantic.es';
         $subject = "Area Privada Sohiscert - Notificacion de Actualizacion de Documentacion del Operador"; 
         
         /*MNN Modificamos la plantilla */
