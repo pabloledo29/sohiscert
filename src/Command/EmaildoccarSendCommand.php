@@ -286,7 +286,7 @@ EOF
 
                   
                     $archivo = $em->getRepository(DocumentosFTP::class)->findOneByNbDoc($lista[$i]);
-                    var_dump($archivo);
+                    //var_dump($archivo);
                     switch ($tipodoc) {
                         
                         
@@ -574,7 +574,9 @@ EOF
                     # Si Existen Datos de Actualización para Remitir por Mail 
                     #
                     if (isset($datamail)) {
-                        var_dump($datamail["mail"]);
+                        if ($datamail['mail']!=''){
+                            var_dump($datamail["mail"]);
+                            
                         if($datamail["mail"] != null){
                             $datamail["mail"] = array_filter(preg_split('[;,/ ]',trim($datamail["mail"])));
                                 if($datamail["mail"][0]){
@@ -586,7 +588,7 @@ EOF
                                         str_replace("ó","o",$datamail["mail"]);
                                         str_replace("ú","u",$datamail["mail"]);
                                     if($datamail["mail"]==null || ($datamail["mail"] != [] && $datamail["mail"] != null && $datamail["mail"] != "" && !filter_var($datamail["mail"], FILTER_VALIDATE_EMAIL))){
-                                        $path_file_fail = $urlBase.'register_falladas_CART_'.date("d_m_Y").'.log';
+                                        $path_file_fail = $urlBase.'register_falladas_ANA_'.date("d_m_Y").'.log';
                                         $open_file = fopen($path_file_fail,'a+');
                                         fwrite($open_file,date("Y-m-d H:i:s"). "---->" .implode($datamail));
                                         fclose($open_file);
@@ -622,6 +624,7 @@ EOF
                         
                         $contMail++;
                         # exit('Envió de Mail Realizado');
+                        }
                     }
                     
                 }else{
