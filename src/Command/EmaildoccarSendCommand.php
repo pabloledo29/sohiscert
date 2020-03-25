@@ -574,7 +574,7 @@ EOF
                     # Si Existen Datos de Actualización para Remitir por Mail 
                     #
                     if (isset($datamail)) {
-                        dump($datamail["mail"]);
+                        var_dump($datamail["mail"]);
                         if($datamail["mail"] != null){
                             $datamail["mail"] = array_filter(preg_split('[;,/ ]',trim($datamail["mail"])));
                                 if($datamail["mail"][0]){
