@@ -322,9 +322,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
     }
 
     
-    
-    public function setPassword(string $password): self
+    public function setPassword(?string $password): self
     {
+        if (!$password){
+            return $this;
+        }
         
         /*$options = [
             'cost' => 12

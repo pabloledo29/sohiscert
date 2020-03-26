@@ -31,8 +31,8 @@ class RegistrationUserOperatorType extends AbstractType
             ->add('username', HiddenType::class)
             ->add('email')
             ->add('password',RepeatedType::class,['type'=>PasswordType::class,
+                                                          'empty_data' =>'',
                                                           'required'=>false,
-                                                          'empty_data' => '',
                                                           'invalid_message' => 'Las contraseñas deben coincidir',
                                                           'options' => ['attr' => [ 'class' => 'form-control','placeholder'=> '*******']],
                                                           'first_options'  => ['label' =>'Password:'],
@@ -50,6 +50,7 @@ class RegistrationUserOperatorType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
+
         $resolver->setDefaults([
             'data_class' => User::class,
         ]);

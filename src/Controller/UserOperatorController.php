@@ -419,11 +419,13 @@ class UserOperatorController extends AbstractController
         $form->handleRequest($request);
        
         if ($form->isSubmitted() && $form->isValid()) {
-             
+            $user->setPassword(password_hash($user->getPassword(), PASSWORD_BCRYPT,['cost'=>12])); 
+            
             $userManager = $em;
+            
             $userManager->persist($user);
             $userManager->flush();
-
+            
             $request->getSession()->getFlashBag()->add('msg', 'El usuario ha sido modificado correctamente');
 
             return $this->redirect($this->generateUrl('admin_useroperator_list'));

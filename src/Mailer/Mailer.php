@@ -601,6 +601,7 @@ class Mailer
 
         //$to = 'ignacio.fernandez@atlantic.es'; // 'manuel.navarro@atlantic.es'; // 'co.ferrete@atlantic.es';
         $to = $user->getEmail();
+        
         //$clientEmail = 'ignacio.fernandez@atlantic.es'; // 'manuel.navarro@atlantic.es';
 
         $template = $this->twig->load('email/useroperator_reset_email.html.twig');
@@ -762,12 +763,12 @@ class Mailer
                 ->setTo($to)
                 ->setCharset('utf-8')
                 #->setBody($bodyHtml, 'text/html')
-                ->setBody($miMensaje, 'text/html')
+                ->setBody($miMensaje, 'text/html');
                 #->setBody($template->renderView('email/useroperator_created_email.html.twig'),'text/html')
                 #->setCc($clientEmail) // Copia a cliente, DESHABILITAR EN PRODUCCIÓN
-                ->setBcc(array(
-                    'soporte@sohiscert.com' => 'Soporte Sohiscert' # 'fernando.delalastra@atlantic.es'  => 'Soporte Atlantic'
-                ));
+                #->setBcc(array(
+                #    'soporte@sohiscert.com' => 'Soporte Sohiscert' # 'fernando.delalastra@atlantic.es'  => 'Soporte Atlantic'
+                #));
                 #->addPart($miMensaje, 'text/html');
                 #->addPart('<q>Por favor utilice un cliente de correo compatible con HTML!!!!</q>', 'text/html');
                 
