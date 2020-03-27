@@ -96,20 +96,30 @@ class FtpController extends AbstractController
         }
 
         //Validación de permisos.
-        $clientId = explode('/', $path)[3];
+        $path_aux=str_replace('.pdf',"",$path);
+
+        $clientId = preg_split('/\/|-/', $path_aux);
+        $clientId[2];
         // Si solo hubiese un cliente para un usuario esta sería la manera más logica
 //        if ($clientId !== $user->getClientId()->getCodigo()) {
 //            throw $this->createAccessDeniedException();
 //        }
-
+        
         $cif = $user->getUsername();
-        $clients = $this->getDoctrine()->getManager()->getRepository(Client::class)->findClients($cif);
+        $clients = $this->getDoctrine()->getManager()->getRepository(Client::class)->findClientsNop($cif);
         $list = [];
         foreach ($clients as $cod) {
-            array_push($list, $cod['codigo']);
+            array_push($list, $cod['opNop']);
         }
-        if (!in_array($clientId, $list)) {
-            throw $this->createAccessDeniedException();
+        
+        if (!in_array($clientId[2], $list)) {
+            if (!in_array($clientId[3], $list)) {
+                if (!in_array($clientId[4], $list)) {
+                    if (!in_array($clientId[5], $list)) {
+                        throw $this->createAccessDeniedException();
+                    }
+                }
+            }
         }
 
         $ftp_server = $this->container->getParameter('ftp_server');
@@ -120,7 +130,7 @@ class FtpController extends AbstractController
 
         # Inciamos Sesión
         $login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass); 
-
+        
         # Verificamos la Conexión
         if ((!$conn_id) || (!$login_result)) {  
             /*echo "\n ¡La conexión FTP ha fallado!";
@@ -131,7 +141,7 @@ class FtpController extends AbstractController
         } /*else {
             echo "\n Conexión a $ftp_server realizada con éxito, por el usuario " . $ftp_user_name . " \n";
         }*/
-
+        
         $this->downloadFileAction($conn_id,$path);
     }
 
@@ -322,7 +332,7 @@ class FtpController extends AbstractController
 
         # Inciamos Sesión
         $login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass); 
-
+        
         # Verificamos la Conexión
         if ((!$conn_id) || (!$login_result)) {  
             /*echo "\n ¡La conexión FTP ha fallado!";
@@ -343,9 +353,9 @@ class FtpController extends AbstractController
      *
      * @param Request $request
      * @throws \Touki\FTP\Exception\DirectoryException
-     * @Route("/private/download/file", name="useroperator_file_download")
+     * 
      */
-    public function userOperatorDownloadFileAction(Request $request)
+   /* public function userOperatorDownloadFileAction(Request $request)
     {
         if (!$this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
             throw $this->createAccessDeniedException();
@@ -366,18 +376,18 @@ class FtpController extends AbstractController
         $login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass); 
 
         # Verificamos la Conexión
-        if ((!$conn_id) || (!$login_result)) {  
+        if ((!$conn_id) || (!$login_result)) {  */
             /*echo "\n ¡La conexión FTP ha fallado!";
             echo "\n Se intentó conectar al $ftp_server por el usuario $ftp_user_name"; 
             echo " \n";*/
-            exit(); 
+           // exit(); 
 
-        }/* else {
-            echo "\n Conexión a $ftp_server realizada con éxito, por el usuario " . $ftp_user_name . " \n";
-        }*/
+     //   }/* else {
+      //      echo "\n Conexión a $ftp_server realizada con éxito, por el usuario " . $ftp_user_name . " \n";
+      //  }*/
 
-        $this->downloadFileAction($conn_id,$path);
-    }
+      //  $this->downloadFileAction($conn_id,$path);
+   // }
 
     /**
      * Método que descarga un fichero desde un servidor FTP.
@@ -398,22 +408,19 @@ class FtpController extends AbstractController
         $path_file = $this->container->getParameter('repo_dir') . // Path server
             'public/docs/temp/' . date("d_m_Y_h_i_s") . $filename;
 
-        $file_open = fopen($path_file, "a+");
         
-        if (!ftp_get($conn_id,$path_file, $path,FTP_BINARY)) {
-            
-        }
+        
 
         $file_open = fopen($path_file, "a+");
         fclose($file_open);
-        ftp_pasv($conn_id,true);
-            $ret = ftp_get($conn_id, $path_file, $path, FTP_BINARY);
+       
+        $ret = ftp_get($conn_id, $path_file, $path, FTP_BINARY);
 
       
         if($ret){
             
             
-            ftp_close($conn_id);
+            
             /*   Pruebas descarga  */
             basename(__FILE__, '.php');
             $response = new Response();
@@ -433,7 +440,9 @@ class FtpController extends AbstractController
                 fclose($file);
             }
             $response->setContent($file);
+            var_dump($response);
             
+            exit;
             return $response;
         }else{
             throw new FileNotFoundException;

@@ -80,11 +80,34 @@ class ClientRepository extends ServiceEntityRepository
      */
     public function findClients($cif)
     {
-        $query = $this->getDoctrine()->getManager()
+        $query = $this->getEntityManager()
             ->createQuery(
                 'SELECT c.codigo
                 FROM App\Entity\Client c
                 WHERE c.clCif = :cif
+                ORDER BY c.id DESC'
+            )->setParameter('cif', $cif);
+        try {
+            return $query->getResult();
+        } catch (NoResultException $e) {
+            return array();
+        }
+    }
+
+    /**
+     * Localiza todas las ocurrencias de un cliente con un mismos CIF.
+     *
+     * @param $cif
+     * @return array
+     */
+    public function findClientsNop($cif)
+    {
+        $query = $this->getEntityManager()
+            ->createQuery(
+                'SELECT o.opNop
+                FROM App\Entity\Client c, App\Entity\Operator o
+                WHERE c.clCif = :cif
+                AND c.clCif = o.opCif
                 ORDER BY c.id DESC'
             )->setParameter('cif', $cif);
         try {

@@ -91,18 +91,9 @@
                                                 <input type="hidden" value="{{ operator.id }}" name="opId"/>#}
                                                  <input type="hidden" value="{{ doc.directory }}" name="path"/>
                                                 <i class="fa fa-floppy-o"></i>
-                                                <a download href="#"
+                                                <a href="#"
                                                    onclick="$(this).closest('form').submit()">Descargar </a>
                                             </form>
-
-
-                                            {#<form action="{{ path('useroperator_file_download') }}"#}
-                                            {#      method="POST">#}
-                                            {#   <input type="hidden" name="path" value="{{ doc.directory }}">#}
-                                            {#    <i class="fa fa-floppy-o"></i>#}
-                                            {#    <a href="#"#}
-                                            {#       onclick="$(this).closest('form').submit()">Descargar </a>#}
-                                            {#</form>#}
                                         </td>
                                         {#<td>{{ doc.deFec }}</td>#}
                                     </tr>

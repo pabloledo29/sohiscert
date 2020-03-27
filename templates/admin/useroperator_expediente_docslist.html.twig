@@ -72,7 +72,7 @@
                                 <tbody>
 
                                 {% for doc in docs %}
-                                    {{ doc }}
+                                    
                                     {% if doc.anFec|date('Y') == 'now'|date('Y') or doc.anFec|date('Y') == 'now'|date_modify('-1 year')|date('Y') %}
                                         <tr>
                                             <td> Análisis - {{ doc.anFec|date('d/m/Y') }}</td>

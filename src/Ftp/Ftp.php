@@ -366,7 +366,7 @@ class Ftp
                     if($query!=='analisis'){
                         $certList[substr(strrchr($rutadoc, '/'), 1)] = $rutadoc;
                     }else{
-                        $certList[substr(strrchr($rutadoc, '/'), 1)] = [directory=>$rutadoc, anFec=>$fmod];                    
+                        $certList[substr(strrchr($rutadoc, '/'), 1)] = ["directory"=>$rutadoc, "anFec"=>$fmod];                    
                     } 
                 }
             }
