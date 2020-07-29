@@ -37,56 +37,69 @@
                     {% endif %}
                     </span>
                 </div>
-                {% if info['rlEntity'] == "ProductosPae" %}
-                <div><label>Productos utilizables en agricultura ecológica</label></div>
-                {% for productoPae in operator.opProductosPae %}
-                <br>        
-                <div><label>Marca Comercial: </label><span> {{ productoPae.pipPro }} </span></div>
-                <div><label>Descripción: </label><span> {{ productoPae.pipDsc }} </span></div>
-                {#<div><label>Tipo de Producto: </label><span> {{ productoPae.pipTpp }} </span></div>#}
-                {% endfor %}
-                {%  endif %}
+               {% if info['rlEntity'] == "ProductosPae" %}
+                                <div><label>Productos utilizables en agricultura ecológica</label></div>
+                                {% for productoPae in operator.opProductosPae %}
+                                    
+                
+                                    {% if productoPae.pipEst is defined %}
+                                     {% if  productoPae.pipEst != 'DL' and productoPae.pipEst != 'B'%}
+                                        <br>
+                                        <div><label>Marca Comercial: </label><span> {{ productoPae.pipPro }} </span></div>
+                                        <div><label>Descripción: </label><span> {{ productoPae.pipDsc }} </span></div>
 
-                {% if info['rlEntity'] == "Ganaderias" %}
-                    {% set mostrados = [] %}
-                    <div><label>Productos:</label></div>
-                    {% for ganaderia in operator.opGanaderias %}
-                        {% if ganaderia.gnProductosG.pnDeno is defined %}
-                            {% if ganaderia.gnProductosG.pnDeno | default('') not in mostrados %}
-                                <div><label>- </label><span> {{ ganaderia.gnProductosG.pnDeno | default('')}} </span></div>
-                                {% set mostrados = mostrados|merge([ganaderia.gnProductosG.pnDeno | default('')]) %}
+                                    {#<div><label>Tipo de Producto: </label><span> {{ productoPae.pipTpp }} </span></div>#}
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
                             {% endif %}
 
-                        {% endif %}
-                    {% endfor %}
-                {%  endif %}
+                            {% if info['rlEntity'] == "Ganaderias" %}
+                                {% set mostrados = [] %}
+                                <div><label>Productos:</label></div>
+                                {% for ganaderia in operator.opGanaderias %}
+                                    {% if ganaderia.gnProductosG.pnDeno is defined %}
+                                        {% if ganaderia.gnProductosG.pnDeno | default('') not in mostrados and ganaderia.gnProductosG.pnEst != 'DL' and ganaderia.gnProductosG.ptEst != 'B' %}
+                                            <div>
+                                                <label>- </label><span> {{ ganaderia.gnProductosG.pnDeno | default('') }} </span>
+                                            </div>
+                                            {% set mostrados = mostrados|merge([ganaderia.gnProductosG.pnDeno | default('')]) %}
+                                        {% endif %}
 
-                {% if info['rlEntity'] == "CultivosRec" %}              
-                    {% set mostrados = [] %}
-                    <div><label>Productos:</label></div>
-                    {% for cultivoRec in operator.opCultivosRec %}
-                        {% if cultivoRec.ruProducto.ptDeno is defined and cultivoRec.ruProducto.ptEst == 'L' %}
-                            {% if cultivoRec.ruProducto.ptDeno | default('') not in mostrados  %}
-                                <div><label>- </label><span> {{ cultivoRec.ruProducto.ptDeno | default('')}} </span></div>
-                                {% set mostrados = mostrados|merge([cultivoRec.ruProducto.ptDeno | default('')]) %}
+                                    {% endif %}
+                                {% endfor %}
                             {% endif %}
-                        {% endif %}
-                    {% endfor %}
-                {%  endif %}
 
-                {% if info['rlEntity'] == "CultivosRec2" %}
-                    {% set mostrados = [] %}
-                    <div><label>Cultivos: </label></div>    
-                    {% for cultivoRec2 in operator.opCultivosRec2 %}
-                        {% if cultivoRec2.ru2Cultivos.cuDeno is defined %}                            
-                            {% if cultivoRec2.ru2Cultivos.cuDeno | default('') not in mostrados %}
-                                
-                                <div><label>- </label><span> {{ cultivoRec2.ru2Cultivos.cuDeno | default('')}} </span></div>
-                                {% set mostrados = mostrados|merge([cultivoRec2.ru2Cultivos.cuDeno | default('')]) %}
+                            {% if info['rlEntity'] == "CultivosRec" %}
+                                {% set mostrados = [] %}
+                                <div><label>Productos:</label></div>
+                                {% for cultivoRec in operator.opCultivosRec %}
+                                    {% if cultivoRec.ruProducto.ptDeno is defined and cultivoRec.ruProducto.ptEst == 'L' and cultivoRec.ruProducto.ptEst != 'B' and cultivoRec.ruProducto.ptEst != 'DL' %}
+                                        {% if cultivoRec.ruProducto.ptDeno | default('') not in mostrados %}
+                                            <div>
+                                                <label>- </label><span> {{ cultivoRec.ruProducto.ptDeno | default('') }} </span>
+                                            </div>
+                                            {% set mostrados = mostrados|merge([cultivoRec.ruProducto.ptDeno | default('')]) %}
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
                             {% endif %}
-                        {% endif %}
-                    {% endfor %}
-                {%  endif %}
+
+                            {% if info['rlEntity'] == "CultivosRec2" %}
+                                {% set mostrados = [] %}
+                                <div><label>Cultivos: </label></div>
+                                {% for cultivoRec2 in operator.opCultivosRec2 %}
+                                    {% if cultivoRec2.ru2Cultivos.cuDeno is defined %}
+                                        {% if cultivoRec2.ru2Cultivos.cuDeno | default('') not in mostrados and ganaderia.ru2Cultivos.ptEst != 'DL' and ganaderia.gnProductosG.ptEst != 'B' %}
+
+                                            <div>
+                                                <label>- </label><span> {{ cultivoRec2.ru2Cultivos.cuDeno | default('') }} </span>
+                                            </div>
+                                            {% set mostrados = mostrados|merge([cultivoRec2.ru2Cultivos.cuDeno | default('')]) %}
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
 
                  {% if info['rlEntity'] == "AvesCorral" %}
                 <div><label>Aves de corral</label></div>
@@ -122,16 +135,19 @@
 
 
                 {% if info['rlEntity'] == "Industrias" %}
-                    {% set mostrados = [] %}
-                    <div><label>Actividad:</label></div>
-                    {% for industrias in operator.opIndustrias %}
-                        {% if industrias.inActividadI.ainDeno is defined%}  
-                            {% if industrias.inActividadI.ainDeno  | default('') not in mostrados %}
-                                <div><label> - </label><span> {{ industrias.inActividadI.ainDeno }} </span></div>
-                                {% set mostrados = mostrados|merge([industrias.inActividadI.ainDeno | default('')]) %}
+                                {% set mostrados = [] %}
+                                
+                                <div><label>Actividad:</label></div>
+                                {% for industrias in operator.opIndustrias %}
+                                    {% if industrias.inActividadI.ainDeno is defined %}
+                                        {% if industrias.inActividadI.ainDeno  | default('') not in mostrados and industrias.inActividadI.inSit != 'DL' and industrias.inActividadI.inSit != 'B' %}
+                                            <div><label> - </label><span> {{ industrias.inActividadI.ainDeno }} </span>
+                                            </div>
+                                            {% set mostrados = mostrados|merge([industrias.inActividadI.ainDeno | default('')]) %}
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
                             {% endif %}
-                        {% endif %}
-                    {% endfor %}
                 
 
 

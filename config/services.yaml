@@ -58,7 +58,12 @@ parameters:
     ftp_server: 'sohiscert3.ddns.cyberoam.com'
     ftp_user_name: 'userftp1'
     ftp_user_pass: 'AtlIntTec.12'
-    
+    mailchimp_api_key: 'bccbc65594b97af78b8d502147d008b6-us19' #Elemento duplicado mailchimp.yaml
+    twilio_sid: SK277c0d83b4164e6e0b86127b5518a027
+    twilio_token: 9HZEOuM9aOtXTJKlZTA00NpYuJg3qRn1
+    twilio_number: '(205) 809-0487'
+    twilio_acconts_sid: ACc04c58a17f50ee78128156129a2ac1ee
+    twilio_whatsapp_number: '+14155238886'
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -98,21 +103,24 @@ services:
             $ftp_server: '%ftp_server%'
             $ftp_user_name: '%ftp_user_name%'
             $ftp_user_pass: '%ftp_user_pass%'
-
-    
+            $mailchimp_api_key: '%mailchimp_api_key%'
+            $twilio_sid: '%twilio_sid'
+            $twilio_token: '%twilio_token'
+            $twilio_number: '%twilio_number'
+            $twilio_acconts_sid: '%twilio_acconts_sid'
+            $twilio_whatsapp_number: '%twilio_whatsapp_number'
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/*'
-        exclude: '../src/{DependencyInjection,Entity,Mailer,GsBase,Command,Ftp,Tools,Migrations,Tests,Kernel.php}'
+        exclude: '../src/{DependencyInjection,Entity,Mailchimp,Twilio,Esendex,Mailer,GsBase,Command,Ftp,Tools,Migrations,Tests,Kernel.php}'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
-        
- 
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
     gsbase:
@@ -306,7 +314,35 @@ services:
         tags: ['doctrine.repository_service']
     App\Repository\ContactRepository:
         tags: ['doctrine.repository_service']
+    App\Repository\DocumentFTPRepository:
+        tags: ['doctrine.repository_service']
+    App\Repository\ComunicationSendRegistryRepository:
+        tags: ['doctrine.repository_service']    
 
 
-    
+#======================================================================
    
+    App\Mailchimp\Provider\MailchimpDynamicProvider:
+        arguments: [App\Repository\UserOperatorRepository,"@service_container"] 
+
+    welp_mailchimp.provider.factory:
+        class: App\Mailchimp\Provider\MailchimpDynamicProvider
+    doctrine.list.provider:
+        class: App\Mailchimp\Provider\DoctrineListProvider
+        public: true
+        arguments: ['@doctrine.orm.entity_manager','App\Entity\UserOperator','@welp_mailchimp.provider.factory']
+        
+    App\Mailchimp\Provider\DoctrineListProvider: '@doctrine.list.provider'
+
+    twilio.client:
+       class: Twilio\Rest\Client
+       arguments: ['%twilio_sid%', '%twilio_token%','@doctrine']
+  
+   # Add an alias for the twilio.client service
+    Twilio\Rest\Client: '@twilio.client'
+
+    App\Twilio\TwilioController:
+        class: App\Twilio\TwilioController
+        arguments: [ '@doctrine.orm.entity_manager']
+
+    ##App\SmsUp\SmsUpController: '@smsup.smsupapi.sender'

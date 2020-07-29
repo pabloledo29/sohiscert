@@ -13,20 +13,34 @@ class ComposerStaticInit1d03d7bdfb881d576d54cf3caf2be1bb
         '0d59ee240a4cd96ddbb4ff164fccea4d' => __DIR__ . '/..' . '/symfony/polyfill-php73/bootstrap.php',
         '92c8763cd6170fce6fcfe7e26b4e8c10' => __DIR__ . '/..' . '/symfony/phpunit-bridge/bootstrap.php',
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
+        'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         'e88992873b7765f9b5710cab95ba5dd7' => __DIR__ . '/..' . '/hoa/consistency/Prelude.php',
         '6a47392539ca2329373e0d33e1dba053' => __DIR__ . '/..' . '/symfony/polyfill-intl-icu/bootstrap.php',
         '3e76f7f02b41af8cea96018933f6b7e3' => __DIR__ . '/..' . '/hoa/protocol/Wrapper.php',
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
+        '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
+        'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
+        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
     );
 
     public static $prefixLengthsPsr4 = array (
+        's' => 
+        array (
+            'smsup\\SmsupapiBundle\\' => 21,
+            'smsup\\' => 6,
+        ),
         'Z' => 
         array (
             'Zend\\EventManager\\' => 18,
             'Zend\\Code\\' => 10,
         ),
+        'W' => 
+        array (
+            'Welp\\MailchimpBundle\\' => 21,
+        ),
         'T' => 
         array (
+            'Twilio\\' => 7,
             'Twig\\Extra\\TwigExtraBundle\\' => 27,
             'Twig\\' => 5,
         ),
@@ -39,6 +53,7 @@ class ComposerStaticInit1d03d7bdfb881d576d54cf3caf2be1bb
             'Symfony\\Flex\\' => 13,
             'Symfony\\Contracts\\Translation\\' => 30,
             'Symfony\\Contracts\\Service\\' => 26,
+            'Symfony\\Contracts\\HttpClient\\' => 29,
             'Symfony\\Contracts\\EventDispatcher\\' => 34,
             'Symfony\\Contracts\\Cache\\' => 24,
             'Symfony\\Component\\Yaml\\' => 23,
@@ -59,6 +74,7 @@ class ComposerStaticInit1d03d7bdfb881d576d54cf3caf2be1bb
             'Symfony\\Component\\Inflector\\' => 28,
             'Symfony\\Component\\HttpKernel\\' => 29,
             'Symfony\\Component\\HttpFoundation\\' => 33,
+            'Symfony\\Component\\HttpClient\\' => 29,
             'Symfony\\Component\\Form\\' => 23,
             'Symfony\\Component\\Finder\\' => 25,
             'Symfony\\Component\\Filesystem\\' => 29,
@@ -91,6 +107,7 @@ class ComposerStaticInit1d03d7bdfb881d576d54cf3caf2be1bb
         'P' => 
         array (
             'Psr\\Log\\' => 8,
+            'Psr\\Http\\Message\\' => 17,
             'Psr\\Container\\' => 14,
             'Psr\\Cache\\' => 10,
             'PhpParser\\' => 10,
@@ -124,6 +141,9 @@ class ComposerStaticInit1d03d7bdfb881d576d54cf3caf2be1bb
         ),
         'G' => 
         array (
+            'GuzzleHttp\\Psr7\\' => 16,
+            'GuzzleHttp\\Promise\\' => 19,
+            'GuzzleHttp\\' => 11,
             'Gedmo\\' => 6,
         ),
         'E' => 
@@ -133,6 +153,7 @@ class ComposerStaticInit1d03d7bdfb881d576d54cf3caf2be1bb
         ),
         'D' => 
         array (
+            'DrewM\\MailChimp\\' => 16,
             'Doctrine\\Persistence\\' => 21,
             'Doctrine\\ORM\\' => 13,
             'Doctrine\\Migrations\\' => 20,
@@ -162,6 +183,14 @@ class ComposerStaticInit1d03d7bdfb881d576d54cf3caf2be1bb
     );
 
     public static $prefixDirsPsr4 = array (
+        'smsup\\SmsupapiBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/smsup/smsup-api-bundle',
+        ),
+        'smsup\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/smsup/smsuplib/src/smsup',
+        ),
         'Zend\\EventManager\\' => 
         array (
             0 => __DIR__ . '/..' . '/zendframework/zend-eventmanager/src',
@@ -169,6 +198,14 @@ class ComposerStaticInit1d03d7bdfb881d576d54cf3caf2be1bb
         'Zend\\Code\\' => 
         array (
             0 => __DIR__ . '/..' . '/zendframework/zend-code/src',
+        ),
+        'Welp\\MailchimpBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/welp/mailchimp-bundle/src',
+        ),
+        'Twilio\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/twilio/sdk/src/Twilio',
         ),
         'Twig\\Extra\\TwigExtraBundle\\' => 
         array (
@@ -205,6 +242,10 @@ class ComposerStaticInit1d03d7bdfb881d576d54cf3caf2be1bb
         'Symfony\\Contracts\\Service\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/service-contracts',
+        ),
+        'Symfony\\Contracts\\HttpClient\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/http-client-contracts',
         ),
         'Symfony\\Contracts\\EventDispatcher\\' => 
         array (
@@ -285,6 +326,10 @@ class ComposerStaticInit1d03d7bdfb881d576d54cf3caf2be1bb
         'Symfony\\Component\\HttpFoundation\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/http-foundation',
+        ),
+        'Symfony\\Component\\HttpClient\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/http-client',
         ),
         'Symfony\\Component\\Form\\' => 
         array (
@@ -402,6 +447,10 @@ class ComposerStaticInit1d03d7bdfb881d576d54cf3caf2be1bb
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
+        'Psr\\Http\\Message\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
+        ),
         'Psr\\Container\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
@@ -486,6 +535,18 @@ class ComposerStaticInit1d03d7bdfb881d576d54cf3caf2be1bb
         array (
             0 => __DIR__ . '/..' . '/hoa/compiler',
         ),
+        'GuzzleHttp\\Psr7\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
+        ),
+        'GuzzleHttp\\Promise\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/promises/src',
+        ),
+        'GuzzleHttp\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
+        ),
         'Gedmo\\' => 
         array (
             0 => __DIR__ . '/..' . '/gedmo/doctrine-extensions/lib/Gedmo',
@@ -497,6 +558,10 @@ class ComposerStaticInit1d03d7bdfb881d576d54cf3caf2be1bb
         'EasyCorp\\EasyLog\\' => 
         array (
             0 => __DIR__ . '/..' . '/easycorp/easy-log-handler/src',
+        ),
+        'DrewM\\MailChimp\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/drewm/mailchimp-api/src',
         ),
         'Doctrine\\Persistence\\' => 
         array (
@@ -580,11 +645,36 @@ class ComposerStaticInit1d03d7bdfb881d576d54cf3caf2be1bb
     );
 
     public static $prefixesPsr0 = array (
+        'S' => 
+        array (
+            'Surfnet\\MessageBirdApiClient\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/surfnet/messagebird-api-client-bundle/src',
+            ),
+            'Surfnet\\MessageBirdApiClientBundle\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/surfnet/messagebird-api-client-bundle/src',
+            ),
+        ),
         'P' => 
         array (
             'ProxyManager\\' => 
             array (
                 0 => __DIR__ . '/..' . '/ocramius/proxy-manager/src',
+            ),
+        ),
+        'F' => 
+        array (
+            'FtpClient' => 
+            array (
+                0 => __DIR__ . '/..' . '/nicolab/php-ftp-client/src',
+            ),
+        ),
+        'E' => 
+        array (
+            'Esendex' => 
+            array (
+                0 => __DIR__ . '/..' . '/esendex/sdk/src',
             ),
         ),
     );

@@ -61,6 +61,7 @@
                     <!-- /.box-header -->
 
                     <div class="box-body">
+                        
                         {% if filelist is defined and filelist|length > 0 %}
                             <table id="listDocs" class="table">
                                 <thead>
@@ -69,6 +70,8 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                
+                                {% set i = 0 %}
                                 {% for key,doc in filelist %}
                                     <tr>
                                         <td>
@@ -81,16 +84,17 @@
                                         {#<a href="javascript:void(0)" onclick="return false;"> Descargar</a>#}
                                         {#</td>#}
                                         <td>
-                                            <form action="{{ path('useroperator_file_download') }}" method="POST">
+                                            <form  id={{ "procesar_formulario" ~ i }} action="{{ path('useroperator_file_download') }}" method="POST">
                                                 <input type="hidden" name="path" value="{{ doc }}">
                                                 <i class="fa fa-floppy-o"></i>
-                                                <a href="#"
+                                                <a name="btn_enviar" href="#"
                                                    onclick="$(this).closest('form').submit()"> Descargar
-                                                </a>
+                                                </a><small>+ {{visitas[i].visitas}} Visitas</small>
                                             </form>
                                         </td>
 
                                     </tr>
+                                    {% set i = i + 1 %}
                                 {% endfor %}
                                 </tbody>
                             </table>
@@ -117,4 +121,7 @@
         </div>
 
     </section><!-- /.content -->
+   <script>
+        setInterval('window.location.reload()', 10000);
+    </script>
 {% endblock %}

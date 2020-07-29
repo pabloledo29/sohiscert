@@ -20,6 +20,7 @@ use App\Form\PartialUpdUserOperatorType;
 use App\Form\RegistrationUserOperatorType;
 use App\Entity\User;
 use App\Mailer\Mailer;
+use Error;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -246,13 +247,13 @@ class UserOperatorController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $notRegisteredUserOperators = $em->getRepository(Operator::class)->getOperatorsCifNotUser();
         //dump($notRegisteredUserOperators);
-
+        
         foreach ($notRegisteredUserOperators as $operadores)
         {
             //dump($operadores);
             $usuario = $operadores['opCif'];
             $mail = $operadores['opEma'];
-
+            
             /** @var UserOperator $userOperator */
             
             if($mail != null){
@@ -262,13 +263,15 @@ class UserOperatorController extends AbstractController
                 //$discriminator = $this->container->get('pugx_user.manager.user_discriminator');
                 //$discriminator->setClass('App\Entity\UserOperator');
                 //$userManager = $this->container->get('pugx_user_manager');
-                $user = new User();
+                $user = new UserOperator();
                 
 
                 $user->setUsername($usuario);
                 $user->setEmail($mail);
+                
                 //$userOperator->setPlainPassword('1234');
-                $user->setPassword($pswd);
+                $user->setPassword(password_hash($pswd, PASSWORD_BCRYPT,['cost'=>12])); 
+               
                 $user->setEnabled(true);
                 
 
@@ -279,10 +282,7 @@ class UserOperatorController extends AbstractController
                 $event = new ResponseEvent($kernel,$request,0,$response);
 
                 $dispatcher->dispatch('registration_initalize', $event);
-
-                if (null !== $event->getResponse()) {
-                    return $event->getResponse();
-                }
+                
                 
                 $form = $this->createForm(RegistrationUserOperatorType::class, $user);
         
@@ -291,13 +291,19 @@ class UserOperatorController extends AbstractController
                 $event = new FormEvent($form, $request);
 
                 $dispatcher->dispatch('registration_success', $event);
-        
+               
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($user);
-                $em->flush();
+                try{
+                    $em->persist($user);
+                    $em->flush();
+                }catch (\Exception $e){
+                    continue;
+                }
+                
 
             }
         }
+        
         //exit("Comprobar Datos");
         
         return $this->redirect($this->generateUrl('admin_useroperator_list'));
@@ -358,7 +364,7 @@ class UserOperatorController extends AbstractController
                 $pswd = $this->generadorClave();
 
                 //Actualizamos el valor del campo de la contraseña
-                $userOperator->setPassword($pswd);
+                $userOperator->setPassword(password_hash($pswd, PASSWORD_BCRYPT,['cost'=>12]));
                 
             }
 

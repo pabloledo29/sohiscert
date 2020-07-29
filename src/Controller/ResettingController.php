@@ -53,10 +53,19 @@ class ResettingController extends AbstractController
             return $this->render('Resetting/passwordAlreadyRequested.html.twig');
         }
         
+  
         if (null === $user->getConfirmationToken()) {
             $tokenGenerator = $this->generateRandomString(12);
+            
             $user->setConfirmationToken($tokenGenerator);
+        }else{
+            if(count($user->getConfirmationToken())>12){
+                $tokenGenerator = $this->generateRandomString(12);
+                $user->setConfirmationToken($tokenGenerator);
+            }
         }
+        
+        
 
         $this->get('app.mailer.service')->sendResettingClientEmail($user);
         
@@ -92,7 +101,7 @@ class ResettingController extends AbstractController
      */
     public function resetAction(Request $request,string $token,HttpKernelInterface $kernel)
     {
-       
+   
         $formFactory = $this->createForm(PartialUpdUserOperatorType::class);
 
         /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */

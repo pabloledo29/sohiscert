@@ -6,5 +6,9 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Surfnet\\MessageBirdApiClient\\' => array($vendorDir . '/surfnet/messagebird-api-client-bundle/src'),
+    'Surfnet\\MessageBirdApiClientBundle\\' => array($vendorDir . '/surfnet/messagebird-api-client-bundle/src'),
     'ProxyManager\\' => array($vendorDir . '/ocramius/proxy-manager/src'),
+    'FtpClient' => array($vendorDir . '/nicolab/php-ftp-client/src'),
+    'Esendex' => array($vendorDir . '/esendex/sdk/src'),
 );

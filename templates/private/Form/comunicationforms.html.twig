@@ -1,0 +1,166 @@
+{% extends 'base_private.html.twig' %}
+
+
+
+{% block content %}
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-md-10">
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <h3 class="box-title">Correo por expediente</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    {{ form_start(form, { attr: form.vars.attr|merge({ novalidate: 'novalidate' }) }) }}
+                        {{ form_row(form._token) }}
+                    <div class="box-body">
+                        
+                        <div class="form-group {% if form.asunto.vars.valid==false %}has-error{% endif %}">
+                            {{ form_label(form.asunto, 'Asunto: ') }}
+                            {{ form_widget(form.asunto, {'attr': {'class': 'form-control'} }) }}
+                            <div id="error_operator" class="error-block"><span
+                                        class="label label-danger">{{ form.asunto.vars.errors }}</span></div>
+                        </div>
+
+                        <div class="form-group {% if form.operator.vars.valid==false %}has-error{% endif %}">
+                            {{ form_label(form.operator, 'Número de Expediente: ') }}
+                            {{ form_widget(form.operator, {'attr': {'class': 'form-control'} }) }}
+                            <div id="error_operator" class="error-block"><span
+                                        class="label label-danger">{{ form.operator.vars.errors }}</span></div>
+                        </div>
+
+                        <div class="form-group {% if form.type.vars.valid==false %}has-error{% endif %}">
+                            {{ form_label(form.type, 'Tipo de Documento: ') }}
+                            {{ form_widget(form.type, {'attr': {'class': 'form-control'} }) }}
+                            <div id="error_type" class="error-block"><span
+                                        class="label label-danger">{{ form.type.vars.errors }}</span></div>
+                        </div>
+
+                        <div class="form-group {% if form.description.vars.valid==false %}has-error{% endif %}">
+                            {{ form_label(form.description, 'Descripción: ') }}
+                            {{ form_widget(form.description, {'attr': {'class': 'form-control'} }) }}
+                            <div id="error_description" class="error-block"><span
+                                        class="label label-danger">{{ form.description.vars.errors }}</span></div>
+                        </div>
+
+                        <!--{#<div class="form-group {% if form.document.vars.valid==false %}has-error{% endif %}">
+                            {{ form_label(form.document, 'Adjuntar documento: ') }}
+                            {{ form_widget(form.document, {'attr': {'class': ''} }) }}
+                            <div id="error_type" class="error-block"><span
+                                        class="label label-danger">{{ form.document.vars.errors }}</span></div>
+                        </div>#}-->
+                        <small>Correos enviados: {{visitas}}</small>
+                        <div class="input-group-btn">
+                            {{form_widget(form.save,{'attr': {'class':'btn btn-success', 'id':'save'}}) }} <!--<i class="fa fa-save"></i>-->
+                        </div>
+
+
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+<!--{#            <div class="col-md-10">
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <h3 class="box-title">Correo por grupos</h3>
+                    </div>                                                                                                    #}-->
+                    <!-- /.box-header -->
+<!--{#                    {{ form_start(form_grupo, { attr: form_grupo.vars.attr|merge({ novalidate: 'novalidate' }) }) }}
+                    {{ form_row(form_grupo._token) }}
+                    <div class="box-body">
+                        <div class="form-group {% if form_grupo.asunto.vars.valid==false %}has-error{% endif %}">
+                            {{ form_label(form_grupo.asunto, 'Asunto: ') }}
+                            {{ form_widget(form_grupo.asunto, {'attr': {'class': 'form-control'} }) }}
+                            <div id="error_operator" class="error-block"><span
+                                        class="label label-danger">{{ form_grupo.asunto.vars.errors }}</span></div>
+                        </div>
+                        <div class="form-group {% if form_grupo.OpReg.vars.valid==false %}has-error{% endif %}">
+                            {{ form_label(form_grupo.OpReg, 'Selección de grupo: ') }}
+                            {{ form_widget(form_grupo.OpReg, {'attr': {'class': 'form-control'} }) }}
+                            <div id="error_operator_grupo" class="error-block"><span
+                                        class="label label-danger">{{ form_grupo.OpReg.vars.errors }}</span></div>
+                        </div>
+
+                        <div class="form-group {% if form_grupo.type.vars.valid==false %}has-error{% endif %}">
+                            {{ form_label(form_grupo.type, 'Tipo de Documento: ') }}
+                            {{ form_widget(form_grupo.type, {'attr': {'class': 'form-control'} }) }}
+                            <div id="error_type_grupo" class="error-block"><span
+                                        class="label label-danger">{{ form_grupo.type.vars.errors }}</span></div>
+                        </div>
+
+                        <div class="form-group {% if form_grupo.description.vars.valid==false %}has-error{% endif %}">
+                            {{ form_label(form_grupo.description, 'Descripción: ') }}
+                            {{ form_widget(form_grupo.description, {'attr': {'class': 'form-control'} }) }}
+                            <div id="error_description_grupo" class="error-block"><span
+                                        class="label label-danger">{{ form_grupo.description.vars.errors }}</span></div>
+                        </div>                                                                                                  #}-->
+
+                        <!--{#<div class="form-group {% if form_grupo.document.vars.valid==false %}has-error{% endif %}">
+                            {{ form_label(form_grupo.document, 'Adjuntar documento: ') }}
+                            {{ form_widget(form_grupo.document, {'attr': {'class': ''} }) }}
+                            <div id="error_type_grupo" class="error-block"><span
+                                        class="label label-danger">{{ form_grupo.document.vars.errors }}</span></div>
+                        </div>#}-->
+
+<!--{#                        <div class="input-group-btn">
+                            {{form_widget(form_grupo.save_grupo,{'attr': {'class':'btn btn-success', 'id':'save_grupo'}}) }}
+                        </div>
+
+
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+            <div class="col-md-10">
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <h3 class="box-title">Correo a todos</h3>
+                    </div>                                                                                                         #}-->
+                    <!-- /.box-header -->
+<!--{#                    {{ form_start(form_todos, { attr: form_todos.vars.attr|merge({ novalidate: 'novalidate' }) }) }}
+                    {{ form_row(form_todos._token) }}
+                    <div class="box-body">
+                        <div class="form-group {% if form_todos.asunto.vars.valid==false %}has-error{% endif %}">
+                            {{ form_label(form_todos.asunto, 'Asunto: ') }}
+                            {{ form_widget(form_todos.asunto, {'attr': {'class': 'form-control'} }) }}
+                            <div id="error_operator" class="error-block"><span
+                                        class="label label-danger">{{ form_todos.asunto.vars.errors }}</span></div>
+                        </div>
+
+                        <div class="form-group {% if form_todos.type.vars.valid==false %}has-error{% endif %}">
+                            {{ form_label(form_todos.type, 'Tipo de Documento: ') }}
+                            {{ form_widget(form_todos.type, {'attr': {'class': 'form-control'} }) }}
+                            <div id="error_type_todos" class="error-block"><span
+                                        class="label label-danger">{{ form_todos.type.vars.errors }}</span></div>
+                        </div>
+
+                        <div class="form-group {% if form_todos.description.vars.valid==false %}has-error{% endif %}">
+                            {{ form_label(form_todos.description, 'Descripción: ') }}
+                            {{ form_widget(form_todos.description, {'attr': {'class': 'form-control'} }) }}
+                            <div id="error_description_todos" class="error-block"><span
+                                        class="label label-danger">{{ form_todos.description.vars.errors }}</span></div>
+                        </div>                                                                                                        #}-->
+
+                        <!--{#<div class="form-group {% if form_todos.document.vars.valid==false %}has-error{% endif %}">
+                            {{ form_label(form_todos.document, 'Adjuntar documento: ') }}
+                            {{ form_widget(form_todos.document, {'attr': {'class': ''} }) }}
+                            <div id="error_type_todos" class="error-block"><span
+                                        class="label label-danger">{{ form_todos.document.vars.errors }}</span></div>
+                        </div>#}-->
+
+<!-- {#                       <div class="input-group-btn">
+                            {{form_widget(form_todos.save_todos,{'attr': {'class':'btn btn-success', 'id':'save_todos'}}) }}
+                        </div>
+
+
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        
+        </div>
+    </section>
+ #}-->
+{% endblock %}                                                                                                                               

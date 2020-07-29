@@ -55,7 +55,7 @@ function enviar_emails_poco_a_poco()
 				while
 					: ${start=$send}
 					#Contar documetos
-					/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console swiftmailer:spool:send --message-limit=24 --env=prod
+					/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console swiftmailer:spool:send --message-limit=24 --env=prod &
 					send=$(find $DIRECTORIO -maxdepth 1 -type f | wc -l)
 					sleep 5
 					[ "$send" -ne "0" ]
@@ -114,7 +114,7 @@ function execute_command()
 }
 tried=0;
 total_tried=2
-execution_string=/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console appbundle:emaildocana:send
+execution_string=/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console appbundle:emaildocana:send &
 state_task=$(execute_command $tried)
 echo $"$state_task"
 
@@ -126,7 +126,7 @@ wait;
 
 tried=0;
 total_tried=2
-execution_string=/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console appbundle:emaildoccar:send
+execution_string=/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console appbundle:emaildoccar:send &
 state_task=$(execute_command $tried)
 echo $"$state_task"
 if [ -d ${DIRECTORIO} ]; then	
@@ -137,7 +137,7 @@ wait;
 
 tried=0;
 total_tried=2
-execution_string=/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console appbundle:emaildoccerti:send
+execution_string=/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console appbundle:emaildoccerti:send &
 state_task=$(execute_command $tried)
 echo $"$state_task"
 if [ -d ${DIRECTORIO} ]; then	
@@ -148,7 +148,7 @@ wait;
 
 tried=0;
 total_tried=2
-execution_string=/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console appbundle:emaildocfactu:send
+execution_string=/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console appbundle:emaildocfactu:send &
 state_task=$(execute_command $tried)
 echo $"$state_task"
 if [ -d ${DIRECTORIO} ]; then	
@@ -160,7 +160,7 @@ wait;
 #MNN. Añadimos en elvio de conclusiones
 tried=0;
 total_tried=2
-execution_string=/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console appbundle:emaildoccon:send
+execution_string=/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console appbundle:emaildoccon:send &
 state_task=$(execute_command $tried)
 echo $"$state_task"
 if [ -d ${DIRECTORIO} ]; then	

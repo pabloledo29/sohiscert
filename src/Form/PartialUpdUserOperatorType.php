@@ -36,7 +36,7 @@ class PartialUpdUserOperatorType extends AbstractType
                         'first_options'  => ['label' =>'Password:'],
                         'second_options' => ['label' => 'Confirmar password:']])->getForm() ;
         
-    }
+    }               
 
     public function configureOptions(OptionsResolver $resolver)
     {

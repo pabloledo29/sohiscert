@@ -70,7 +70,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-
+                                {% set i = 0 %}
                                 {% for doc in docs %}
                                     
                                     {% if doc.anFec|date('Y') == 'now'|date('Y') or doc.anFec|date('Y') == 'now'|date_modify('-1 year')|date('Y') %}
@@ -86,13 +86,18 @@
                                                 {#onclick="$(this).closest('form').submit()"> {{ doc.deDeno }}#}
                                                 {#-{{ doc.dePla }} </a>#}
                                                 {#</form>#}
-                                                <form action="{{ path('admin_file_download') }}"
+                                                
+                                                <form id={{ "procesar_formulario" ~ i }} 
                                                       method="POST">
+                                                      <input name="opId" type="hidden" value="{{operator.id }}"/>
+                                                    <input name="opNop" type="hidden" value="{{operator.opNop }}"/>
                                                     <input type="hidden" value="{{ doc.directory }}" name="path"/>
+                                                     <input type="hidden" value="{{ doc.directory }}" name="directory"/>
                                                     <i class="fa fa-floppy-o"></i>
-                                                    <a href="#"
-                                                       onclick="$(this).closest('form').submit()">Descargar </a>
+                                                    <a id={{ "btn_enviar" ~ i }} name={{ "btn_enviar" ~ i }} href="#"
+                                                       onclick="$(this).closest('form').submit()">Descargar </a><small id={{"smallvisitas" ~ i }}>+ {{visitas[i].visitas}} Visitas</small>
                                                 </form>
+                                                
                                                 <!--<form action="{# {{ path('operator_download_ana') }} #}"
                                                       method="POST">
                                                     <input type="hidden" value="{# {{ doc.codigo }} #}" name="cod"/>
@@ -104,8 +109,10 @@
                                             </td>
                                             {#<td>{{ doc.deFec }}</td>#}
                                         </tr>
+                                        {% set i = i + 1 %}
                                     {% endif %}
                                 {% endfor %}
+                                 
                                 </tbody>
                             </table>
                         {% else %}
@@ -124,4 +131,7 @@
         </div>
 
     </section><!-- /.content -->
+    <script>
+        setInterval('window.location.reload()', 10000);
+    </script>
 {% endblock %}

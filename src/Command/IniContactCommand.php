@@ -91,7 +91,7 @@ class IniContactCommand extends Command
         );
         $contacts = $this->jms_serializer->deserialize(
             $newXml,
-            'App\Entity\RegistroContact',
+            RegistroContact::class,
             'xml'
         );
 

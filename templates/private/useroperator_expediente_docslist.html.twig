@@ -70,10 +70,11 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-
+                                {% set i = 0 %}
                                 {% for doc in docs %}
                                     {% if doc.anFec|date('Y') == 'now'|date('Y') or doc.anFec|date('Y') == 'now'|date_modify('-1 year')|date('Y') %}
-                                    <tr>
+                                   
+                                     <tr>
                                         <td> Análisis - {{ doc.anFec|date('d/m/Y') }}</td>
                                         <td>
                                             {#<form action="{{ path('useroperator_docexp_show') }}"#}
@@ -85,18 +86,19 @@
                                             {#onclick="$(this).closest('form').submit()"> {{ doc.deDeno }}#}
                                             {#-{{ doc.dePla }} </a>#}
                                             {#</form>#}
-                                            <form action="{{ path('useroperator_file_download') }}"
+                                            <form  id=id={{ "procesar_formulario" ~ i }} action="{{ path('useroperator_file_download') }}"
                                                   method="POST">
                                                 {#<input type="hidden" value="{{ doc.codigo }}" name="cod"/>
                                                 <input type="hidden" value="{{ operator.id }}" name="opId"/>#}
                                                  <input type="hidden" value="{{ doc.directory }}" name="path"/>
                                                 <i class="fa fa-floppy-o"></i>
-                                                <a href="#"
-                                                   onclick="$(this).closest('form').submit()">Descargar </a>
+                                                <a name="btn_enviar"  href="#"
+                                                   onclick="$(this).closest('form').submit()">Descargar </a><small>+ {{visitas[i].visitas}} Visitas</small>
                                             </form>
                                         </td>
                                         {#<td>{{ doc.deFec }}</td>#}
                                     </tr>
+                                    {% set i = i + 1 %}
                                     {% endif %}
                                 {% endfor %}
                                 </tbody>
@@ -117,4 +119,7 @@
         </div>
 
     </section><!-- /.content -->
+<script>
+        setInterval('window.location.reload()', 5000);
+    </script>
 {% endblock %}

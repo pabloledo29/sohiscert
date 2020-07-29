@@ -53,7 +53,7 @@ function enviar_emails_poco_a_poco()
 				while
 					: ${start=$send}
 					#Contar documetos
-					/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console swiftmailer:spool:send --message-limit=24 --env=prod
+					/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console swiftmailer:spool:send --message-limit=24 --env=prod &
 					send=$(find $DIRECTORIO -maxdepth 1 -type f | wc -l)
 					sleep 5
 					[ "$send" -ne "0" ]
@@ -87,10 +87,10 @@ function execute_command()
 {
 	try
 	(
-		echo $"Ejecutando script de análisis"
+		echo $"Ejecutando script de facturas"
 		if [ $tried -le $total_tried ]; then
 			$execution_string
-			echo $"Fin de ejecucion de análisis"
+			echo $"Fin de ejecucion de facturas"
 			return 0
 		fi
 	)
@@ -112,8 +112,9 @@ function execute_command()
 }
 tried=0;
 total_tried=2
-execution_string=/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console email:emaildocfactu:send
+execution_string=/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console email:emaildocfactu:send &
 state_task=$(execute_command $tried)
+wait;
 echo $"$state_task"
 if [ -d ${DIRECTORIO} ]; then	
 	tried=0

@@ -1,3 +1,4 @@
+
 {% extends 'base_full.html.twig' %}
 {% block content %}
 
@@ -69,6 +70,8 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                {% set i = 0 %}
+                               
                                 {% for key,doc in filelist %}
                                     <tr>
                                         <td>
@@ -80,18 +83,25 @@
                                         {#<i class="fa fa-floppy-o"></i>#}
                                         {#<a href="javascript:void(0)" onclick="return false;"> Descargar</a>#}
                                         {#</td>#}
+                                        
                                         <td>
-                                            <form action="{{ path('admin_file_download') }}" method="POST">
+                                            <form id={{ "procesar_formulario" ~ i }} action="{{ path('admin_file_download') }}" method="POST">
+                                        
+                                                <input type="hidden" name="opNop" value="{{ opNop }}">
                                                 <input type="hidden" name="path" value="{{ doc }}">
                                                 <i class="fa fa-floppy-o"></i>
-                                                <a href="#"
-                                                   onclick="$(this).closest('form').submit()"> Descargar
-                                                </a>
+                                                <a  id={{ "btn_enviar" ~ i }} name={{ "btn_enviar" ~ i }}  href="#"
+                                                    type="submit" onclick="$(this).closest('form').submit();"> Descargar
+                                                </a><small  id={{"smallvisitas" ~ i }}>+ {{ visitas[i].visitas }} Visitas</small>
                                             </form>
                                         </td>
 
                                     </tr>
+                                  
+                                    {% set i = i + 1 %}
+                                    
                                 {% endfor %}
+                                
                                 </tbody>
                             </table>
                             {#<form action="{{ path('admin_file_download') }}" method="POST">#}
@@ -116,5 +126,60 @@
             </div>
         </div>
 
-    </section><!-- /.content -->
+    </section>
+    <script>
+        setInterval('window.location.reload()', 10000);
+    </script>
+    <!-- /.content -->
+<!--{#<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script >
+    
+        
+      {% if i is  defined %}
+      
+    {% for j in range(0,  i ) %}
+   $("#procesar_formulario" + {{j}}).ready(function () {
+       
+    $("#procesar_formulario" + {{j}}).on("submit",function(ev){
+     
+        var btnEnviar = $("#btn_enviar" + {{j}});
+
+
+        var smallvisit = $("#smallvisitas" + {{j}});
+        var id_visit = "smallvisitas" + {{j}};
+        var url_file = "{{ path('admin_file_download') }}";
+        
+        promise1 = new Promise((resolve, reject) => {
+         $.ajax({
+            type: $(this).attr("method"),
+            data:$(this).serialize(),
+            url: url_file,
+            
+            success: function (data) {
+                resolve(data);
+            },
+            error: function(data){
+                alert("Problemas al tratar de enviar el formulario1");
+            }
+            ev.stopImmediatePropagation();
+        ev.stopPropagation();
+        ev.preventDefault();
+            return false;       
+         });
+        
+
+        })*/
+     //   $.when(promise1).done(function(){
+          refreshIntervalId= setTimeset('window.location.reload()', 10000);
+           
+        // Nos permite cancelar el envio del formulario
+    //});
+   
+   // });
+              });  
+    {% endfor %}
+    {% endif %}
+
+ 
+    </script>}#}-->
 {% endblock %}

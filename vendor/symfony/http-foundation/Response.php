@@ -11,6 +11,9 @@
 
 namespace Symfony\Component\HttpFoundation;
 
+// Help opcache.preload discover always-needed symbols
+class_exists(ResponseHeaderBag::class);
+
 /**
  * Response represents an HTTP response.
  *
@@ -267,10 +270,12 @@ class Response
             $this->setContent(null);
             $headers->remove('Content-Type');
             $headers->remove('Content-Length');
+            // prevent PHP from sending the Content-Type header based on default_mimetype
+            ini_set('default_mimetype', '');
         } else {
             // Content-type based on the Request
             if (!$headers->has('Content-Type')) {
-                $format = $request->getPreferredFormat();
+                $format = $request->getPreferredFormat(null);
                 if (null !== $format && $mimeType = $request->getMimeType($format)) {
                     $headers->set('Content-Type', $mimeType);
                 }
@@ -337,16 +342,18 @@ class Response
         // headers
         foreach ($this->headers->allPreserveCaseWithoutCookies() as $name => $values) {
             $replace = 0 === strcasecmp($name, 'Content-Type');
+            
+            
             foreach ($values as $value) {
                 header($name.': '.$value, $replace, $this->statusCode);
             }
         }
-
+       
         // cookies
         foreach ($this->headers->getCookies() as $cookie) {
             header('Set-Cookie: '.$cookie, false, $this->statusCode);
         }
-
+       
         // status
         header(sprintf('HTTP/%s %s %s', $this->version, $this->statusCode, $this->statusText), true, $this->statusCode);
 

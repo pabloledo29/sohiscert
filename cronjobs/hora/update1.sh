@@ -3,10 +3,12 @@
 sed -i 's/memory_limit = 128M/memory_limit = 1024M/g' /etc/opt/rh/rh-php72/php.ini; 
 sed -i 's/max_execution_time = 300/max_execution_time = 1200/g' /etc/opt/rh/rh-php72/php.ini;
 
-/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console gsbase:connect 
-/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console gsbase:update:basicinfo
-/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console gsbase:update:registro
-/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console gsbase:update:productos
-
+/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console gsbase:connect &
+wait;
+/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console gsbase:update:basicinfo &
+wait;
+/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console gsbase:update:registro &
+wait;
+/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console gsbase:update:productos &
 wait;
 echo 0;
