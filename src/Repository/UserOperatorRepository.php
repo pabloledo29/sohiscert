@@ -23,4 +23,12 @@ class UserOperatorRepository extends ServiceEntityRepository
        
         parent::__construct($registry,UserOperator::class);
     }
+
+    public function findUserSubscriber()
+    {
+        return $this->createQueryBuilder('u')
+            ->getQuery()
+            ->getResult();
+        
+    }
 }

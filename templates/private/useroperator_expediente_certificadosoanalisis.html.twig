@@ -61,6 +61,7 @@
                     <!-- /.box-header -->
 
                     <div class="box-body">
+                        
                         {% if filelist is defined and filelist|length > 0 %}
                             <table id="listDocs" class="table">
                                 <thead>
@@ -69,6 +70,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                {% set i = 0 %}
                                 {% for key,doc in filelist %}
                                     <tr>
                                         <td>
@@ -86,11 +88,12 @@
                                                 <i class="fa fa-floppy-o"></i>
                                                 <a href="#"
                                                    onclick="$(this).closest('form').submit()"> Descargar
-                                                </a>
+                                                </a><small>+ {{visitas[i].visitas}} Visitas</small>
                                             </form>
                                         </td>
 
                                     </tr>
+                                    {% set i = i + 1 %}
                                 {% endfor %}
                                 </tbody>
                             </table>

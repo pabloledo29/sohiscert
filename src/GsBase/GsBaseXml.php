@@ -134,11 +134,6 @@ class GsBaseXml
                 <Pregunta>
                     <Campo>OP_SREG</Campo>
                     <Ope>dif</Ope>
-                    <Valor>PAE</Valor>
-                </Pregunta>
-                <Pregunta>
-                    <Campo>OP_SREG</Campo>
-                    <Ope>dif</Ope>
                     <Valor>FCG</Valor>
                 </Pregunta>
                 <Pregunta>

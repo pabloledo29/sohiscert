@@ -8,6 +8,7 @@ namespace App\Controller;
 use Symfony\Component\HttpFoundation\RequestStack;
 use App\Entity\UpdateLog;
 use App\Entity\CultivosRec;
+use App\Entity\DocumentosFTP;
 use App\Entity\Ganaderias;
 use App\Entity\Industrias;
 use App\Entity\Productos;
@@ -456,11 +457,32 @@ class OperatorController extends AbstractController
             $operator->getOpSreg()
         );
         $normativas = $this->getDoctrine()->getRepository(Operator::class)->getOperatorNormative($operator);
-
+        $opNop = $operator->getOpNop();
+        
         $info = $relation;
+
         $estado = $this->showState($operator->getOpEst());
         $updateLog = $this->getDoctrine()->getManager()->getRepository(UpdateLog::class)->getLastUpdateLog();
-
+        
+        $path ="";
+        $fileList = $this->get('app.ftp.service')->retrieveDocListFromFtpServer($opNop, 'cartas');
+        if (count($fileList) > 0) {
+            $fileList = array_reverse($fileList);
+            
+            $path = reset($fileList);
+        }
+        
+        $visitas = $this->extraerVisitas([$path], $opNop);
+        if($visitas and count($visitas)>0){
+            $visitas = $visitas[0];
+            if($visitas instanceof \App\Entity\DocumentosFTP)
+            {
+                $visitas = $visitas->getVisitas();
+            }else{
+                $visitas = $visitas['visitas'];
+            }
+            
+        }
         return $this->render(
             'admin/useroperator_expediente.html.twig',
             array(
@@ -468,7 +490,8 @@ class OperatorController extends AbstractController
                 'info' => $info,
                 'normativas' => $normativas,
                 'estado' => $estado,
-                'updateLog' => $updateLog
+                'updateLog' => $updateLog,
+                'visitas' => $visitas
             )
         );
     }
@@ -494,10 +517,33 @@ class OperatorController extends AbstractController
             throw $this->createAccessDeniedException();
         }
         $operator = $this->getDoctrine()->getManager()->getRepository(Operator::class)->find($id);
-
+        $opNop = $operator->getOpNop();
+        $fileList = $this->get('app.ftp.service')->retrieveDocListFromFtpServer($opNop, 'cartas');
+        $path = "";
+        if (count($fileList) > 0) {
+            $fileList = array_reverse($fileList);
+            
+            $path = reset($fileList);
+        }
+        $visitas = $this->extraerVisitas([$path], $opNop);
+        $opinfo =$this->retrieveOperatorInfo($operator);
+       
+        
+        if($visitas and count($visitas)>0){
+            $visitas = $visitas[0];
+            if($visitas instanceof \App\Entity\DocumentosFTP)
+            {
+                $opinfo ['visitas']= $visitas->getVisitas();
+            }else{
+                $opinfo ['visitas']= $visitas['visitas'];
+            }
+            
+        }
+        
+        
         return $this->render(
             'admin/useroperator_expediente.html.twig',
-            $this->retrieveOperatorInfo($operator)
+            $opinfo
         );
     }
 
@@ -523,10 +569,34 @@ class OperatorController extends AbstractController
         if (!$user->getOperators()->contains($operator)) {
             throw $this->createAccessDeniedException();
         }
+        $opNop = $operator->getOpNop();
+        $fileList = $this->get('app.ftp.service')->retrieveDocListFromFtpServer($opNop, 'cartas');
+        $path = "";
+        if (count($fileList) > 0) {
+            $fileList = array_reverse($fileList);
+            
+            $path = reset($fileList);
+        }
+        $visitas = $this->extraerVisitas([$path], $opNop);
+        $opinfo =$this->retrieveOperatorInfo($operator);
+        
 
+        
+        if($visitas and count($visitas)>0){
+            $visitas = $visitas[0];
+            if($visitas instanceof \App\Entity\DocumentosFTP)
+            {
+                $opinfo ['visitas']= $visitas->getVisitas();
+            }else{
+                $opinfo ['visitas']= $visitas['visitas'];
+            }
+            
+        }
+        
+        
         return $this->render(
             'private/useroperator_expediente.html.twig',
-            $this->retrieveOperatorInfo($operator)
+            $opinfo
         );
     }
 
@@ -676,5 +746,23 @@ class OperatorController extends AbstractController
 
 
         return $operators;
+    }
+     /**
+     * Función que extrae visitas a traves del nombre de los documentos, nos aseguramos que el valor de la clave visitas siempre es rellenado
+     */
+    public function extraerVisitas($fileList, $opNop){
+        $visitas = [];
+        $em = $this->getDoctrine()->getManager();
+        foreach ($fileList as &$value) {
+            
+            $result = $em->getRepository(DocumentosFTP::class)->findDocumentvisualizationByNbDoc($value,$opNop);
+            if($result!==null){
+                $visitas[] = $result;
+            }else{
+                $visitas[] = ['visitas' => 0];
+            }
+              
+        }
+        return $visitas;
     }
 }

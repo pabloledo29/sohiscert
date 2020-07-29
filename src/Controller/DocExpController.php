@@ -34,13 +34,20 @@ use Aws\Result;
 use App\Entity\DocAnaDoc;
 use App\Entity\DocAnaList;
 use App\Entity\DocExp;
+use App\Entity\DocumentosFTP;
 use App\Entity\Operator;
 use App\Entity\UserOperator;
 use App\Entity\UploadedFileRegistry;
+use App\Entity\ComunicationSendRegistry;
+use App\Mailchimp\Provider\DoctrineListProvider;
+use App\Repository\ComunicationSendRegistryRepository;
+use App\Twilio\TwilioController;
 use Doctrine\Common\Collections\Expr\Value;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
  * Class DocExpController
@@ -339,7 +346,9 @@ class DocExpController extends AbstractController
         return $this->render('private/Form/upload_docexp_form.html.twig', array('form' => $form->createView()));
     }
 
-    /**
+
+
+   /**
      * Controller que genera un formulario de subida de documentación al sistema con traslado a FTP server.
      *
      * Permite la subida de documentación al sistema de gestión.
@@ -451,6 +460,240 @@ class DocExpController extends AbstractController
         return $this->render('private/Form/upload_docexp_form.html.twig', array('form' => $form->createView()));
     }
 
+
+    /**
+     * Controller que genera un formulario de subida de documentación al sistema con traslado a FTP server.
+     *
+     * Permite la subida de documentación al sistema de gestión.
+     * Para ello y en base a los parámetros definidos en el array parametrizado docexptypes de sohiscert.yml.
+     * Mediante un FileValidator admite diversos formatos de documentos para ser subidos.
+     *
+     * maxSize fijado a 10Mi
+     * description fijado a máximo 500 caracteres
+     *
+     * @param Request $request
+     * @return Response
+     * @Route("/private/expediente/comunicaciones", name="useroperator_expediente_comunicaciones")
+     */
+    public function cominnicationPanel(Request $request, DoctrineListProvider $mailchimplist)
+    {
+        $user = $this->getUser();
+        $operators = $user->getOperators();
+
+        $choices = [];
+        $choices_group = [];
+        $opNops = [];
+        /** @var Operator $op */
+        foreach ($operators as $op) {
+            $choices[$op->getId()] = $op->getOpNop();
+            $choices_group[ $op->getOpReg()] =$op->getId();
+            $opNops[] = $op->getOpNop();
+        }
+     
+        $defaultData = array('message' => 'Type your message here');
+        /* Includes FileValidator constraints to allow several type of files for uploadinf */
+        $form = $this->createFormBuilder($defaultData)
+            ->add(
+                'operator',
+                ChoiceType::class,
+                array(
+                    'choices' => $choices,
+                )
+            )
+            ->add(
+                'asunto',
+                TextType::class
+            )
+            ->add(
+                'type',
+                ChoiceType::class,
+                array(
+                    'choices' => $this->container->getParameter('docexptypes'),
+                )
+            )
+            ->add(
+                'description',
+                TextareaType::class,
+                array(
+                    'attr' => array('maxlength' => '160'),
+                )
+            );
+            $form_grupo = $this->createFormBuilder($defaultData)
+            -> add('OpReg', ChoiceType::class,
+                array(
+                    'choices' => $choices_group,
+                )
+            )
+            ->add(
+                'asunto',
+                TextType::class
+            )
+            ->add(
+                'type',
+                ChoiceType::class,
+                array(
+                    'choices' => $this->container->getParameter('docexptypes'),
+                )
+            )
+            ->add(
+                'description',
+                TextareaType::class,
+                array(
+                    'attr' => array('maxlength' => '500'),
+                )
+            );
+            
+
+        
+            $form_grupo = clone $form;
+            $form_grupo->remove('operator');
+            $form_grupo-> add('OpReg', ChoiceType::class,
+                array(
+                    'choices' => $choices_group,
+                )
+            )->add('save_grupo', SubmitType::class, ['label' => 'Enviar por grupo']);
+    
+            $form_todos = clone $form;
+            $form_todos->remove('operator')
+            ->add('save_todos', SubmitType::class, ['label' => 'Enviar a todos']);
+            
+            $form->add('save', SubmitType::class, ['label' => 'Enviar por expediente']);
+
+            $form = $form->getForm();
+            $form_grupo = $form_grupo->getForm();
+            $form_todos = $form_todos->getForm();
+
+
+            
+           
+            $form->handleRequest($request);
+            $form_grupo->handleRequest($request);
+            $form_todos->handleRequest($request);
+            
+        
+        /*if(){
+           
+            $form->handleRequest($request);
+        }else if($form_grupo->get('save_grupo')->isClicked()){
+          
+            $form_grupo->handleRequest($request);
+            
+        }else if($form_todos->get('save_todos')->isClicked()){
+           
+            $form_todos->handleRequest($request);
+        }*/
+        $listaEnviado = $this->getDoctrine()->getManager()->getRepository(ComunicationSendRegistry::class)->findVisitasByUserOperator($user);
+        $visitas=0;
+        if($listaEnviado){
+            foreach($listaEnviado as $enviado){
+                
+                $visitas += $enviado['visitas'];
+            }
+       }
+        
+        if($visitas===null)
+        {
+            $visitas=0;
+        }
+        
+
+        if ($form->isSubmitted() && $form->isValid() && $form->get('save')->isClicked() /*&& $form['document']->getData() !== null*/) {
+            
+            $data = $form->getData();
+         
+         
+            $data['opNop'] = $choices [(int)array_keys($choices,$data['operator'])[0]];
+            
+            $data['to'] = $this->getDoctrine()->getManager()->getRepository(Operator::class)->getOperatorEmail($data['opNop'])[0]['opEma'];      
+            
+            $data['visitas'] = $visitas;
+               $comunicationSendRegistry  = $this->addEmailComunicationRegistry($user, $data, "expediente");
+
+                $mailer = $this->container->get('app.mailer.service');
+                $mailer->sendExpedienteEmail($data, $comunicationSendRegistry);
+
+                $sms_whatsapp_notification = new TwilioController($this->container);
+                //$sms_whatsapp_notification->privateTwilioSmssend($data);
+                //$sms_whatsapp_notification->privateTwilioWhatsappsSend($data);
+            
+                $this->addFlash('msg', 'Su documento ha sido subido con éxito.');
+
+                return $this->redirectToRoute('private_home');
+        
+
+            return $this->render('default/index.html.twig');
+        } else if($form_grupo->isSubmitted() && $form_grupo->isValid() && $form_grupo->get('save_grupo')->isClicked() /*&& $form_grupo['document']->getData() !== null*/) {
+            var_dump("AAAAA");
+            $data = $form_grupo->getData();
+            $listaOperadores =[];
+            //var_dump($mailchimplist->getLists());
+            exit;
+            foreach ($listaOperadores as $data) {
+                //TODO:  $data['opNop'] = $choices [(int)array_keys($choices,$data['operator'])[0]];
+                continue;
+          
+                
+                //TODO: SACAR USUARIO
+                // Subida a FTP
+                $file = $this->uploadFile($data);
+
+                if ($file !== null) {
+
+                    //TODO:$uploadedFile = $this->addUploadedFileToRegistry($user, $data, $file, $data['document']);
+
+                //TODO: enviar correo a traves de mailchimp
+                $this->addFlash('msg', 'Su documento ha sido subido con éxito.');
+
+                return $this->redirectToRoute('private_home');
+            }
+        }
+            return $this->render('default/index.html.twig');
+        } else if($form_todos->isSubmitted() && $form_todos->isValid() && $form_todos->get('save_todos')->isClicked() /*&& $form_todos['document']->getData() !== null*/) {
+           
+            $data = $form_todos->getData();
+        
+            //$data['opNop'] = $choices [(int)array_keys($choices,$data['operator'])[0]];
+           
+            //TODO: SACAR USUARIO
+            // Subida a FTP
+            //$file = $this->uploadFile($data);
+
+            //    if ($file !== null) {
+
+                //TODO:$uploadedFile = $this->addUploadedFileToRegistry($user, $data, $file, $data['document']);
+                    $group_option='all';
+                    
+                    $response = $this->forward('App\Controller\MailchimpController::privateEnviarMensajesDeCampaña', [
+                        'data'  => $data,
+                        'group_option' => $group_option,
+                    ]);
+            
+                
+                    $this->addFlash('msg', 'Su documento ha sido subido con éxito.');
+                
+                    return $this->redirectToRoute('private_home');
+           //     }
+            
+        }/*else{
+
+            if ($form->isSubmitted() && $form->get('save')->isClicked()) {
+                $form->get('document')->addError(new FormError('Debe adjuntar un fichero.'));
+            }else if($form_grupo->isSubmitted() && $form_grupo->get('save_grupo')->isClicked()){
+                $form_grupo->get('document')->addError(new FormError('Debe adjuntar un fichero.'));
+            } else if($form_todos->isSubmitted()&& $form_todos->get('save_todos')->isClicked()){
+                $form_todos->get('document')->addError(new FormError('Debe adjuntar un fichero.'));
+            }
+               
+        }*/
+        
+        return $this->render('private/Form/comunicationforms.html.twig', [
+            'form' => $form->createView(),
+            'form_grupo' => $form_grupo->createView(),
+            'form_todos' => $form_todos->createView(),
+            'visitas' => $visitas
+        ]);
+    }
+
     /**
      * Función de subida de un documento a un bucket de S3
      *
@@ -553,6 +796,38 @@ class DocExpController extends AbstractController
         $em->flush();
 
         return $uploadedDocRegistry;
+    }
+
+
+
+    /**
+     * Añade al registro datos relacionados con el documento subido a un servidor FTP.
+     *
+     * Genera un registro en la base de datos con la información vinculada a la subida de documento realizada.
+     *ChoiceType::class
+     * @param UserOperator $user El UserOperator que realiza la gestión.
+     * @param array $data El array de datos del formulario de subida.
+     * @param array $file El array con el fichero subido al sistema y su nombre.
+     * @param UploadedFile $document El objeto generado por el componente de subida de documento desde formulario.
+     * @return UploadedFileRegistry
+     */
+    private function addEmailComunicationRegistry(UserOperator $user, array $data, string $choice)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $comunicationSendRegistry = new ComunicationSendRegistry();
+     
+        $comunicationSendRegistry->setUserOperator($user);
+        $comunicationSendRegistry->setOpNop($data['opNop']);
+        $comunicationSendRegistry->setSubject($data['asunto']);
+        $comunicationSendRegistry->setCuerpo($data['description']);
+        $comunicationSendRegistry->setDestino($data['to']);
+        $comunicationSendRegistry->setSendtype($choice);
+        $comunicationSendRegistry->setVisitas($data['visitas']+1);
+        
+        $em->persist($comunicationSendRegistry);
+        $em->flush();
+
+        return $comunicationSendRegistry;
     }
 
     /**
@@ -833,13 +1108,13 @@ class DocExpController extends AbstractController
 
         
         #//////////////////////////////////
-
-        /** @var ArrayCollection $analisis */
         
+        /** @var ArrayCollection $analisis */
+        $visitas = [];
         #$analisis = $docAnaList->Registro;
         if (count($docAnaList) > 0) {
            
-            
+            $visitas = $this->extraerVisitasANA($docAnaList,$nop);
            /* $iterator = $docAnaList->getIterator();
 
             $iterator->uasort(function ($a, $b) {*/
@@ -849,17 +1124,17 @@ class DocExpController extends AbstractController
             });
 
             $listado = new ArrayCollection(iterator_to_array($iterator));*/
-
+            
             if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
                 return $this->render(
                     'admin/useroperator_expediente_docslist.html.twig',
-                    array('docs' => $docAnaList, 'operator' => $operator)
+                    array('docs' => $docAnaList, 'operator' => $operator, 'visitas' => $visitas)
                 );
 
             } else {
                 return $this->render(
                     'private/useroperator_expediente_docslist.html.twig',
-                    array('docs' => $docAnaList, 'operator' => $operator)
+                    array('docs' => $docAnaList, 'operator' => $operator, 'visitas' => $visitas)
                 );
             }
         } else {
@@ -867,13 +1142,13 @@ class DocExpController extends AbstractController
             if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
                 return $this->render(
                     'admin/useroperator_expediente_docslist.html.twig',
-                    array('docs' => array(), 'operator' => $operator)
+                    array('docs' => array(), 'operator' => $operator, 'visitas' => $visitas)
                 );
 
             } else {
                 return $this->render(
                     'private/useroperator_expediente_docslist.html.twig',
-                    array('docs' => array(), 'operator' => $operator)
+                    array('docs' => array(), 'operator' => $operator, 'visitas' => $visitas)
                 );
             }
         }
@@ -1019,6 +1294,7 @@ class DocExpController extends AbstractController
 
         $docs['Anexo-4-Acuerdo Marco'] = $path . 'IFS/Anexo4AcuerdoMarco.pdf';
 
+        
         return $this->render('admin/useradmin_generaldocs_list.html.twig', array('filelist' => $docs));
     }
 
@@ -1104,7 +1380,9 @@ class DocExpController extends AbstractController
                         'PI/F54-01_Comunicaciones Produccion Integrada.xls';
                     break;
             }
+            
         }
+    
         return $this->render('private/useroperator_expediente_generaldocbyreg.html.twig', array('filelist' => $docs));
     }
 
@@ -1147,17 +1425,53 @@ class DocExpController extends AbstractController
         }
 
         $fileList = $this->get('app.ftp.service')->retrieveDocListFromFtpServer($nop, $query);
-
+        $visitas = $this->extraerVisitas($fileList,$nop);
         if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
             return $this->render(
                 'admin/useroperator_expediente_certificadosoanalisis.html.twig',
-                array('filelist' => $fileList, 'type' => $type)
+                array('filelist' => $fileList, 'type' => $type, 'visitas' => $visitas)
             );
         } else {
             return $this->render(
                 'private/useroperator_expediente_certificadosoanalisis.html.twig',
-                array('filelist' => $fileList, 'type' => $type)
+                array('filelist' => $fileList, 'type' => $type, 'visitas' => $visitas)
             );
         }
+    }
+    /**
+     * Función que extrae visitas a traves del nombre de los documentos, nos aseguramos que el valor de la clave visitas siempre es rellenado
+     */
+    public function extraerVisitas($fileList, $opNop){
+        $visitas = [];
+        $em = $this->getDoctrine()->getManager();
+        foreach ($fileList as &$value) {
+            
+            $result = $em->getRepository(DocumentosFTP::class)->findDocumentvisualizationByNbDoc($value,$opNop);
+            if($result!==null){
+                $visitas[] = $result;
+            }else{
+                $visitas[] = ['visitas' => 0];
+            }
+              
+        }
+        return $visitas;
+    }
+    /**
+     * Función que extrae visitas a traves del nombre de los documentos, nos aseguramos que el valor de la clave visitas siempre es rellenado
+     */
+    public function extraerVisitasANA($fileList,$opNop){
+        $visitas = [];
+        $em = $this->getDoctrine()->getManager();
+        foreach ($fileList as &$value) {
+            
+            $result = $em->getRepository(DocumentosFTP::class)->findDocumentvisualizationByNbDoc($value['directory'],$opNop);
+            if($result!==null){
+                $visitas[] = $result;
+            }else{
+                $visitas[] = ['visitas' => 0];
+            }
+              
+        }
+        return $visitas;
     }
 }

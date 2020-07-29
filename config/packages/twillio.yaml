@@ -1,0 +1,6 @@
+parameters:
+  twilio_sid: SK277c0d83b4164e6e0b86127b5518a027
+  twilio_token: 9HZEOuM9aOtXTJKlZTA00NpYuJg3qRn1
+  twilio_number: '(205) 809-0487'
+  twilio_acconts_sid: ACc04c58a17f50ee78128156129a2ac1ee
+  twilio_whatsapp_number: '+14155238886'

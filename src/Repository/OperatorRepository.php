@@ -459,4 +459,75 @@ class OperatorRepository extends ServiceEntityRepository
 
         return $result;
     }
+
+    /**
+     * @param $opCif
+     * @return array|null
+     */
+    public function getOperatorCifandNop($opCif, $opNop)
+    {
+
+        $query = $this->getEntityManager()
+            ->createQuery(
+                "SELECT e.id, e.opNop, e.codigo, e.opDenoop, e.opCif, r.reDeno, e.opEst, e.opTpex
+			     FROM App\Entity\Operator e INNER JOIN App\Entity\Register r WITH e.opRegistro = r.id
+			     WHERE e.opCif like :cif AND e.opEst = :opest AND e.opNop like :nop
+                 order by e.id DESC"
+            )
+            ->setParameter('cif', '%' . $opCif . '%')
+            ->setParameter('nop', '%' . $opNop . '%')
+            ->setParameter('opest', 'C');
+        try {
+            return $query->getResult();
+        } catch (NoResultException $e) {
+            return null;
+        }
+    }
+
+
+    /**
+     * @param $opCif
+     * @return array|null
+     */
+    public function getOperatorTelefono($opNop)
+    {
+
+        $query = $this->getEntityManager()
+            ->createQuery(
+                "SELECT e.opTel
+			     FROM App\Entity\Operator e INNER JOIN App\Entity\Register r WITH e.opRegistro = r.id
+			     WHERE e.opEst = :opest AND e.opNop like :nop
+                 order by e.id DESC"
+            )
+            ->setParameter('nop', '%' . $opNop . '%')
+            ->setParameter('opest', 'C');
+        try {
+            return $query->getResult();
+        } catch (NoResultException $e) {
+            return null;
+        }
+    }
+
+     /**
+     * @param $opCif
+     * @return array|null
+     */
+    public function getOperatorEmail($opNop)
+    {
+
+        $query = $this->getEntityManager()
+            ->createQuery(
+                "SELECT e.opEma
+			     FROM App\Entity\Operator e INNER JOIN App\Entity\Register r WITH e.opRegistro = r.id
+			     WHERE e.opEst = :opest AND e.opNop like :nop
+                 order by e.id DESC"
+            )
+            ->setParameter('nop', '%' . $opNop . '%')
+            ->setParameter('opest', 'C');
+        try {
+            return $query->getResult();
+        } catch (NoResultException $e) {
+            return null;
+        }
+    }
 }

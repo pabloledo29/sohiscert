@@ -12,6 +12,7 @@ use JMS\Serializer\Annotation as JMS;
 
 /**
  * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\DocumentFTPRepository")
  * @ORM\HasLifecycleCallbacks()
  * @ORM\Table(name="documentosFTP")
  */
@@ -65,6 +66,12 @@ class DocumentosFTP
      */
     private $fechaDoc;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="visitas", type="integer", nullable=false, options={"unsigned":true, "default":0})
+     */
+    private $visitas = 0;
     /*
     public function __construct(
         $opCdp,
@@ -197,13 +204,39 @@ class DocumentosFTP
         return $this;
     }
 
-    /**
-     * Get fechaDoc
+     /**
+     * Set fechaDoc
      *
-     * @return \DateTime 
+     * @param \DateTime $fechaDoc
+     * @return DocumentosFTP
      */
     public function getFechaDoc()
     {
         return $this->fechaDoc;
+
+    }
+
+
+    /**
+     * Set visitas
+     *
+     * @param int $visitas
+     * @return DocumentosFTP
+     */
+    public function setVisitas(int $visitas)
+    {
+        $this->visitas = $visitas;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaDoc
+     *
+     * @return int
+     */
+    public function getVisitas()
+    {
+        return $this->visitas;
     }
 }

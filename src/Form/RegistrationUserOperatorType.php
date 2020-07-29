@@ -41,11 +41,9 @@ class RegistrationUserOperatorType extends AbstractType
                 'enabled',
                 ChoiceType::class,
                 array(
-                    'choices' => array(true => 'Sí', false => 'No'),
+                    'choices' => array('Sí' => true, 'No' => false),
                 )
-            )
-           
-            ->getForm();
+            )->getForm();
     }
 
     public function configureOptions(OptionsResolver $resolver)

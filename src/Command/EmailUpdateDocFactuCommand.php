@@ -555,7 +555,7 @@ EOF
                     if (isset($datamail)) {
 
                         if ($datamail['mail']!=''){
-                            var_dump($datamail["mail"]);
+                            var_dump($datamail);
                         if($datamail["mail"] != null){
                             $datamail["mail"] = array_filter(preg_split('[;,/ ]',trim($datamail["mail"])));
                                 if($datamail["mail"][0]){

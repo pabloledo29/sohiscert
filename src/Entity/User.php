@@ -87,7 +87,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
     private $expires_at = NULL;
 
     
-    /**http://intranet-sohiscert.e4ff.pro-eu-west-1.openshiftapps.com/web/resetting/_-aYKu6BwUyMAl-GrqP_wmm5S57Rql0zRbcxQ93Ap-Y
+    /**
      * @ORM\Column(name="credentials_expire_at",type="datetime", nullable=true)
      */
     private $credentials_expire_at;
@@ -160,7 +160,15 @@ use Symfony\Component\Security\Core\User\UserInterface;
     }
 
     public function getConfirmationToken(){
+        if(count($this->confirmation_token)>12){
+            $tokenGenerator = $this->generateRandomString(12);
+            $this->confirmation_token = $tokenGenerator;
+        }
         return $this->confirmation_token;
+    }
+
+    public function generateRandomString($length = 12) { 
+        return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, $length); 
     }
     /**
      * @ORM\PrePersist

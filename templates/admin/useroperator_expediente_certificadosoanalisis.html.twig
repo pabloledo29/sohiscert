@@ -69,6 +69,8 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                {% set i = 0 %}
+                               
                                 {% for key,doc in filelist %}
                                     <tr>
                                         <td>
@@ -82,15 +84,18 @@
                                         {#</td>#}
                                         <td>
                                             <form action="{{ path('admin_file_download') }}" method="POST">
+                                        
+                                                <input type="hidden" name="opNop" value="{{ opNop }}">
                                                 <input type="hidden" name="path" value="{{ doc }}">
                                                 <i class="fa fa-floppy-o"></i>
                                                 <a href="#"
                                                    onclick="$(this).closest('form').submit()"> Descargar
-                                                </a>
+                                                </a><small>+ {{ visitas[i].visitas }} Visitas</small>
                                             </form>
                                         </td>
 
                                     </tr>
+                                    {% set i = i + 1 %}
                                 {% endfor %}
                                 </tbody>
                             </table>

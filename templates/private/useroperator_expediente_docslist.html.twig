@@ -70,10 +70,11 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-
+                                {% set i = 0 %}
                                 {% for doc in docs %}
                                     {% if doc.anFec|date('Y') == 'now'|date('Y') or doc.anFec|date('Y') == 'now'|date_modify('-1 year')|date('Y') %}
-                                    <tr>
+                                   
+                                     <tr>
                                         <td> Análisis - {{ doc.anFec|date('d/m/Y') }}</td>
                                         <td>
                                             {#<form action="{{ path('useroperator_docexp_show') }}"#}
@@ -92,11 +93,12 @@
                                                  <input type="hidden" value="{{ doc.directory }}" name="path"/>
                                                 <i class="fa fa-floppy-o"></i>
                                                 <a href="#"
-                                                   onclick="$(this).closest('form').submit()">Descargar </a>
+                                                   onclick="$(this).closest('form').submit()">Descargar </a><small>+ {{visitas[i].visitas}} Visitas</small>
                                             </form>
                                         </td>
                                         {#<td>{{ doc.deFec }}</td>#}
                                     </tr>
+                                    {% set i = i + 1 %}
                                     {% endif %}
                                 {% endfor %}
                                 </tbody>

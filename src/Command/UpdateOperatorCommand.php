@@ -129,11 +129,11 @@ class UpdateOperatorCommand extends Command
 	}else{
 		$datosxml = 0;
 	}
-
+    
 	//$datos = array("hola");
         /** @var Operator $operatorXml */
         foreach ($operators->Registro as $operatorXml) {
-
+            
             $opReg = $operatorXml->getOpReg();
 
             $opSubreg = $operatorXml->getOpSreg();
@@ -169,6 +169,8 @@ class UpdateOperatorCommand extends Command
 	    //array_push($datos, $operator);
 
             if (!$operator) {
+
+
                 if (!in_array($operatorXml->getOpSreg(), $operatorsNoInsert)) {
 		//	$output->writeln("Código de producto NO Operativo"); // Si el valor del campo opSreg coincide con el de los Operadores que NO se Insertan no hacemos nada
 		//}else{
@@ -177,7 +179,7 @@ class UpdateOperatorCommand extends Command
 			        $proceso = 1;
                 }
             } else {
-
+                
                 $updateEntity = $em->getRepository(Operator::class)->compareEntities($operatorXml, $operator);
                 if ($updateEntity) {
                     $operator->setOpDenoop($operatorXml->getOpDenoop());
