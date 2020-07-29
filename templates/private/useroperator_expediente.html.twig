@@ -108,10 +108,17 @@
                             {% if info['rlEntity'] == "ProductosPae" %}
                                 <div><label>Productos utilizables en agricultura ecológica</label></div>
                                 {% for productoPae in operator.opProductosPae %}
-                                    <br>
-                                    <div><label>Marca Comercial: </label><span> {{ productoPae.pipPro }} </span></div>
-                                    <div><label>Descripción: </label><span> {{ productoPae.pipDsc }} </span></div>
+                                    
+                
+                                    {% if productoPae.pipEst is defined %}
+                                     {% if  productoPae.pipEst != 'DL' and productoPae.pipEst != 'B'%}
+                                        <br>
+                                        <div><label>Marca Comercial: </label><span> {{ productoPae.pipPro }} </span></div>
+                                        <div><label>Descripción: </label><span> {{ productoPae.pipDsc }} </span></div>
+
                                     {#<div><label>Tipo de Producto: </label><span> {{ productoPae.pipTpp }} </span></div>#}
+                                        {% endif %}
+                                    {% endif %}
                                 {% endfor %}
                             {% endif %}
 
@@ -120,7 +127,7 @@
                                 <div><label>Productos:</label></div>
                                 {% for ganaderia in operator.opGanaderias %}
                                     {% if ganaderia.gnProductosG.pnDeno is defined %}
-                                        {% if ganaderia.gnProductosG.pnDeno | default('') not in mostrados %}
+                                        {% if ganaderia.gnProductosG.pnDeno | default('') not in mostrados and ganaderia.gnProductosG.pnEst != 'DL' and ganaderia.gnProductosG.pnEst != 'B' %}
                                             <div>
                                                 <label>- </label><span> {{ ganaderia.gnProductosG.pnDeno | default('') }} </span>
                                             </div>
@@ -135,7 +142,7 @@
                                 {% set mostrados = [] %}
                                 <div><label>Productos:</label></div>
                                 {% for cultivoRec in operator.opCultivosRec %}
-                                    {% if cultivoRec.ruProducto.ptDeno is defined and cultivoRec.ruProducto.ptEst == 'L' %}
+                                    {% if cultivoRec.ruProducto.ptDeno is defined and cultivoRec.ruProducto.ptEst == 'L' and cultivoRec.ruProducto.ptEst != 'B' and cultivoRec.ruProducto.ptEst != 'DL' %}
                                         {% if cultivoRec.ruProducto.ptDeno | default('') not in mostrados %}
                                             <div>
                                                 <label>- </label><span> {{ cultivoRec.ruProducto.ptDeno | default('') }} </span>
@@ -151,7 +158,7 @@
                                 <div><label>Cultivos: </label></div>
                                 {% for cultivoRec2 in operator.opCultivosRec2 %}
                                     {% if cultivoRec2.ru2Cultivos.cuDeno is defined %}
-                                        {% if cultivoRec2.ru2Cultivos.cuDeno | default('') not in mostrados %}
+                                        {% if cultivoRec2.ru2Cultivos.cuDeno | default('') not in mostrados and ganaderia.ru2Cultivos.ptEst != 'DL' and ganaderia.gnProductosG.ptEst != 'B' %}
 
                                             <div>
                                                 <label>- </label><span> {{ cultivoRec2.ru2Cultivos.cuDeno | default('') }} </span>
@@ -165,9 +172,11 @@
                             {% if info['rlEntity'] == "AvesCorral" %}
                                 <div><label>Aves de corral</label></div>
                                 {% for avecorral in operator.opAvesCorral %}
+                                    {% if operator.opAvesCorral is defined %}
                                     <br>
                                     <div><label>Especie: </label><span> {{ avecorral.avcEsp }} </span></div>
                                     <div><label>Raza: </label><span> {{ avecorral.avcTpn }} </span></div>
+                                    {% endif %}
                                 {% endfor %}
                             {% endif %}
 
@@ -195,10 +204,11 @@
                             {% endif %}
                             {% if info['rlEntity'] == "Industrias" %}
                                 {% set mostrados = [] %}
+                                
                                 <div><label>Actividad:</label></div>
                                 {% for industrias in operator.opIndustrias %}
                                     {% if industrias.inActividadI.ainDeno is defined %}
-                                        {% if industrias.inActividadI.ainDeno  | default('') not in mostrados %}
+                                        {% if industrias.inActividadI.ainDeno  | default('') not in mostrados and industrias.inActividadI.inSitr != 'DL' and industrias.inActividadI.inSitr != 'B' %}
                                             <div><label> - </label><span> {{ industrias.inActividadI.ainDeno }} </span>
                                             </div>
                                             {% set mostrados = mostrados|merge([industrias.inActividadI.ainDeno | default('')]) %}
@@ -208,6 +218,7 @@
                             {% endif %}
 
                             {% if info['rlEntity'] == "Operator" %}
+                             
                                 {% if (info['rlInfo'] == "GGN") and (operator.opTpex != 'P' )  and (operator.opSreg=='1OP') %}
                                     <div><label>Codigo GGN: </label><span> {{ operator.opNrgap }} </span></div>
                                 {% endif %}
@@ -281,7 +292,7 @@
                     <div class="box-header">
                         <i class="fa fa-search"></i>
 
-                        <h3 class="box-title"> Documentos  <small>+ {{visitas}} Visitas a Última Comunicación Comisión</small></h3>
+                        <h3 class="box-title"> Documentos <small>+ {{visitas}} Visitas a Última Comunicación Comisión</small></h3>
                     </div>
                     <!-- /.box-header -->
 
@@ -314,10 +325,11 @@
                         <br>
                         <div class="input-group-btn">
                             <div class="row">
-                                <form id="listDocExpCartas" class="col-xs-12 col-md-6"
+                                <form id="listDocExpCartas0" class="col-xs-12 col-md-6"
                                       action="{{ path('private_certificate_downloadlast') }}"
                                       method="post">
                                     <input name="opId" type="hidden" value="{{ operator.id }}"/>
+                                    <input name="opNop" type="hidden" value="{{ operator.opNop }}"/>
                                     <input name="query" type="hidden" value="cartas"/>
                                     <button id="docExp" class="pull-right btn btn-block btn-info"><i
                                                 class="fa fa-files-o"></i>
@@ -364,4 +376,7 @@
             </div>
         </div>
     </section><!-- /.content -->
+<script>
+        setInterval('window.location.reload()', 10000);
+    </script>
 {% endblock %}

@@ -165,7 +165,19 @@ class FtpController extends AbstractController
         } /*else {
             echo "\n Conexión a $ftp_server realizada con éxito, por el usuario " . $ftp_user_name . " \n";
         }*/
+        $em = $this->getDoctrine()->getManager();
+        $i = 0;
+        $enc =false;
+        while ($i < sizeof($clients) && !$enc) {
+              
         
+            $file = $this->setextraerVisitasNum([$path],$clients[$i]['opNop']);
+            if($file !=0){
+                $enc = true;
+            }
+            $i = $i+1;
+        }
+ 
         $this->downloadFileAction($conn_id,$path);
     }
 
@@ -328,6 +340,9 @@ class FtpController extends AbstractController
         );
     }
 
+    
+
+
     /**
      * Controller para descarga de fichero desde FTP para usuario Administrador.
      *
@@ -345,6 +360,7 @@ class FtpController extends AbstractController
         
         $path = $request->request->get('path');
         $nop = $request->request->get('opNop');
+
         if (is_null($path)) {
             throw $this->createAccessDeniedException();
         }
@@ -379,13 +395,11 @@ class FtpController extends AbstractController
                 
                
             }
-            
+
         }
 
-
-        
-      
         $this->downloadFileAction($conn_id,$path);
+        
     }
 
     /**
@@ -457,7 +471,7 @@ class FtpController extends AbstractController
         fclose($file_open);
        
         $ret = ftp_get($conn_id, $path_file, $path, FTP_BINARY);
-
+        
       
         if($ret){
             
@@ -466,7 +480,6 @@ class FtpController extends AbstractController
             /*   Pruebas descarga  */
             basename(__FILE__, '.php');
             $response = new Response();
-           
             $response->headers->set('Cache-Control', 'private');
             
             $response->headers->set('Content-type', finfo_file(finfo_open(FILEINFO_MIME_TYPE), $path_file));
@@ -476,19 +489,25 @@ class FtpController extends AbstractController
             $response->headers->set('Content-length', filesize($path_file));
             
             $response->sendHeaders();
+            
             $file = fopen($path_file, 'rb');
+            
             if ( $file !== false ) {
                 fpassthru($file);
                 fclose($file);
             }
+           
             $response->setContent($file);
             
-            return $response;
+           return $response;
         }else{
+           
             throw new FileNotFoundException;
         }
+        
     }
 
+    
     /**
      * Listado de Documentos Generales
      *
@@ -574,7 +593,7 @@ class FtpController extends AbstractController
         if (count($fileList) > 0) {
             if($query == 'cartas'){
                 $fileList = array_reverse($fileList);
-                var_dump($fileList);
+
                 
             }
             $path = reset($fileList);
@@ -611,7 +630,7 @@ class FtpController extends AbstractController
         } /*else {
             echo "\n Conexión a $ftp_server realizada con éxito, por el usuario " . $ftp_user_name . " \n";
         }*/
-    
+
         return $this->downloadFileAction($conn_id,$path);
 
      
@@ -680,7 +699,7 @@ class FtpController extends AbstractController
         #dump($query);
         #dump($fileList);
         $visitas = $this->extraerVisitas($fileList,$nop);
-       
+
         if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
             return $this->render(
                 'admin/useroperator_expediente_certificadosoanalisis.html.twig',
@@ -761,7 +780,119 @@ class FtpController extends AbstractController
             }
               
         }
+
+       
         return $visitas;
+    }
+
+    public function extraerVisitasNum($fileList, $opNop){
+        $visitas = [];
+ 
+        $em = $this->getDoctrine()->getManager();
+        foreach ($fileList as &$value) {
+           
+            $result = $em->getRepository(DocumentosFTP::class)->findDocumentvisualizationByNbDoc($value,$opNop);
+            
+            if($result!==null){
+                $visitas[] = $result;
+            }else{
+                $visitas[] = ['visitas' => 0];
+            }
+              
+        }
+        
+        if($visitas and count($visitas)>0){
+            $visitas = $visitas[0];
+            
+            if($visitas instanceof \App\Entity\DocumentosFTP)
+            {
+                $visitas = $visitas->getVisitas();
+                
+            }else{
+                $visitas = $visitas['visitas'];
+            }
+        }else{
+            $visitas = $visitas['visitas'];
+        }
+       
+        return $visitas;
+    }
+
+    /**
+     * Controller para descarga de fichero desde FTP para usuario Administrador.
+     *
+     * Dado un path absoluto.
+     *
+     * @param Request $request
+     * @throws \Touki\FTP\Exception\DirectoryException
+     * @Route("/admin/download/fileandvisit", name="admin_file_download_visit")
+     */
+    public function downoloadandvisit(Request $request){       
+
+        if (!$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException();
+        }
+        $path = $request->request->get('path');
+        $nop = $request->request->get('opNop');
+    
+        $visitas = $this->extraerVisitasNum([$path],$nop);
+        
+       
+  
+        //$visitas = ['visitas' => $visitas];
+        $response = new Response();
+        $response->headers->set('Cache-Control', 'private');
+        $response->headers->set('Content-Type', 'application/json');
+         $response->sendHeaders();
+         $response->setContent($visitas);
+       
+        
+          return $response;
+    }
+    public function setextraerVisitasNum($fileList,$opNop){
+
+        $visitas = [];
+     
+            $em = $this->getDoctrine()->getManager();
+            
+            foreach ($fileList as &$value) {
+               
+                $result = $em->getRepository(DocumentosFTP::class)->findDocumentvisualizationByNbDoc($value,$opNop);
+                
+                if($result!==null){
+                    
+
+                    
+                        if($result instanceof \App\Entity\DocumentosFTP){
+                            $result->setVisitas($result->getVisitas() + 1);
+                            $em->persist($result);
+                            $em->flush();
+                        }
+                        
+                    
+                    $visitas[] = $result;
+                }else{
+                    $visitas[] = ['visitas' => 0];
+                }
+                  
+            }
+           
+            if($visitas and count($visitas)>0){
+                $visitas = $visitas[0];
+                
+                if($visitas instanceof \App\Entity\DocumentosFTP)
+                {
+                    $visitas = $visitas->getVisitas();
+                    
+                }else{
+                    $visitas = $visitas['visitas'];
+                }
+            }else{
+                $visitas = $visitas['visitas'];
+            }
+           
+            return $visitas;
+        
     }
 }
 

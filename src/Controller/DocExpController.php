@@ -612,7 +612,8 @@ class DocExpController extends AbstractController
                 $mailer = $this->container->get('app.mailer.service');
                 $mailer->sendExpedienteEmail($data, $comunicationSendRegistry);
 
-                $sms_whatsapp_notification = new TwilioController($this->container);
+                //$sms_whatsapp_notification = new TwilioController($this->container);
+
                 //$sms_whatsapp_notification->privateTwilioSmssend($data);
                 //$sms_whatsapp_notification->privateTwilioWhatsappsSend($data);
             
@@ -1069,7 +1070,7 @@ class DocExpController extends AbstractController
         if (!$this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
             throw $this->createAccessDeniedException();
         }
-
+        
         $operator = $this->getDoctrine()->getManager()->getRepository(Operator::class)->find($opId);
 
         if (!$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
@@ -1426,6 +1427,7 @@ class DocExpController extends AbstractController
 
         $fileList = $this->get('app.ftp.service')->retrieveDocListFromFtpServer($nop, $query);
         $visitas = $this->extraerVisitas($fileList,$nop);
+
         if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
             return $this->render(
                 'admin/useroperator_expediente_certificadosoanalisis.html.twig',

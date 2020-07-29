@@ -656,12 +656,12 @@ class OperatorController extends AbstractController
 
         $allProducts = array();
         foreach ($productos as $product) {
-            if (!in_array($product->getPtDeno(), $allProducts) && $product->getPtEst() != 'B') {
+            if (!in_array($product->getPtDeno(), $allProducts) && $product->getPtEst() != 'B' && $product->getPtEst() != 'DL') {
                 array_push($allProducts, $product->getPtDeno());
             }
         }
         foreach ($productosG as $product) {
-            if (!in_array($product->getPnDeno(), $allProducts) && $product->getPnEst() != 'B') {
+            if (!in_array($product->getPnDeno(), $allProducts) && $product->getPnEst() != 'B' && $product->getPnEst() != 'DL') {
                 array_push($allProducts, $product->getPnDeno());
             }
         }

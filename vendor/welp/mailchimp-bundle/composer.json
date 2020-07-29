@@ -1,0 +1,43 @@
+{
+    "name": "welp/mailchimp-bundle",
+    "description": "MailChimp API V3 Symfony Bundle",
+    "type": "symfony-bundle",
+    "homepage": "https://github.com/welpdev/mailchimp-bundle",
+    "license": "MIT",
+    "keywords": [
+        "Symfony",
+        "MailChimp",
+        "API",
+        "V3",
+        "User",
+        "Subscriber"
+    ],
+    "authors": [
+        {
+            "name": "Titouan BENOIT",
+            "email": "titouan@welp.today"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Welp\\MailchimpBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": ">=5.6",
+        "drewm/mailchimp-api": "2.5.*"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "~2@dev",
+        "phpunit/phpunit": "~5",
+        "symfony/symfony": ">=2.7"
+    },
+    "config": {
+        "bin-dir": "bin"
+    }
+}

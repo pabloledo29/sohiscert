@@ -192,10 +192,11 @@ EOF
                    
 
                     case 'analisis':
-                        if(false===strpos($lista[$i], 'F156')){ //NUEVA NORMATIVA
+                    /*    if(false===strpos($lista[$i], 'F156')){ //NUEVA NORMATIVA
                             unset($lista[$i]);
                             continue;
-                        }
+                        }*/
+
                         # Certificados Procesados
                         $procCert = $contArch++;
                         break;
@@ -316,8 +317,11 @@ EOF
                                 #var_dump($op);
                                 $op = trim($op, '-');
                                 #var_dump($op);
+<<<<<<< HEAD
                                 // Quitar los comentarios /* */ y estará como antes
                                 //********************************************************************************************************************************************/
+=======
+>>>>>>> 0da28f6301a18d95cf6a8009689f0e11dcfe0158
                                 # Si el Documento No Contiene más '-' o No Empiece por F ni por 1
                                 /*if ((strrpos($op, '-') == false && strrpos($op, ' ') == false) || (strcmp(substr($op, 0, 1), 'F') <> 0 && strcmp(substr($op, 0, 1), '1') <> 0)) {
                                     
@@ -325,7 +329,11 @@ EOF
                                     #echo "\n If 1 \n";
 
                                     # Si el Documenta Comienza por F, 1 o S
+<<<<<<< HEAD
                                 }*/if (strcmp(substr($op, 0, 1), 'F') == 0 ){/*|| strcmp(substr($op, 0, 1), '1') == 0 || strcmp(substr($op, 0, 1), 'S') == 0) {*/
+=======
+                                }elseif (strcmp(substr($op, 0, 1), 'F') == 0 || strcmp(substr($op, 0, 1), '1') == 0 || strcmp(substr($op, 0, 1), 'S') == 0){
+>>>>>>> 0da28f6301a18d95cf6a8009689f0e11dcfe0158
                                     
                                     # Obtenemos el Nombre del Operador a partir de la última
                                     # posición del '-'
@@ -345,8 +353,7 @@ EOF
 
                                     $nbop = substr($op, ($uposg + 1), $tamnc);
                                     #echo "\n If 3 \n";
-                                }*/
-                                //********************************************************************************************************************************************/
+
                                 /*elseif(strcmp(substr($op,0,4), '')){
                                     var_dump()
 

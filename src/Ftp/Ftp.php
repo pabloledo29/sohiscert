@@ -19,16 +19,21 @@ class Ftp
     /**
      * Rutas de documentos en Servidor FTP Sohiscert.
      */
+    //const FTP_BILLING = "/test";
     const FTP_BILLING = "/facturasintranet"; # Directorio anterior: "/RAIZ/SOHISCERT-GERENCIA/DEPARTAMENTO DE CONTABILIDAD/FACTURAS 2016/";
     const FTP_DOC = "/Documentos/Documentos/";
     const FTP_GENERAL = "/Documentos/General/";
+    //const FTP_CERTIFICADOS = "/test";
     const FTP_CERTIFICADOS = "/sitio2";
+    //const FTP_ANALISIS = "/test";
     const FTP_ANALISIS = "/sitio1";
     const FTP_CARTAS = "/sitio3";
+    //const FTP_CARTAS = "/test";
     const FTP_UPLOADS = "/";
     // MNN Nueva ruta para conclusiones
+    //const FTP_CONCLUSIONES = "/test";
     const FTP_CONCLUSIONES = "/sitio4CON"; 
-    //
+    
 
     protected $ftp;
     protected $nopConversion;
@@ -309,6 +314,7 @@ class Ftp
                    
                 if ($query !== 'cartas'){
                     $nop_aux= str_replace('-','',$nop);
+                    
                 }else{
                     $nop_aux= str_replace('-','',$nopcarta);
                 }
@@ -319,12 +325,13 @@ class Ftp
                     $pos = strcmp($filename_aux,$nop_aux);
 
                 }else{
+
                     
                     if(strpos($listado[$i],substr($nop,strpos($nop,'SHC'), strlen($nop)-1))!==false ){
                         $pos = 0;
                     }
                 }
-                
+
                
                 /*
                 * CASO 1
@@ -343,20 +350,36 @@ class Ftp
                 #var_dump($filename_aux);
                 #var_dump($nop_aux);
                 if ($pos==0){
-                    /*if($query=="certificados" && false===strpos($listado[$i], 'F157')){ //NUEVA NORMATIVA
+
+                   /* var_dump("falla1");
+                    if($query=="certificados" && false===strpos($listado[$i], 'F157')){ //NUEVA NORMATIVA
                         unset($listado[$i]);
                         continue;
+                     var_dump("falla2");
                     }else if($query=="cartas" && false===strpos($listado[$i], 'F155')){ //NUEVA NORMATIVA
                         unset($listado[$i]);
                         continue;
+                        var_dump("falla3");
                     }else if($query=="analisis" && false===strpos($listado[$i], 'F156')){ //NUEVA NORMATIVA
+                        var_dump($listado[$i]);
+               
                         unset($listado[$i]);
                         continue;
+                    }else if($query=="facturas" && false===strpos($listado[$i], 'F202')){ //NUEVA NORMATIVA
+                        var_dump($listado[$i]);
+               
+                        unset($listado[$i]);
+                        continue;
+                        
+                        
                     }else if($query=="conclusiones" && false===strpos($listado[$i], 'F27')){ //NUEVA NORMATIVA
                         unset($listado[$i]);
                         continue;
+                        var_dump("falla5");
+                    }else{
+                        var_dump("entras");
                     }*/
-    
+
                         #$certList[substr(strrchr($listado[$i], '/'), 1)] = $listado[$i];
                         
                         # Obtenemos la Fecha de Modificación del Certificado
@@ -406,12 +429,11 @@ class Ftp
        
         /** Confección de la expresión regular para filtrar facturas y/o certificados*/
         if ($query === 'facturas') {
-
             $current = date("y");
             $previous = date("y", strtotime("-1 year"));
             /* comienza con dos digitos para año en vigor o anterior y termina con - NOP . extension de 3 letras */
-            $pattern = '/^(' . $current . '|' . $previous . ')\w+' . $nop . '.[a-z]{3}$/';
-
+            $pattern = '/^( [F202]-' . $current . '|' . $previous . ')\w+' . $nop . '.[a-z]{3}$/';
+           
             $temp = $this->pregGrepKeys($pattern, $certList);
             $certList = $temp;
         } elseif ($query === 'certificados') {
@@ -520,7 +542,7 @@ class Ftp
                 # Devolvemos el Listado de los Certificados
                 return $allcert;
             }else{
-                var_dump("A");
+
                 
                 return $certList;
             }

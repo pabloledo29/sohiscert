@@ -1,0 +1,19 @@
+{
+    "name": "smsup/smsuplib",
+    "type": "library",
+    "description": "Clase que facilita el uso de la API de smsup para envio de sms masivos",
+    "keywords": ["sms","sms api"],
+    "homepage": "https://github.com/smsup/smsuplib_php",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "ale-blanco",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+    },
+    "autoload": {
+        "psr-4": {"smsup\\": "src/smsup"}
+    }
+}
