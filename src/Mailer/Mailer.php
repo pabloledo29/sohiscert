@@ -266,6 +266,7 @@ class Mailer
         } catch (\Exception $ex) {
             
             return $ex->getMessage();
+            
         }
 
         return $response;
