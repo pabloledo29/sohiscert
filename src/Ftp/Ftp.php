@@ -32,7 +32,7 @@ class Ftp
     const FTP_UPLOADS = "/";
     // MNN Nueva ruta para conclusiones
     const FTP_CONCLUSIONES = "/test";
-    //const FTP_CONCLUSIONES = "/sitio4CON"; 
+ //   const FTP_CONCLUSIONES = "/sitio4CON"; 
     
 
     protected $ftp;
@@ -261,15 +261,16 @@ class Ftp
         */
         # Recorremos el Listado de Certificados FTP
         for ($i=0; $i <$numarch ; $i++) {
-
+            
+            
             # Comprobamos SI el conclusion contiene el Nombre del Operador
             // MNN: Para mostrar conclusiones. La opcion F27-03 y F194-03
             if ($query==='conclusiones'){   
 //          if (strpos($listado[$i], $nop2) or strpos($listado[$i], $nop3)) {
                 if (strpos($listado[$i], $nop)) { 
                     $porciones = explode("-", $listado[$i]);
-                    $cadena=substr(strrchr($porciones[0], "/"), 1);
-                    
+                    $cadena=substr(strrchr($porciones[0], "/"), 1);               
+
                     if ($cadena==='F27' or $cadena==='F194'){
                         #$certList[substr(strrchr($listado[$i], '/'), 1)] = $listado[$i];
                       
@@ -292,6 +293,8 @@ class Ftp
                
                 $filename = explode("-", $listado[$i]);   
                 $filename_aux = substr(strrchr($filename[0], "/"),1);
+                
+
                 if(strlen($filename_aux) <=4 ){                    
                     if(count($filename)>2){
                         if(!is_null($filename[2])){
@@ -303,7 +306,7 @@ class Ftp
                             }
                         }
                     }
-                } else if(strlen($filename_aux)==7 && is_numeric($filename_aux)){
+                } else if(strlen($filename_aux)==12 && is_numeric($filename_aux)){
                     if(count($filename)>1){
                         if(!is_null($filename[1])){
                             $filename_aux=$filename[1];
@@ -311,28 +314,36 @@ class Ftp
                         }
                     }
                 }
-                   
+                
                 if ($query !== 'cartas'){
                     $nop_aux= str_replace('-','',$nop);
                     
                 }else{
                     $nop_aux= str_replace('-','',$nopcarta);
-                    $pos= -1;
                 }
+                $pos= -1;
                 if(false === strpos($nop,'SHC') && strpos($listado[$i], 'SHC')===false || $query=="cartas"){
                     $nop_aux= str_replace('AE','', $nop_aux);
+                    $filename_aux= str_replace('.pdf','',$filename_aux);
+                    if(strpos($filename_aux, ".") !== false){
+                        if(isset($filename[1])){
+                            $filename_aux=$filename[1];
+                        }
+                    }
+                    
                     $filename_aux = str_replace('AE','', $filename_aux);
+                    $filename_aux= str_replace('.pdf','',$filename_aux);
                     $pos = strcmp($filename_aux,$nop_aux);
 
-                }else{
-
+                }else{ 
                     
                     if(strpos($listado[$i],substr($nop,strpos($nop,'SHC'), strlen($nop)-1))!==false ){
                         $pos = 0;
                     }
                 }
-
-               
+           
+                
+                
                 /*
                 * CASO 1
                 * %LLNNNL%
@@ -347,11 +358,8 @@ class Ftp
                 * %LLNNNL%
                 * LLNNNL
                 */
-                #var_dump($filename_aux);
-                #var_dump($nop_aux);
                 if ($pos==0){
-
-                    if($query=="certificados" && false===strpos($listado[$i], 'F157')){ //NUEVA NORMATIVA
+                  if($query=="certificados" && false===strpos($listado[$i], 'F157')){ //NUEVA NORMATIVA
                         unset($listado[$i]);
                         continue;
                     
@@ -378,8 +386,6 @@ class Ftp
         }
       
     ftp_close($conn_id);
-
-
         # Ordenamos el Array certFmod ascendentemente por el Valor de la Fecha de Modificación
         
         # Recorremos el Array certFmod Ordenado
@@ -411,11 +417,13 @@ class Ftp
        
         /** Confección de la expresión regular para filtrar facturas y/o certificados*/
         if ($query === 'facturas') {
+            
             $current = date("y");
             $previous = date("y", strtotime("-1 year"));
             /* comienza con dos digitos para año en vigor o anterior y termina con - NOP . extension de 3 letras */
-            $pattern = '/^(' . $current . '|' . $previous . ')\w+' . $nop . '.[a-z]{3}$/';
-           
+           // $pattern = '/^( [F202]-' . $current . '|' . $previous . ')\w+' . $nop . '.[a-z]{3}$/';
+            $pattern = '/^( '. $current . '|' . $previous . ')\w+' . $nop . '.[a-z]{3}$/';
+            
             $temp = $this->pregGrepKeys($pattern, $certList);
             $certList = $temp;
         } elseif ($query === 'certificados') {
