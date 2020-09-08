@@ -317,8 +317,8 @@ class Ftp
                     
                 }else{
                     $nop_aux= str_replace('-','',$nopcarta);
+                    $pos= -1;
                 }
-                $pos= -1;
                 if(false === strpos($nop,'SHC') && strpos($listado[$i], 'SHC')===false || $query=="cartas"){
                     $nop_aux= str_replace('AE','', $nop_aux);
                     $filename_aux = str_replace('AE','', $filename_aux);
@@ -414,7 +414,7 @@ class Ftp
             $current = date("y");
             $previous = date("y", strtotime("-1 year"));
             /* comienza con dos digitos para año en vigor o anterior y termina con - NOP . extension de 3 letras */
-            $pattern = '/^( [F202]-' . $current . '|' . $previous . ')\w+' . $nop . '.[a-z]{3}$/';
+            $pattern = '/^(' . $current . '|' . $previous . ')\w+' . $nop . '.[a-z]{3}$/';
            
             $temp = $this->pregGrepKeys($pattern, $certList);
             $certList = $temp;
