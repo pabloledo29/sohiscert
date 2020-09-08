@@ -25,8 +25,8 @@ class Ftp
     const FTP_GENERAL = "/Documentos/General/";
     //const FTP_CERTIFICADOS = "/test";
     const FTP_CERTIFICADOS = "/sitio2";
-    const FTP_ANALISIS = "/test";
-    //const FTP_ANALISIS = "/sitio1";
+    //const FTP_ANALISIS = "/test";
+    const FTP_ANALISIS = "/sitio1";
     const FTP_CARTAS = "/sitio3";
     //const FTP_CARTAS = "/test";
     const FTP_UPLOADS = "/";
