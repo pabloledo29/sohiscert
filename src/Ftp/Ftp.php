@@ -25,8 +25,8 @@ class Ftp
     const FTP_GENERAL = "/Documentos/General/";
     //const FTP_CERTIFICADOS = "/test";
     const FTP_CERTIFICADOS = "/sitio2";
-    //const FTP_ANALISIS = "/test";
-    const FTP_ANALISIS = "/sitio1";
+    const FTP_ANALISIS = "/test";
+    //const FTP_ANALISIS = "/sitio1";
     const FTP_CARTAS = "/sitio3";
     //const FTP_CARTAS = "/test";
     const FTP_UPLOADS = "/";
@@ -351,35 +351,17 @@ class Ftp
                 #var_dump($nop_aux);
                 if ($pos==0){
 
-                   /* var_dump("falla1");
                     if($query=="certificados" && false===strpos($listado[$i], 'F157')){ //NUEVA NORMATIVA
                         unset($listado[$i]);
                         continue;
-                     var_dump("falla2");
+                    
                     }else if($query=="cartas" && false===strpos($listado[$i], 'F155')){ //NUEVA NORMATIVA
                         unset($listado[$i]);
                         continue;
-                        var_dump("falla3");
                     }else if($query=="analisis" && false===strpos($listado[$i], 'F156')){ //NUEVA NORMATIVA
-                        var_dump($listado[$i]);
-               
-                        unset($listado[$i]);
+                        unset($listado[$i]);                    
                         continue;
-                    }else if($query=="facturas" && false===strpos($listado[$i], 'F202')){ //NUEVA NORMATIVA
-                        var_dump($listado[$i]);
-               
-                        unset($listado[$i]);
-                        continue;
-                        
-                        
-                    }else if($query=="conclusiones" && false===strpos($listado[$i], 'F27')){ //NUEVA NORMATIVA
-                        unset($listado[$i]);
-                        continue;
-                        var_dump("falla5");
-                    }else{
-                        var_dump("entras");
-                    }*/
-
+                    }
                         #$certList[substr(strrchr($listado[$i], '/'), 1)] = $listado[$i];
                         
                         # Obtenemos la Fecha de Modificación del Certificado

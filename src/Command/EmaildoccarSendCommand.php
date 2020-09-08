@@ -580,7 +580,7 @@ EOF
                     if (isset($datamail)) {
                         if ($datamail['mail']!=''){
                             var_dump($datamail["mail"]);
-                            
+                             
                         if($datamail["mail"] != null){
                             $datamail["mail"] = array_filter(preg_split('[;,/ ]',trim($datamail["mail"])));
                                 if($datamail["mail"][0]){
@@ -597,7 +597,7 @@ EOF
                                         fwrite($open_file,date("Y-m-d H:i:s"). "---->" .implode($datamail));
                                         fclose($open_file);
                                         $datamail["mail"] = null;
-                                    }
+                                    } 
                                 }
                             }
                            /* $mailerServiceName = sprintf('swiftmailer.mailer.%s', $input->getOption('mailer'));

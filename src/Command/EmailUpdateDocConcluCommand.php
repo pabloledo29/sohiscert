@@ -705,7 +705,7 @@ EOF
             $log,
             ("\n* DOCUMENTOS FTP => Comienzo: ". $now ." | Final: ". $end ."\n")
         );
-
+ 
         # Escribimos Información sobre Facturas
         /*fwrite(
             $log,

@@ -612,7 +612,7 @@ EOF
                                     }
                                 }
                             }
-                          
+                           
                             switch ($input->getOption('body-source')) {
                                 case 'file':
                                     $filename = $input->getOption('body');

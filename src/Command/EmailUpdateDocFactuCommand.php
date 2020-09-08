@@ -119,7 +119,7 @@ EOF
         $semantes = '2019-01-22';
         #$semantes = date('Y-m-d', strtotime('-1 week'));
         $semantes = strtotime($semantes);
-
+ 
         
         # Rutas para Pruebas
         $rutasftp = array('factura' => '/facturasintranet');
