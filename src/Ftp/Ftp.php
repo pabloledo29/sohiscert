@@ -321,6 +321,8 @@ class Ftp
                 }else{
                     $nop_aux= str_replace('-','',$nopcarta);
                 }
+                $nop_aux= str_replace('.pdf','',$nop_aux);
+                    
                 $pos= -1;
                 if(false === strpos($nop,'SHC') && strpos($listado[$i], 'SHC')===false || $query=="cartas"){
                     $nop_aux= str_replace('AE','', $nop_aux);
