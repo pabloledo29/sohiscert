@@ -43,7 +43,7 @@ parameters:
     mailer_port: 587
     mailer_host: 'smtp.ionos.es'
     mailer_user: 'noreply@sohiscert.com'
-    mailer_password: "Naranjo@@2020."
+    mailer_password: "Naranjo@@2020.-"
     mailer_encryption: 'tls'
     auth_mode: 'login'
     nop_conversion:
@@ -273,6 +273,8 @@ services:
 #===================================================================================================
 
     App\Repository\OperatorRepository:
+        tags: ['doctrine.repository_service']
+    App\Repository\OpNopTransformRepository:
         tags: ['doctrine.repository_service']
     App\Repository\UserOperatorRepository:
         tags: ['doctrine.repository_service']
