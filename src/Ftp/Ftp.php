@@ -27,8 +27,8 @@ class Ftp
     //const FTP_CERTIFICADOS = "/sitio2";
     //const FTP_ANALISIS = "/test/acceso directo";
     const FTP_ANALISIS = "/sitio1";
-    //const FTP_CARTAS = "/sitio3";
-    const FTP_CARTAS = "/test";
+    const FTP_CARTAS = "/sitio3";
+    //const FTP_CARTAS = "/test";
     const FTP_UPLOADS = "/";
     // MNN Nueva ruta para conclusiones
     //const FTP_CONCLUSIONES = "/test/acceso directo";
@@ -571,16 +571,12 @@ class Ftp
                 # Devolvemos el Listado de los Certificados
                 return $allcert;
             }else{
-
-               
+            
                 return $certList;
-
             }
         }
-
             # Devolvemos el Listado de las Facturas
             return $certList;
-
             // ...
     }
     
