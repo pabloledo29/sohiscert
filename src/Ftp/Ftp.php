@@ -23,12 +23,12 @@ class Ftp
     const FTP_BILLING = "/facturasintranet"; # Directorio anterior: "/RAIZ/SOHISCERT-GERENCIA/DEPARTAMENTO DE CONTABILIDAD/FACTURAS 2016/";
     const FTP_DOC = "/Documentos/Documentos/";
     const FTP_GENERAL = "/Documentos/General/";
-    //const FTP_CERTIFICADOS = "/test";
-    const FTP_CERTIFICADOS = "/sitio2";
+    const FTP_CERTIFICADOS = "/test";
+    //const FTP_CERTIFICADOS = "/sitio2";
     //const FTP_ANALISIS = "/test/acceso directo";
     const FTP_ANALISIS = "/sitio1";
-    const FTP_CARTAS = "/sitio3";
-    //const FTP_CARTAS = "/test";
+    //const FTP_CARTAS = "/sitio3";
+    const FTP_CARTAS = "/test";
     const FTP_UPLOADS = "/";
     // MNN Nueva ruta para conclusiones
     //const FTP_CONCLUSIONES = "/test/acceso directo";
@@ -232,7 +232,7 @@ class Ftp
 
         }
         
-        
+   
         /** Para limitar el filtrado */
         if ($query === 'cartas') {
             $nopcarta =$nop;
@@ -329,6 +329,7 @@ class Ftp
                 }
                 $pos= -1;
                 if(false === strpos($nop,'SHC') && strpos($listado[$i], 'SHC')===false || $query=="cartas"){
+
                     $nop_aux= str_replace('AE','', $nop_aux);
                     $filename_aux= str_replace('.pdf','',$filename_aux);
                     if(strpos($filename_aux, ".") !== false || (strlen($filename_aux)==7 && is_numeric($filename_aux)) ){
@@ -352,8 +353,7 @@ class Ftp
                     }
                 }
 
-                
-                
+             
                 /*
                 * CASO 1
                 * %LLNNNL%
@@ -369,7 +369,6 @@ class Ftp
                 * LLNNNL
                 */
             
-                //exit;
                 if ($pos==0){
                   /*if($query=="certificados" && false===strpos($listado[$i], 'F157')){ //NUEVA NORMATIVA
                         unset($listado[$i]);
@@ -396,9 +395,8 @@ class Ftp
                 } 
             }
         }
-      
     ftp_close($conn_id);
-    
+        
         # Ordenamos el Array certFmod ascendentemente por el Valor de la Fecha de Modificación
         
         # Recorremos el Array certFmod Ordenado
@@ -419,6 +417,32 @@ class Ftp
                     } 
                 }
             }
+        }
+        if($query==='cartas'){
+            $listAux = [];
+           
+            foreach($certList as $line){
+                $listAux[] = str_replace('AE', '', $line);
+            }
+            sort($listAux,SORT_STRING);
+            
+            $cont_i = 0;
+            $encontrado = false;
+               $values_cerList = array_values($certList); 
+                while($cont_i < count($listAux) && !$encontrado){
+                        if(strcmp(str_replace('AE', '', $values_cerList[$cont_i]), 
+                            array_values($listAux)[count($listAux)-1])===0){
+                            $position=$cont_i;
+                            $encontrado = true;
+                        }else{
+                            $cont_i++;
+                        }
+                    }
+                
+            
+            
+            $certList[]= array_values($certList)[$cont_i];
+            
         }
 
         #dump($certList);
@@ -548,12 +572,15 @@ class Ftp
                 return $allcert;
             }else{
 
-                
+               
                 return $certList;
+
             }
         }
+
             # Devolvemos el Listado de las Facturas
             return $certList;
+
             // ...
     }
     
