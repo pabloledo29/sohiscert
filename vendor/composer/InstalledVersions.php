@@ -19,7 +19,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '73ca48e9da5357c3a72a15d179a5be35fa48271a',
+    'reference' => '6bc07a27f1cda56018b2cd61dfb6ef66193ac8ec',
     'name' => '__root__',
   ),
   'versions' => 
@@ -31,7 +31,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '73ca48e9da5357c3a72a15d179a5be35fa48271a',
+      'reference' => '6bc07a27f1cda56018b2cd61dfb6ef66193ac8ec',
     ),
     'behat/transliterator' => 
     array (
