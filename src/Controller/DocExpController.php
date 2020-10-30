@@ -380,7 +380,7 @@ class DocExpController extends AbstractController
                 'operator',
                 ChoiceType::class,
                 array(
-                    'choices' => $choices,
+                    'choices' => array_flip($choices),
                 )
             )
             ->add(
@@ -432,10 +432,9 @@ class DocExpController extends AbstractController
         if ($form->isSubmitted() && $form->isValid() && $form['document']->getData() !== null) {
 
             $data = $form->getData();
-            
-         
-            $data['opNop'] = $choices [(int)array_keys($choices,$data['operator'])[0]];
-            
+            $data['opNop'] = $choices[$data['operator']];
+                
+            //$data['opNop'] = $choices [(int)array_keys($choices,$data['operator'])[0]];
             // Subida a FTP
             $file = $this->uploadFile($data);
 
