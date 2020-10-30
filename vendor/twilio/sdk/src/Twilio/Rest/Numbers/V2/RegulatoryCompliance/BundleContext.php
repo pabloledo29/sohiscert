@@ -13,15 +13,19 @@ use Twilio\Exceptions\TwilioException;
 use Twilio\InstanceContext;
 use Twilio\ListResource;
 use Twilio\Options;
+use Twilio\Rest\Numbers\V2\RegulatoryCompliance\Bundle\EvaluationList;
 use Twilio\Rest\Numbers\V2\RegulatoryCompliance\Bundle\ItemAssignmentList;
 use Twilio\Values;
 use Twilio\Version;
 
 /**
+ * @property EvaluationList $evaluations
  * @property ItemAssignmentList $itemAssignments
+ * @method \Twilio\Rest\Numbers\V2\RegulatoryCompliance\Bundle\EvaluationContext evaluations(string $sid)
  * @method \Twilio\Rest\Numbers\V2\RegulatoryCompliance\Bundle\ItemAssignmentContext itemAssignments(string $sid)
  */
 class BundleContext extends InstanceContext {
+    protected $_evaluations;
     protected $_itemAssignments;
 
     /**
@@ -71,6 +75,27 @@ class BundleContext extends InstanceContext {
         $payload = $this->version->update('POST', $this->uri, [], $data);
 
         return new BundleInstance($this->version, $payload, $this->solution['sid']);
+    }
+
+    /**
+     * Delete the BundleInstance
+     *
+     * @return bool True if delete succeeds, false otherwise
+     * @throws TwilioException When an HTTP error occurs.
+     */
+    public function delete(): bool {
+        return $this->version->delete('DELETE', $this->uri);
+    }
+
+    /**
+     * Access the evaluations
+     */
+    protected function getEvaluations(): EvaluationList {
+        if (!$this->_evaluations) {
+            $this->_evaluations = new EvaluationList($this->version, $this->solution['sid']);
+        }
+
+        return $this->_evaluations;
     }
 
     /**

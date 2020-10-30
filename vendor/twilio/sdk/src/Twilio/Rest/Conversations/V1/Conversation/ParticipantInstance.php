@@ -17,14 +17,13 @@ use Twilio\Values;
 use Twilio\Version;
 
 /**
- * PLEASE NOTE that this class contains beta products that are subject to change. Use them with caution.
- *
  * @property string $accountSid
  * @property string $conversationSid
  * @property string $sid
  * @property string $identity
  * @property string $attributes
  * @property array $messagingBinding
+ * @property string $roleSid
  * @property \DateTime $dateCreated
  * @property \DateTime $dateUpdated
  * @property string $url
@@ -35,7 +34,7 @@ class ParticipantInstance extends InstanceResource {
      *
      * @param Version $version Version that contains the resource
      * @param mixed[] $payload The response payload
-     * @param string $conversationSid The unique id of the Conversation for this
+     * @param string $conversationSid The unique ID of the Conversation for this
      *                                participant.
      * @param string $sid A 34 character string that uniquely identifies this
      *                    resource.
@@ -51,6 +50,7 @@ class ParticipantInstance extends InstanceResource {
             'identity' => Values::array_get($payload, 'identity'),
             'attributes' => Values::array_get($payload, 'attributes'),
             'messagingBinding' => Values::array_get($payload, 'messaging_binding'),
+            'roleSid' => Values::array_get($payload, 'role_sid'),
             'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
             'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
             'url' => Values::array_get($payload, 'url'),

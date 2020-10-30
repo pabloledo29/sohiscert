@@ -21,25 +21,41 @@ abstract class FleetOptions {
      *                           identifies the resource
      * @param bool $dataEnabled Defines whether SIMs in the Fleet are capable of
      *                          using data connectivity
+     * @param int $dataLimit The total data usage (download and upload combined) in
+     *                       Megabytes that each Sim resource assigned to the Fleet
+     *                       resource can consume
      * @param bool $commandsEnabled Defines whether SIMs in the Fleet are capable
-     *                              of sending and receiving Commands via SMS
+     *                              of sending and receiving machine-to-machine SMS
+     *                              via Commands
      * @param string $commandsUrl The URL that will receive a webhook when a SIM in
-     *                            the Fleet originates a machine-to-machine Command
+     *                            the Fleet originates a machine-to-machine SMS via
+     *                            Commands
      * @param string $commandsMethod A string representing the HTTP method to use
      *                               when making a request to `commands_url`
      * @return CreateFleetOptions Options builder
      */
-    public static function create(string $uniqueName = Values::NONE, bool $dataEnabled = Values::NONE, bool $commandsEnabled = Values::NONE, string $commandsUrl = Values::NONE, string $commandsMethod = Values::NONE): CreateFleetOptions {
-        return new CreateFleetOptions($uniqueName, $dataEnabled, $commandsEnabled, $commandsUrl, $commandsMethod);
+    public static function create(string $uniqueName = Values::NONE, bool $dataEnabled = Values::NONE, int $dataLimit = Values::NONE, bool $commandsEnabled = Values::NONE, string $commandsUrl = Values::NONE, string $commandsMethod = Values::NONE): CreateFleetOptions {
+        return new CreateFleetOptions($uniqueName, $dataEnabled, $dataLimit, $commandsEnabled, $commandsUrl, $commandsMethod);
+    }
+
+    /**
+     * @param string $networkAccessProfile The SID or unique name of the Network
+     *                                     Access Profile of the Fleet
+     * @return ReadFleetOptions Options builder
+     */
+    public static function read(string $networkAccessProfile = Values::NONE): ReadFleetOptions {
+        return new ReadFleetOptions($networkAccessProfile);
     }
 
     /**
      * @param string $uniqueName An application-defined string that uniquely
      *                           identifies the resource
+     * @param string $networkAccessProfile The SID or unique name of the Network
+     *                                     Access Profile of the Fleet
      * @return UpdateFleetOptions Options builder
      */
-    public static function update(string $uniqueName = Values::NONE): UpdateFleetOptions {
-        return new UpdateFleetOptions($uniqueName);
+    public static function update(string $uniqueName = Values::NONE, string $networkAccessProfile = Values::NONE): UpdateFleetOptions {
+        return new UpdateFleetOptions($uniqueName, $networkAccessProfile);
     }
 }
 
@@ -49,16 +65,22 @@ class CreateFleetOptions extends Options {
      *                           identifies the resource
      * @param bool $dataEnabled Defines whether SIMs in the Fleet are capable of
      *                          using data connectivity
+     * @param int $dataLimit The total data usage (download and upload combined) in
+     *                       Megabytes that each Sim resource assigned to the Fleet
+     *                       resource can consume
      * @param bool $commandsEnabled Defines whether SIMs in the Fleet are capable
-     *                              of sending and receiving Commands via SMS
+     *                              of sending and receiving machine-to-machine SMS
+     *                              via Commands
      * @param string $commandsUrl The URL that will receive a webhook when a SIM in
-     *                            the Fleet originates a machine-to-machine Command
+     *                            the Fleet originates a machine-to-machine SMS via
+     *                            Commands
      * @param string $commandsMethod A string representing the HTTP method to use
      *                               when making a request to `commands_url`
      */
-    public function __construct(string $uniqueName = Values::NONE, bool $dataEnabled = Values::NONE, bool $commandsEnabled = Values::NONE, string $commandsUrl = Values::NONE, string $commandsMethod = Values::NONE) {
+    public function __construct(string $uniqueName = Values::NONE, bool $dataEnabled = Values::NONE, int $dataLimit = Values::NONE, bool $commandsEnabled = Values::NONE, string $commandsUrl = Values::NONE, string $commandsMethod = Values::NONE) {
         $this->options['uniqueName'] = $uniqueName;
         $this->options['dataEnabled'] = $dataEnabled;
+        $this->options['dataLimit'] = $dataLimit;
         $this->options['commandsEnabled'] = $commandsEnabled;
         $this->options['commandsUrl'] = $commandsUrl;
         $this->options['commandsMethod'] = $commandsMethod;
@@ -77,7 +99,7 @@ class CreateFleetOptions extends Options {
     }
 
     /**
-     * Defines whether SIMs in the Fleet are capable of using 2G/3G/4G/LTE/CAT-M/NB-IoT data connectivity
+     * Defines whether SIMs in the Fleet are capable of using 2G/3G/4G/LTE/CAT-M data connectivity. Defaults to `true`.
      *
      * @param bool $dataEnabled Defines whether SIMs in the Fleet are capable of
      *                          using data connectivity
@@ -89,10 +111,24 @@ class CreateFleetOptions extends Options {
     }
 
     /**
-     * Defines whether SIMs in the Fleet are capable of sending and receiving Commands via SMS.
+     * The total data usage (download and upload combined) in Megabytes that each Sim resource assigned to the Fleet resource can consume during a billing period (normally one month). Value must be between 1MB (1) and 2TB (2,000,000). Defaults to 1GB (1,000).
+     *
+     * @param int $dataLimit The total data usage (download and upload combined) in
+     *                       Megabytes that each Sim resource assigned to the Fleet
+     *                       resource can consume
+     * @return $this Fluent Builder
+     */
+    public function setDataLimit(int $dataLimit): self {
+        $this->options['dataLimit'] = $dataLimit;
+        return $this;
+    }
+
+    /**
+     * Defines whether SIMs in the Fleet are capable of sending and receiving machine-to-machine SMS via Commands. Defaults to `true`.
      *
      * @param bool $commandsEnabled Defines whether SIMs in the Fleet are capable
-     *                              of sending and receiving Commands via SMS
+     *                              of sending and receiving machine-to-machine SMS
+     *                              via Commands
      * @return $this Fluent Builder
      */
     public function setCommandsEnabled(bool $commandsEnabled): self {
@@ -101,10 +137,11 @@ class CreateFleetOptions extends Options {
     }
 
     /**
-     * The URL that will receive a webhook when a SIM in the Fleet originates a machine-to-machine Command. Your server should respond with an HTTP status code in the 200 range; any response body will be ignored.
+     * The URL that will receive a webhook when a SIM in the Fleet originates a machine-to-machine SMS via Commands. Your server should respond with an HTTP status code in the 200 range; any response body will be ignored.
      *
      * @param string $commandsUrl The URL that will receive a webhook when a SIM in
-     *                            the Fleet originates a machine-to-machine Command
+     *                            the Fleet originates a machine-to-machine SMS via
+     *                            Commands
      * @return $this Fluent Builder
      */
     public function setCommandsUrl(string $commandsUrl): self {
@@ -113,7 +150,7 @@ class CreateFleetOptions extends Options {
     }
 
     /**
-     * A string representing the HTTP method to use when making a request to `commands_url`. Can be one of POST or GET. Defaults to POST.
+     * A string representing the HTTP method to use when making a request to `commands_url`. Can be one of `POST` or `GET`. Defaults to `POST`.
      *
      * @param string $commandsMethod A string representing the HTTP method to use
      *                               when making a request to `commands_url`
@@ -135,13 +172,48 @@ class CreateFleetOptions extends Options {
     }
 }
 
+class ReadFleetOptions extends Options {
+    /**
+     * @param string $networkAccessProfile The SID or unique name of the Network
+     *                                     Access Profile of the Fleet
+     */
+    public function __construct(string $networkAccessProfile = Values::NONE) {
+        $this->options['networkAccessProfile'] = $networkAccessProfile;
+    }
+
+    /**
+     * The SID or unique name of the Network Access Profile that controls which cellular networks the Fleet's SIMs can connect to.
+     *
+     * @param string $networkAccessProfile The SID or unique name of the Network
+     *                                     Access Profile of the Fleet
+     * @return $this Fluent Builder
+     */
+    public function setNetworkAccessProfile(string $networkAccessProfile): self {
+        $this->options['networkAccessProfile'] = $networkAccessProfile;
+        return $this;
+    }
+
+    /**
+     * Provide a friendly representation
+     *
+     * @return string Machine friendly representation
+     */
+    public function __toString(): string {
+        $options = \http_build_query(Values::of($this->options), '', ' ');
+        return '[Twilio.Supersim.V1.ReadFleetOptions ' . $options . ']';
+    }
+}
+
 class UpdateFleetOptions extends Options {
     /**
      * @param string $uniqueName An application-defined string that uniquely
      *                           identifies the resource
+     * @param string $networkAccessProfile The SID or unique name of the Network
+     *                                     Access Profile of the Fleet
      */
-    public function __construct(string $uniqueName = Values::NONE) {
+    public function __construct(string $uniqueName = Values::NONE, string $networkAccessProfile = Values::NONE) {
         $this->options['uniqueName'] = $uniqueName;
+        $this->options['networkAccessProfile'] = $networkAccessProfile;
     }
 
     /**
@@ -153,6 +225,18 @@ class UpdateFleetOptions extends Options {
      */
     public function setUniqueName(string $uniqueName): self {
         $this->options['uniqueName'] = $uniqueName;
+        return $this;
+    }
+
+    /**
+     * The SID or unique name of the Network Access Profile that will control which cellular networks the Fleet's SIMs can connect to.
+     *
+     * @param string $networkAccessProfile The SID or unique name of the Network
+     *                                     Access Profile of the Fleet
+     * @return $this Fluent Builder
+     */
+    public function setNetworkAccessProfile(string $networkAccessProfile): self {
+        $this->options['networkAccessProfile'] = $networkAccessProfile;
         return $this;
     }
 

@@ -1,3 +1,0 @@
-services:
-    smsup.smsupapi.sender:
-        class: smsup\SmsupapiBundle\Clases\SmsupSender

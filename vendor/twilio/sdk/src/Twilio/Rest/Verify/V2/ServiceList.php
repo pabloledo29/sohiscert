@@ -52,6 +52,10 @@ class ServiceList extends ListResource {
             'TtsName' => $options['ttsName'],
             'Psd2Enabled' => Serialize::booleanToString($options['psd2Enabled']),
             'DoNotShareWarningEnabled' => Serialize::booleanToString($options['doNotShareWarningEnabled']),
+            'CustomCodeEnabled' => Serialize::booleanToString($options['customCodeEnabled']),
+            'Push.IncludeDate' => Serialize::booleanToString($options['pushIncludeDate']),
+            'Push.ApnCredentialSid' => $options['pushApnCredentialSid'],
+            'Push.FcmCredentialSid' => $options['pushFcmCredentialSid'],
         ]);
 
         $payload = $this->version->create('POST', $this->uri, [], $data);

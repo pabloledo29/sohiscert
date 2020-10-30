@@ -16,10 +16,10 @@ use Twilio\Version;
 
 /**
  * @property string $accountSid
- * @property string $phoneNumber
- * @property string $friendlyName
- * @property int $validationCode
  * @property string $callSid
+ * @property string $friendlyName
+ * @property string $phoneNumber
+ * @property string $validationCode
  */
 class ValidationRequestInstance extends InstanceResource {
     /**
@@ -35,10 +35,10 @@ class ValidationRequestInstance extends InstanceResource {
         // Marshaled Properties
         $this->properties = [
             'accountSid' => Values::array_get($payload, 'account_sid'),
-            'phoneNumber' => Values::array_get($payload, 'phone_number'),
-            'friendlyName' => Values::array_get($payload, 'friendly_name'),
-            'validationCode' => Values::array_get($payload, 'validation_code'),
             'callSid' => Values::array_get($payload, 'call_sid'),
+            'friendlyName' => Values::array_get($payload, 'friendly_name'),
+            'phoneNumber' => Values::array_get($payload, 'phone_number'),
+            'validationCode' => Values::array_get($payload, 'validation_code'),
         ];
 
         $this->solution = ['accountSid' => $accountSid, ];

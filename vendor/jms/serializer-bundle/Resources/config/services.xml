@@ -74,16 +74,31 @@
 
         <!-- extra metadata driver -->
         <service id="jms_serializer.metadata.doctrine_type_driver" class="JMS\Serializer\Metadata\Driver\DoctrineTypeDriver" public="false">
-            <argument type="service" id="jms_serializer.metadata.chain_driver" />
+            <argument />
             <argument type="service" id="doctrine" />
+            <argument type="service" id="jms_serializer.type_parser" />
         </service>
         <service id="jms_serializer.metadata.doctrine_phpcr_type_driver" class="JMS\Serializer\Metadata\Driver\DoctrinePHPCRTypeDriver" public="false">
-            <argument type="service" id="jms_serializer.metadata.chain_driver" />
+            <argument />
             <argument type="service" id="doctrine_phpcr" />
+            <argument type="service" id="jms_serializer.type_parser" />
         </service>
+        <service id="jms_serializer.metadata.typed_properties_driver" class="JMS\Serializer\Metadata\Driver\TypedPropertiesDriver" public="false">
+            <argument id="jms_serializer.metadata.typed_properties_driver.inner" type="service"/>
+            <argument type="service" id="jms_serializer.type_parser" on-invalid="null" />
+        </service>
+
+        <service id="jms_serializer.metadata.service_locator" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+            <argument type="collection">
+                <argument key="metadata_driver" type="service" id="jms_serializer.metadata_driver" />
+            </argument>
+
+            <tag name="container.service_locator" />
+        </service>
+
         <service id="jms_serializer.metadata.lazy_loading_driver" class="Metadata\Driver\LazyLoadingDriver" public="false">
-            <argument type="service" id="service_container" />
-            <argument>jms_serializer.metadata_driver</argument>
+            <argument type="service" id="jms_serializer.metadata.service_locator"/>
+            <argument>metadata_driver</argument>
         </service>
 
         <service id="jms_serializer.metadata_driver" alias="jms_serializer.metadata.chain_driver" public="true"/>

@@ -13,6 +13,8 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 use Symfony\Component\Stopwatch\Stopwatch;
+use JMS\Serializer\Metadata\Driver\TypedPropertiesDriver;
+use Symfony\Component\Templating\Helper\Helper;
 
 class JMSSerializerExtension extends ConfigurableExtension
 {
@@ -58,7 +60,16 @@ class JMSSerializerExtension extends ConfigurableExtension
             $container->setAlias('jms_serializer.naming_strategy', $config['property_naming']['id']);
         }
 
+        if (!class_exists(Helper::class)) {
+            $container->removeDefinition('jms_serializer.templating.helper.serializer');
+        }
+
         $bundles = $container->getParameter('kernel.bundles');
+
+        if (!isset($bundles['TwigBundle'])) {
+            $container->removeDefinition('jms_serializer.twig_extension.serializer');
+            $container->removeDefinition('jms_serializer.twig_extension.serializer_runtime_helper');
+        }
 
         if (!empty($config['expression_evaluator']['id'])) {
             $container
@@ -95,6 +106,13 @@ class JMSSerializerExtension extends ConfigurableExtension
 
         if ($config['metadata']['infer_types_from_doctrine_metadata'] === false) {
             $container->setParameter('jms_serializer.infer_types_from_doctrine_metadata', false);
+        }
+
+        if (PHP_VERSION_ID >= 70400 && class_exists(TypedPropertiesDriver::class)) {
+            $container->getDefinition('jms_serializer.metadata.typed_properties_driver')
+                ->setDecoratedService('jms_serializer.metadata_driver')
+                ->setPublic(false)
+            ;
         }
 
         $container
@@ -165,6 +183,7 @@ class JMSSerializerExtension extends ConfigurableExtension
 
             if (isset($config['default_context'][$configKey]['id'])) {
                 $container->setAlias('jms_serializer.' . $configKey . '_context_factory', new Alias($config['default_context'][$configKey]['id'], true));
+                $container->setAlias('JMS\\Serializer\\ContextFactory\\' . ucfirst($configKey) . 'ContextFactoryInterface', new Alias($config['default_context'][$configKey]['id'], true));
                 $container->removeDefinition($serviceId);
                 continue;
             }

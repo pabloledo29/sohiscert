@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace JMS\Serializer\Metadata\Driver;
 
-use Doctrine\Common\Persistence\Mapping\ClassMetadata as DoctrineClassMetadata;
+use Doctrine\Persistence\Mapping\ClassMetadata as DoctrineClassMetadata;
 use JMS\Serializer\Metadata\PropertyMetadata;
 
 /**
@@ -23,9 +23,11 @@ class DoctrinePHPCRTypeDriver extends AbstractDoctrineTypeDriver
     protected function setPropertyType(DoctrineClassMetadata $doctrineMetadata, PropertyMetadata $propertyMetadata): void
     {
         $propertyName = $propertyMetadata->name;
-        if ($doctrineMetadata->hasField($propertyName)
+        if (
+            $doctrineMetadata->hasField($propertyName)
             && ($typeOfFiled = $doctrineMetadata->getTypeOfField($propertyName))
-            && ($fieldType = $this->normalizeFieldType($typeOfFiled))) {
+            && ($fieldType = $this->normalizeFieldType($typeOfFiled))
+        ) {
             $field = $doctrineMetadata->getFieldMapping($propertyName);
             if (!empty($field['multivalue'])) {
                 $fieldType = 'array';

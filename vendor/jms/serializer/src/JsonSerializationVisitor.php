@@ -15,12 +15,12 @@ final class JsonSerializationVisitor extends AbstractVisitor implements Serializ
     /**
      * @var int
      */
-    private $options = JSON_PRESERVE_ZERO_FRACTION;
+    private $options;
 
     /**
      * @var array
      */
-    private $dataStack = [];
+    private $dataStack;
     /**
      * @var \ArrayObject
      */
@@ -103,6 +103,7 @@ final class JsonSerializationVisitor extends AbstractVisitor implements Serializ
         }
 
         \array_pop($this->dataStack);
+
         return $rs;
     }
 
@@ -156,8 +157,6 @@ final class JsonSerializationVisitor extends AbstractVisitor implements Serializ
     }
 
     /**
-     * @deprecated Will be removed in 3.0
-     *
      * Checks if some data key exists.
      */
     public function hasData(string $key): bool

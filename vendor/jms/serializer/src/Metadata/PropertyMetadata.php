@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace JMS\Serializer\Metadata;
 
 use JMS\Serializer\Exception\InvalidMetadataException;
+use JMS\Serializer\Expression\Expression;
 use Metadata\PropertyMetadata as BasePropertyMetadata;
 
 class PropertyMetadata extends BasePropertyMetadata
@@ -124,7 +125,7 @@ class PropertyMetadata extends BasePropertyMetadata
     public $maxDepth = null;
 
     /**
-     * @var string
+     * @var string|Expression
      */
     public $excludeIf = null;
 
@@ -286,15 +287,19 @@ class PropertyMetadata extends BasePropertyMetadata
         if (isset($unserialized['xmlEntryNamespace'])) {
             $this->xmlEntryNamespace = $unserialized['xmlEntryNamespace'];
         }
+
         if (isset($unserialized['xmlCollectionSkipWhenEmpty'])) {
             $this->xmlCollectionSkipWhenEmpty = $unserialized['xmlCollectionSkipWhenEmpty'];
         }
+
         if (isset($unserialized['excludeIf'])) {
             $this->excludeIf = $unserialized['excludeIf'];
         }
+
         if (isset($unserialized['skipWhenEmpty'])) {
             $this->skipWhenEmpty = $unserialized['skipWhenEmpty'];
         }
+
         if (isset($unserialized['forceReflectionAccess'])) {
             $this->forceReflectionAccess = $unserialized['forceReflectionAccess'];
         }

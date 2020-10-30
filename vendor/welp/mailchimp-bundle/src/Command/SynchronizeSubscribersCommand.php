@@ -68,9 +68,8 @@ class SynchronizeSubscribersCommand extends Command
         $output->writeln(sprintf('<info>%s</info>', $this->getDescription()));
 
         $lists = $this->listProvider->getLists();
-       
+
         foreach ($lists as $list) {
-            
             $output->writeln(sprintf('Synchronize list %s', $list->getListId()));
             $batchesResult = $this->listSynchronizer->synchronize($list);
             if ($input->getOption('follow-sync')) {

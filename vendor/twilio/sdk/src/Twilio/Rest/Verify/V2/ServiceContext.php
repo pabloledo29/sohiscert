@@ -13,10 +13,13 @@ use Twilio\Exceptions\TwilioException;
 use Twilio\InstanceContext;
 use Twilio\ListResource;
 use Twilio\Options;
+use Twilio\Rest\Verify\V2\Service\AccessTokenList;
+use Twilio\Rest\Verify\V2\Service\EntityList;
 use Twilio\Rest\Verify\V2\Service\MessagingConfigurationList;
 use Twilio\Rest\Verify\V2\Service\RateLimitList;
 use Twilio\Rest\Verify\V2\Service\VerificationCheckList;
 use Twilio\Rest\Verify\V2\Service\VerificationList;
+use Twilio\Rest\Verify\V2\Service\WebhookList;
 use Twilio\Serialize;
 use Twilio\Values;
 use Twilio\Version;
@@ -26,15 +29,23 @@ use Twilio\Version;
  * @property VerificationCheckList $verificationChecks
  * @property RateLimitList $rateLimits
  * @property MessagingConfigurationList $messagingConfigurations
+ * @property EntityList $entities
+ * @property WebhookList $webhooks
+ * @property AccessTokenList $accessTokens
  * @method \Twilio\Rest\Verify\V2\Service\VerificationContext verifications(string $sid)
  * @method \Twilio\Rest\Verify\V2\Service\RateLimitContext rateLimits(string $sid)
  * @method \Twilio\Rest\Verify\V2\Service\MessagingConfigurationContext messagingConfigurations(string $country)
+ * @method \Twilio\Rest\Verify\V2\Service\EntityContext entities(string $identity)
+ * @method \Twilio\Rest\Verify\V2\Service\WebhookContext webhooks(string $sid)
  */
 class ServiceContext extends InstanceContext {
     protected $_verifications;
     protected $_verificationChecks;
     protected $_rateLimits;
     protected $_messagingConfigurations;
+    protected $_entities;
+    protected $_webhooks;
+    protected $_accessTokens;
 
     /**
      * Initialize the ServiceContext
@@ -92,6 +103,10 @@ class ServiceContext extends InstanceContext {
             'TtsName' => $options['ttsName'],
             'Psd2Enabled' => Serialize::booleanToString($options['psd2Enabled']),
             'DoNotShareWarningEnabled' => Serialize::booleanToString($options['doNotShareWarningEnabled']),
+            'CustomCodeEnabled' => Serialize::booleanToString($options['customCodeEnabled']),
+            'Push.IncludeDate' => Serialize::booleanToString($options['pushIncludeDate']),
+            'Push.ApnCredentialSid' => $options['pushApnCredentialSid'],
+            'Push.FcmCredentialSid' => $options['pushFcmCredentialSid'],
         ]);
 
         $payload = $this->version->update('POST', $this->uri, [], $data);
@@ -144,6 +159,39 @@ class ServiceContext extends InstanceContext {
         }
 
         return $this->_messagingConfigurations;
+    }
+
+    /**
+     * Access the entities
+     */
+    protected function getEntities(): EntityList {
+        if (!$this->_entities) {
+            $this->_entities = new EntityList($this->version, $this->solution['sid']);
+        }
+
+        return $this->_entities;
+    }
+
+    /**
+     * Access the webhooks
+     */
+    protected function getWebhooks(): WebhookList {
+        if (!$this->_webhooks) {
+            $this->_webhooks = new WebhookList($this->version, $this->solution['sid']);
+        }
+
+        return $this->_webhooks;
+    }
+
+    /**
+     * Access the accessTokens
+     */
+    protected function getAccessTokens(): AccessTokenList {
+        if (!$this->_accessTokens) {
+            $this->_accessTokens = new AccessTokenList($this->version, $this->solution['sid']);
+        }
+
+        return $this->_accessTokens;
     }
 
     /**

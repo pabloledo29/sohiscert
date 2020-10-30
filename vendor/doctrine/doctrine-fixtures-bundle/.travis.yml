@@ -1,5 +1,4 @@
 language: php
-sudo: false
 cache:
     directories:
         - $HOME/.composer/cache/files
@@ -8,7 +7,11 @@ php:
     - 7.1
     - 7.2
     - 7.3
-    - 7.4snapshot
+    - 7.4
+
+env:
+    global:
+        - SYMFONY_DEPRECATIONS_HELPER="max[self]=0&max[direct]=0"
 
 jobs:
     include:
@@ -25,6 +28,12 @@ jobs:
         - stage: test
           php: 7.3
           env: DEPENDENCIES="dev"
+
+        - stage: test
+          php: nightly
+          before_install:
+              - composer config platform.php 7.4.99
+              - composer config minimum-stability dev
 
         # Run phpcs
         - stage: Code Quality

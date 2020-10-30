@@ -21,8 +21,6 @@ use Twilio\Values;
 use Twilio\Version;
 
 /**
- * PLEASE NOTE that this class contains beta products that are subject to change. Use them with caution.
- *
  * @property ParticipantList $participants
  * @property MessageList $messages
  * @property WebhookList $webhooks
@@ -67,6 +65,10 @@ class ConversationContext extends InstanceContext {
             'DateUpdated' => Serialize::iso8601DateTime($options['dateUpdated']),
             'Attributes' => $options['attributes'],
             'MessagingServiceSid' => $options['messagingServiceSid'],
+            'State' => $options['state'],
+            'Timers.Inactive' => $options['timersInactive'],
+            'Timers.Closed' => $options['timersClosed'],
+            'UniqueName' => $options['uniqueName'],
         ]);
         $headers = Values::of(['X-Twilio-Webhook-Enabled' => $options['xTwilioWebhookEnabled'], ]);
 

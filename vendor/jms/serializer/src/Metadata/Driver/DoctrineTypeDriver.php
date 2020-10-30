@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace JMS\Serializer\Metadata\Driver;
 
-use Doctrine\Common\Persistence\Mapping\ClassMetadata as DoctrineClassMetadata;
+use Doctrine\Persistence\Mapping\ClassMetadata as DoctrineClassMetadata;
 use JMS\Serializer\Metadata\ClassMetadata;
 use JMS\Serializer\Metadata\PropertyMetadata;
 
@@ -16,7 +16,8 @@ class DoctrineTypeDriver extends AbstractDoctrineTypeDriver
 {
     protected function setDiscriminator(DoctrineClassMetadata $doctrineMetadata, ClassMetadata $classMetadata): void
     {
-        if (empty($classMetadata->discriminatorMap) && !$classMetadata->discriminatorDisabled
+        if (
+            empty($classMetadata->discriminatorMap) && !$classMetadata->discriminatorDisabled
             && !empty($doctrineMetadata->discriminatorMap) && $doctrineMetadata->isRootEntity()
         ) {
             $classMetadata->setDiscriminator(
@@ -29,9 +30,11 @@ class DoctrineTypeDriver extends AbstractDoctrineTypeDriver
     protected function setPropertyType(DoctrineClassMetadata $doctrineMetadata, PropertyMetadata $propertyMetadata): void
     {
         $propertyName = $propertyMetadata->name;
-        if ($doctrineMetadata->hasField($propertyName)
+        if (
+            $doctrineMetadata->hasField($propertyName)
             && ($typeOfFiled = $doctrineMetadata->getTypeOfField($propertyName))
-            && ($fieldType = $this->normalizeFieldType($typeOfFiled))) {
+            && ($fieldType = $this->normalizeFieldType($typeOfFiled))
+        ) {
             $propertyMetadata->setType($this->typeParser->parse($fieldType));
         } elseif ($doctrineMetadata->hasAssociation($propertyName)) {
             $targetEntity = $doctrineMetadata->getAssociationTargetClass($propertyName);

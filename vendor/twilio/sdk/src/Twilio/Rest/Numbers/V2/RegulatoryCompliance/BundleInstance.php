@@ -13,6 +13,7 @@ use Twilio\Deserialize;
 use Twilio\Exceptions\TwilioException;
 use Twilio\InstanceResource;
 use Twilio\Options;
+use Twilio\Rest\Numbers\V2\RegulatoryCompliance\Bundle\EvaluationList;
 use Twilio\Rest\Numbers\V2\RegulatoryCompliance\Bundle\ItemAssignmentList;
 use Twilio\Values;
 use Twilio\Version;
@@ -23,6 +24,7 @@ use Twilio\Version;
  * @property string $regulationSid
  * @property string $friendlyName
  * @property string $status
+ * @property \DateTime $validUntil
  * @property string $email
  * @property string $statusCallback
  * @property \DateTime $dateCreated
@@ -31,6 +33,7 @@ use Twilio\Version;
  * @property array $links
  */
 class BundleInstance extends InstanceResource {
+    protected $_evaluations;
     protected $_itemAssignments;
 
     /**
@@ -50,6 +53,7 @@ class BundleInstance extends InstanceResource {
             'regulationSid' => Values::array_get($payload, 'regulation_sid'),
             'friendlyName' => Values::array_get($payload, 'friendly_name'),
             'status' => Values::array_get($payload, 'status'),
+            'validUntil' => Deserialize::dateTime(Values::array_get($payload, 'valid_until')),
             'email' => Values::array_get($payload, 'email'),
             'statusCallback' => Values::array_get($payload, 'status_callback'),
             'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
@@ -94,6 +98,23 @@ class BundleInstance extends InstanceResource {
      */
     public function update(array $options = []): BundleInstance {
         return $this->proxy()->update($options);
+    }
+
+    /**
+     * Delete the BundleInstance
+     *
+     * @return bool True if delete succeeds, false otherwise
+     * @throws TwilioException When an HTTP error occurs.
+     */
+    public function delete(): bool {
+        return $this->proxy()->delete();
+    }
+
+    /**
+     * Access the evaluations
+     */
+    protected function getEvaluations(): EvaluationList {
+        return $this->proxy()->evaluations;
     }
 
     /**

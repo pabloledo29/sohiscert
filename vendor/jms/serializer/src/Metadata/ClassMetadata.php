@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace JMS\Serializer\Metadata;
 
 use JMS\Serializer\Exception\InvalidMetadataException;
+use JMS\Serializer\Expression\Expression;
 use JMS\Serializer\Ordering\AlphabeticalPropertyOrderingStrategy;
 use JMS\Serializer\Ordering\CustomPropertyOrderingStrategy;
 use JMS\Serializer\Ordering\IdenticalPropertyOrderingStrategy;
@@ -126,6 +127,11 @@ class ClassMetadata extends MergeableClassMetadata
      */
     public $xmlDiscriminatorNamespace;
 
+    /**
+     * @var string|Expression
+     */
+    public $excludeIf;
+
     public function setDiscriminator(string $fieldName, array $map, array $groups = []): void
     {
         if (empty($fieldName)) {
@@ -203,6 +209,7 @@ class ClassMetadata extends MergeableClassMetadata
         if (!$object instanceof ClassMetadata) {
             throw new InvalidMetadataException('$object must be an instance of ClassMetadata.');
         }
+
         parent::merge($object);
 
         $this->preSerializeMethods = array_merge($this->preSerializeMethods, $object->preSerializeMethods);
@@ -210,6 +217,10 @@ class ClassMetadata extends MergeableClassMetadata
         $this->postDeserializeMethods = array_merge($this->postDeserializeMethods, $object->postDeserializeMethods);
         $this->xmlRootName = $object->xmlRootName;
         $this->xmlRootNamespace = $object->xmlRootNamespace;
+        if (null !== $object->excludeIf) {
+            $this->excludeIf = $object->excludeIf;
+        }
+
         $this->xmlNamespaces = array_merge($this->xmlNamespaces, $object->xmlNamespaces);
 
         if ($object->accessorOrder) {
@@ -237,6 +248,7 @@ class ClassMetadata extends MergeableClassMetadata
             $this->discriminatorFieldName = $object->discriminatorFieldName;
             $this->discriminatorMap = $object->discriminatorMap;
             $this->discriminatorBaseClass = $object->discriminatorBaseClass;
+            $this->discriminatorGroups = $object->discriminatorGroups;
         }
 
         $this->handleDiscriminatorProperty();
@@ -287,6 +299,7 @@ class ClassMetadata extends MergeableClassMetadata
             $this->discriminatorValue,
             $this->discriminatorMap,
             $this->discriminatorGroups,
+            $this->excludeIf,
             parent::serialize(),
             'discriminatorGroups' => $this->discriminatorGroups,
             'xmlDiscriminatorAttribute' => $this->xmlDiscriminatorAttribute,
@@ -327,12 +340,14 @@ class ClassMetadata extends MergeableClassMetadata
             $this->discriminatorValue,
             $this->discriminatorMap,
             $this->discriminatorGroups,
+            $this->excludeIf,
             $parentStr,
         ] = $unserialized;
 
         if (isset($unserialized['discriminatorGroups'])) {
             $this->discriminatorGroups = $unserialized['discriminatorGroups'];
         }
+
         if (isset($unserialized['usingExpression'])) {
             $this->usingExpression = $unserialized['usingExpression'];
         }
@@ -366,7 +381,8 @@ class ClassMetadata extends MergeableClassMetadata
 
     private function handleDiscriminatorProperty(): void
     {
-        if ($this->discriminatorMap
+        if (
+            $this->discriminatorMap
             && !$this->getReflection()->isAbstract()
             && !$this->getReflection()->isInterface()
         ) {
@@ -380,7 +396,8 @@ class ClassMetadata extends MergeableClassMetadata
 
             $this->discriminatorValue = $typeValue;
 
-            if (isset($this->propertyMetadata[$this->discriminatorFieldName])
+            if (
+                isset($this->propertyMetadata[$this->discriminatorFieldName])
                 && !$this->propertyMetadata[$this->discriminatorFieldName] instanceof StaticPropertyMetadata
             ) {
                 throw new InvalidMetadataException(sprintf(

@@ -13,12 +13,12 @@ namespace Symfony\Flex\Command;
 
 use Composer\Command\BaseCommand;
 use Composer\Downloader\TransportException;
+use Composer\Util\HttpDownloader;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Flex\InformationOperation;
 use Symfony\Flex\Lock;
-use Symfony\Flex\ParallelDownloader;
 use Symfony\Flex\Recipe;
 
 /**
@@ -32,7 +32,7 @@ class RecipesCommand extends BaseCommand
     private $symfonyLock;
     private $downloader;
 
-    public function __construct(/* cannot be type-hinted */ $flex, Lock $symfonyLock, ParallelDownloader $downloader)
+    public function __construct(/* cannot be type-hinted */ $flex, Lock $symfonyLock, $downloader)
     {
         $this->flex = $flex;
         $this->symfonyLock = $symfonyLock;
@@ -137,6 +137,7 @@ class RecipesCommand extends BaseCommand
         $lockRef = $recipeLock['recipe']['ref'] ?? null;
         $lockRepo = $recipeLock['recipe']['repo'] ?? null;
         $lockFiles = $recipeLock['files'] ?? null;
+        $lockBranch = $recipeLock['recipe']['branch'] ?? null;
 
         $status = '<comment>up to date</comment>';
         if ($recipe->isAuto()) {
@@ -147,7 +148,6 @@ class RecipesCommand extends BaseCommand
             $status = '<comment>update available</comment>';
         }
 
-        $branch = $recipeLock['recipe']['branch'] ?? 'master';
         $gitSha = null;
         $commitDate = null;
         if (null !== $lockRef && null !== $lockRepo) {
@@ -155,7 +155,7 @@ class RecipesCommand extends BaseCommand
                 list($gitSha, $commitDate) = $this->findRecipeCommitDataFromTreeRef(
                     $recipe->getName(),
                     $lockRepo,
-                    $branch,
+                    $lockBranch ?? '',
                     $recipeLock['version'],
                     $lockRef
                 );
@@ -172,7 +172,7 @@ class RecipesCommand extends BaseCommand
                 'https://%s/tree/%s/%s/%s',
                 $lockRepo,
                 // if something fails, default to the branch as the closest "sha"
-                $gitSha ?? $branch,
+                $gitSha ?? $lockBranch,
                 $recipe->getName(),
                 $recipeLock['version']
             );
@@ -186,7 +186,7 @@ class RecipesCommand extends BaseCommand
             $historyUrl = sprintf(
                 'https://%s/commits/%s/%s',
                 $lockRepo,
-                $branch,
+                $lockBranch,
                 $recipe->getName()
             );
 
@@ -354,7 +354,11 @@ class RecipesCommand extends BaseCommand
 
     private function requestGitHubApi(string $path)
     {
-        $contents = $this->downloader->getContents('api.github.com', $path, false);
+        if ($this->downloader instanceof HttpDownloader) {
+            $contents = $this->downloader->get($path)->getBody();
+        } else {
+            $contents = $this->downloader->getContents('api.github.com', $path, false);
+        }
 
         return json_decode($contents, true);
     }

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace JMS\Serializer\Metadata\Driver;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\Common\Persistence\Mapping\ClassMetadata as DoctrineClassMetadata;
+use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Persistence\Mapping\ClassMetadata as DoctrineClassMetadata;
 use JMS\Serializer\Metadata\ClassMetadata;
 use JMS\Serializer\Metadata\ExpressionPropertyMetadata;
 use JMS\Serializer\Metadata\PropertyMetadata;
@@ -79,8 +79,8 @@ abstract class AbstractDoctrineTypeDriver implements DriverInterface
 
     public function loadMetadataForClass(\ReflectionClass $class): ?BaseClassMetadata
     {
-        /** @var ClassMetadata $classMetadata */
         $classMetadata = $this->delegate->loadMetadataForClass($class);
+        \assert($classMetadata instanceof ClassMetadata);
 
         // Abort if the given class is not a mapped entity
         if (!$doctrineMetadata = $this->tryLoadingDoctrineMetadata($class->name)) {
@@ -92,8 +92,6 @@ abstract class AbstractDoctrineTypeDriver implements DriverInterface
         // We base our scan on the internal driver's property list so that we
         // respect any internal white/blacklisting like in the AnnotationDriver
         foreach ($classMetadata->propertyMetadata as $key => $propertyMetadata) {
-            /** @var $propertyMetadata PropertyMetadata */
-
             // If the inner driver provides a type, don't guess anymore.
             if ($propertyMetadata->type || $this->isVirtualProperty($propertyMetadata)) {
                 continue;

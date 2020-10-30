@@ -13,6 +13,8 @@ use Twilio\Domain;
 use Twilio\Exceptions\TwilioException;
 use Twilio\InstanceContext;
 use Twilio\Rest\Preview\TrustedComms\BrandedCallList;
+use Twilio\Rest\Preview\TrustedComms\BrandedChannelList;
+use Twilio\Rest\Preview\TrustedComms\BrandsInformationList;
 use Twilio\Rest\Preview\TrustedComms\BusinessList;
 use Twilio\Rest\Preview\TrustedComms\CpsList;
 use Twilio\Rest\Preview\TrustedComms\CurrentCallList;
@@ -21,14 +23,19 @@ use Twilio\Version;
 
 /**
  * @property BrandedCallList $brandedCalls
+ * @property BrandedChannelList $brandedChannels
+ * @property BrandsInformationList $brandsInformation
  * @property BusinessList $businesses
  * @property CpsList $cps
  * @property CurrentCallList $currentCalls
  * @property PhoneCallList $phoneCalls
+ * @method \Twilio\Rest\Preview\TrustedComms\BrandedChannelContext brandedChannels(string $sid)
  * @method \Twilio\Rest\Preview\TrustedComms\BusinessContext businesses(string $sid)
  */
 class TrustedComms extends Version {
     protected $_brandedCalls;
+    protected $_brandedChannels;
+    protected $_brandsInformation;
     protected $_businesses;
     protected $_cps;
     protected $_currentCalls;
@@ -49,6 +56,20 @@ class TrustedComms extends Version {
             $this->_brandedCalls = new BrandedCallList($this);
         }
         return $this->_brandedCalls;
+    }
+
+    protected function getBrandedChannels(): BrandedChannelList {
+        if (!$this->_brandedChannels) {
+            $this->_brandedChannels = new BrandedChannelList($this);
+        }
+        return $this->_brandedChannels;
+    }
+
+    protected function getBrandsInformation(): BrandsInformationList {
+        if (!$this->_brandsInformation) {
+            $this->_brandsInformation = new BrandsInformationList($this);
+        }
+        return $this->_brandsInformation;
     }
 
     protected function getBusinesses(): BusinessList {

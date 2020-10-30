@@ -83,7 +83,9 @@ abstract class Version {
         if (\is_array($content)) {
             $message .= isset($content['message']) ? ': ' . $content['message'] : '';
             $code = isset($content['code']) ? $content['code'] : $response->getStatusCode();
-            return new RestException($message, $code, $response->getStatusCode());
+            $moreInfo = $content['more_info'] ?? '';
+            $details = $content['details'] ?? [];
+            return new RestException($message, $code, $response->getStatusCode(), $moreInfo, $details);
         }
 
         return new RestException($message, $response->getStatusCode(), $response->getStatusCode());
@@ -107,7 +109,8 @@ abstract class Version {
             $timeout
         );
 
-        if ($response->getStatusCode() < 200 || $response->getStatusCode() >= 300) {
+        // 3XX response codes are allowed here to allow for 307 redirect from Deactivations API.
+        if ($response->getStatusCode() < 200 || $response->getStatusCode() >= 400) {
             throw $this->exception($response, 'Unable to fetch record');
         }
 
@@ -165,13 +168,8 @@ abstract class Version {
     }
 
     public function readLimits(int $limit = null, int $pageSize = null): array {
-        $pageLimit = Values::NONE;
-
-        if ($limit) {
-            if ($pageSize === null) {
-                $pageSize = \min($limit, self::MAX_PAGE_SIZE);
-            }
-            $pageLimit = (int)(\ceil($limit / (float)$pageSize));
+        if ($limit && $pageSize === null) {
+            $pageSize = $limit;
         }
 
         $pageSize = \min($pageSize, self::MAX_PAGE_SIZE);
@@ -179,7 +177,7 @@ abstract class Version {
         return [
             'limit' => $limit ?: Values::NONE,
             'pageSize' => $pageSize ?: Values::NONE,
-            'pageLimit' => $pageLimit,
+            'pageLimit' => Values::NONE,
         ];
     }
 

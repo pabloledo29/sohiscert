@@ -86,8 +86,8 @@ EOF
 
         if (!$filenames) {
             // @deprecated to be removed in 5.0
-            if (0 === ftell(STDIN)) {
-                @trigger_error('Piping content from STDIN to the "lint:twig" command without passing the dash symbol "-" as argument is deprecated since Symfony 4.4.', E_USER_DEPRECATED);
+            if (0 === ftell(\STDIN)) {
+                @trigger_error('Piping content from STDIN to the "lint:twig" command without passing the dash symbol "-" as argument is deprecated since Symfony 4.4.', \E_USER_DEPRECATED);
 
                 return $this->display($input, $output, $io, [$this->validate(file_get_contents('php://stdin'), uniqid('sf_', true))]);
             }
@@ -108,9 +108,9 @@ EOF
 
         if ($showDeprecations) {
             $prevErrorHandler = set_error_handler(static function ($level, $message, $file, $line) use (&$prevErrorHandler) {
-                if (E_USER_DEPRECATED === $level) {
+                if (\E_USER_DEPRECATED === $level) {
                     $templateLine = 0;
-                    if (preg_match('/ at line (\d+) /', $message, $matches)) {
+                    if (preg_match('/ at line (\d+)[ .]/', $message, $matches)) {
                         $templateLine = $matches[1];
                     }
 
@@ -152,7 +152,7 @@ EOF
             return Finder::create()->files()->in($filename)->name('*.twig');
         }
 
-        throw new RuntimeException(sprintf('File or directory "%s" is not readable', $filename));
+        throw new RuntimeException(sprintf('File or directory "%s" is not readable.', $filename));
     }
 
     private function validate(string $template, string $file): array
@@ -221,7 +221,7 @@ EOF
             }
         });
 
-        $output->writeln(json_encode($filesInfo, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        $output->writeln(json_encode($filesInfo, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES));
 
         return min($errors, 1);
     }
@@ -234,6 +234,14 @@ EOF
             $output->text(sprintf('<error> ERROR </error> in %s (line %s)', $file, $line));
         } else {
             $output->text(sprintf('<error> ERROR </error> (line %s)', $line));
+        }
+
+        // If the line is not known (this might happen for deprecations if we fail at detecting the line for instance),
+        // we render the message without context, to ensure the message is displayed.
+        if ($line <= 0) {
+            $output->text(sprintf('<error> >> %s</error> ', $exception->getRawMessage()));
+
+            return;
         }
 
         foreach ($this->getContext($template, $line) as $lineNumber => $code) {

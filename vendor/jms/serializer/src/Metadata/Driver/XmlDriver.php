@@ -57,6 +57,7 @@ class XmlDriver extends AbstractFileDriver
         if (!$elems = $elem->xpath("./class[@name = '" . $name . "']")) {
             throw new InvalidMetadataException(sprintf('Could not find class %s inside XML element.', $name));
         }
+
         $elem = reset($elems);
 
         $metadata->fileResources[] = $path;
@@ -64,9 +65,15 @@ class XmlDriver extends AbstractFileDriver
         if (false !== $fileResource) {
             $metadata->fileResources[] = $fileResource;
         }
+
         $exclusionPolicy = strtoupper((string) $elem->attributes()->{'exclusion-policy'}) ?: 'NONE';
         $exclude = $elem->attributes()->exclude;
         $excludeAll = null !== $exclude ? 'true' === strtolower((string) $exclude) : false;
+
+        if (null !== $excludeIf = $elem->attributes()->{'exclude-if'}) {
+            $metadata->excludeIf = $this->parseExpression((string) $excludeIf);
+        }
+
         $classAccessType = (string) ($elem->attributes()->{'access-type'} ?: PropertyMetadata::ACCESS_TYPE_PROPERTY);
 
         $propertiesMetadata = [];
@@ -83,6 +90,7 @@ class XmlDriver extends AbstractFileDriver
         if (null !== $xmlRootNamespace = $elem->attributes()->{'xml-root-namespace'}) {
             $metadata->xmlRootNamespace = (string) $xmlRootNamespace;
         }
+
         if (null !== $xmlRootPrefix = $elem->attributes()->{'xml-root-prefix'}) {
             $metadata->xmlRootPrefix = (string) $xmlRootPrefix;
         }
@@ -106,6 +114,7 @@ class XmlDriver extends AbstractFileDriver
             foreach ($elem->xpath('./discriminator-groups/group') as $entry) {
                 $discriminatorGroups[] = (string) $entry;
             }
+
             $metadata->setDiscriminator($discriminatorFieldName, $discriminatorMap, $discriminatorGroups);
         }
 
@@ -127,9 +136,11 @@ class XmlDriver extends AbstractFileDriver
             if (isset($xmlDiscriminator->attributes()->attribute)) {
                 $metadata->xmlDiscriminatorAttribute = 'true' === (string) $xmlDiscriminator->attributes()->attribute;
             }
+
             if (isset($xmlDiscriminator->attributes()->cdata)) {
                 $metadata->xmlDiscriminatorCData = 'true' === (string) $xmlDiscriminator->attributes()->cdata;
             }
+
             if (isset($xmlDiscriminator->attributes()->namespace)) {
                 $metadata->xmlDiscriminatorNamespace = (string) $xmlDiscriminator->attributes()->namespace;
             }
@@ -146,6 +157,7 @@ class XmlDriver extends AbstractFileDriver
                 if (!isset($method->attributes()->method)) {
                     throw new InvalidMetadataException('The method attribute must be set for all virtual-property elements.');
                 }
+
                 $virtualPropertyMetadata = new VirtualPropertyMetadata($name, (string) $method->attributes()->method);
             }
 
@@ -158,6 +170,7 @@ class XmlDriver extends AbstractFileDriver
                 if ($property->class !== $name || (isset($property->info) && $property->info['class'] !== $name)) {
                     continue;
                 }
+
                 $pName = $property->getName();
                 $propertiesMetadata[] = new PropertyMetadata($name, $pName);
 
@@ -330,7 +343,8 @@ class XmlDriver extends AbstractFileDriver
                     $pMetadata->name = (string) $name;
                 }
 
-                if ((ExclusionPolicy::NONE === (string) $exclusionPolicy && !$isExclude)
+                if (
+                    (ExclusionPolicy::NONE === (string) $exclusionPolicy && !$isExclude)
                     || (ExclusionPolicy::ALL === (string) $exclusionPolicy && $isExpose)
                 ) {
                     $metadata->addPropertyMetadata($pMetadata);
@@ -342,6 +356,7 @@ class XmlDriver extends AbstractFileDriver
             if (!isset($method->attributes()->type)) {
                 throw new InvalidMetadataException('The type attribute must be set for all callback-method elements.');
             }
+
             if (!isset($method->attributes()->name)) {
                 throw new InvalidMetadataException('The name attribute must be set for all callback-method elements.');
             }
@@ -363,6 +378,7 @@ class XmlDriver extends AbstractFileDriver
                     if (!isset($method->attributes()->format)) {
                         throw new InvalidMetadataException('The format attribute must be set for "handler" callback methods.');
                     }
+
                     if (!isset($method->attributes()->direction)) {
                         throw new InvalidMetadataException('The direction attribute must be set for "handler" callback methods.');
                     }

@@ -32,7 +32,7 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
 use Symfony\Component\Security\Http\Session\SessionAuthenticationStrategyInterface;
 
-@trigger_error(sprintf('The "%s" class is deprecated since Symfony 4.2, use Guard instead.', SimplePreAuthenticationListener::class), E_USER_DEPRECATED);
+@trigger_error(sprintf('The "%s" class is deprecated since Symfony 4.2, use Guard instead.', SimplePreAuthenticationListener::class), \E_USER_DEPRECATED);
 
 /**
  * SimplePreAuthenticationListener implements simple proxying to an authenticator.
@@ -146,7 +146,7 @@ class SimplePreAuthenticationListener extends AbstractListener implements Listen
                 if ($response instanceof Response) {
                     $event->setResponse($response);
                 } elseif (null !== $response) {
-                    throw new \UnexpectedValueException(sprintf('The %s::onAuthenticationFailure method must return null or a Response object', \get_class($this->simpleAuthenticator)));
+                    throw new \UnexpectedValueException(sprintf('The "%s::onAuthenticationFailure()" method must return null or a Response object.', \get_class($this->simpleAuthenticator)));
                 }
             }
 
@@ -158,7 +158,7 @@ class SimplePreAuthenticationListener extends AbstractListener implements Listen
             if ($response instanceof Response) {
                 $event->setResponse($response);
             } elseif (null !== $response) {
-                throw new \UnexpectedValueException(sprintf('The %s::onAuthenticationSuccess method must return null or a Response object', \get_class($this->simpleAuthenticator)));
+                throw new \UnexpectedValueException(sprintf('The "%s::onAuthenticationSuccess()" method must return null or a Response object.', \get_class($this->simpleAuthenticator)));
             }
         }
     }

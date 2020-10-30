@@ -65,7 +65,7 @@ class Subscriber
     {
         return $this->email;
     }
-    
+
     /**
      * Set mergefields
      * @param array $mergeFields

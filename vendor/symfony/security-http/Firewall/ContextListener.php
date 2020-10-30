@@ -89,7 +89,7 @@ class ContextListener extends AbstractListener implements ListenerInterface
      */
     public function setLogoutOnUserChange($logoutOnUserChange)
     {
-        @trigger_error(sprintf('The "%s()" method is deprecated since Symfony 4.1.', __METHOD__), E_USER_DEPRECATED);
+        @trigger_error(sprintf('The "%s()" method is deprecated since Symfony 4.1.', __METHOD__), \E_USER_DEPRECATED);
     }
 
     /**
@@ -115,10 +115,10 @@ class ContextListener extends AbstractListener implements ListenerInterface
 
         if (null !== $session) {
             $usageIndexValue = method_exists(Request::class, 'getPreferredFormat') && $session instanceof Session ? $usageIndexReference = &$session->getUsageIndex() : 0;
-            $sessionId = $session->getId();
+            $sessionId = $request->cookies->get($session->getName());
             $token = $session->get($this->sessionKey);
 
-            if ($this->sessionTrackerEnabler && $session->getId() === $sessionId) {
+            if ($this->sessionTrackerEnabler && \in_array($sessionId, [true, $session->getId()], true)) {
                 $usageIndexReference = $usageIndexValue;
             }
         }

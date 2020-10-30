@@ -140,7 +140,7 @@ final class RequestValidator {
      */
     private static function removePort(array $parsedUrl): string {
         unset($parsedUrl['port']);
-        return self::buildUrl($parsedUrl);
+        return self::unparse_url($parsedUrl);
     }
 
     /**
@@ -154,7 +154,7 @@ final class RequestValidator {
             $port = ($parsedUrl['scheme'] === 'https') ? 443 : 80;
             $parsedUrl['port'] = $port;
         }
-        return self::buildUrl($parsedUrl);
+        return self::unparse_url($parsedUrl);
     }
 
     /**
@@ -163,7 +163,7 @@ final class RequestValidator {
      * @param array $parsedUrl
      * @return string Full URL
      */
-    private static function buildUrl(array $parsedUrl): string {
+    static function unparse_url(array $parsedUrl): string {
         $parts = [];
 
         $parts['scheme'] = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '';
@@ -179,3 +179,4 @@ final class RequestValidator {
         return \implode('', $parts);
     }
 }
+

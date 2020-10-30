@@ -35,6 +35,11 @@ use Symfony\Contracts\Translation\LocaleAwareInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Contracts\Translation\TranslatorTrait;
 
+// Help opcache.preload discover always-needed symbols
+class_exists(TranslatorInterface::class);
+class_exists(LocaleAwareInterface::class);
+class_exists(TranslatorTrait::class);
+
 /**
  * The default implementation of {@link ValidatorBuilderInterface}.
  *
@@ -237,7 +242,7 @@ class ValidatorBuilder implements ValidatorBuilderInterface
      */
     public function setMetadataCache(CacheInterface $cache)
     {
-        @trigger_error(sprintf('%s is deprecated since Symfony 4.4. Use setMappingCache() instead.', __METHOD__), E_USER_DEPRECATED);
+        @trigger_error(sprintf('%s is deprecated since Symfony 4.4. Use setMappingCache() instead.', __METHOD__), \E_USER_DEPRECATED);
 
         if (null !== $this->metadataFactory) {
             throw new ValidatorException('You cannot set a custom metadata cache after setting a custom metadata factory. Configure your metadata factory instead.');

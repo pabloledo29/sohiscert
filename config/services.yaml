@@ -319,7 +319,9 @@ services:
     App\Repository\DocumentFTPRepository:
         tags: ['doctrine.repository_service']
     App\Repository\ComunicationSendRegistryRepository:
-        tags: ['doctrine.repository_service']    
+        tags: ['doctrine.repository_service']
+    App\Repository\UserAdminRepository:
+        tags: ['doctrine.repository_service']      
 
 
 #======================================================================

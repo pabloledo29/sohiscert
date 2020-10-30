@@ -58,9 +58,9 @@ class LazyLoadingMetadataFactory implements MetadataFactoryInterface
     public function __construct(LoaderInterface $loader = null, $cache = null)
     {
         if ($cache instanceof CacheInterface) {
-            @trigger_error(sprintf('Passing a "%s" to "%s" is deprecated in Symfony 4.4 and will trigger a TypeError in 5.0. Please pass an implementation of "%s" instead.', \get_class($cache), __METHOD__, CacheItemPoolInterface::class), E_USER_DEPRECATED);
+            @trigger_error(sprintf('Passing a "%s" to "%s" is deprecated in Symfony 4.4 and will trigger a TypeError in 5.0. Please pass an implementation of "%s" instead.', \get_class($cache), __METHOD__, CacheItemPoolInterface::class), \E_USER_DEPRECATED);
         } elseif (!$cache instanceof CacheItemPoolInterface && null !== $cache) {
-            throw new \TypeError(sprintf('Expected an instance of %s, got %s.', CacheItemPoolInterface::class, \is_object($cache) ? \get_class($cache) : \gettype($cache)));
+            throw new \TypeError(sprintf('Expected an instance of "%s", got "%s".', CacheItemPoolInterface::class, \is_object($cache) ? \get_class($cache) : \gettype($cache)));
         }
 
         $this->loader = $loader;
@@ -85,7 +85,7 @@ class LazyLoadingMetadataFactory implements MetadataFactoryInterface
     public function getMetadataFor($value)
     {
         if (!\is_object($value) && !\is_string($value)) {
-            throw new NoSuchMetadataException(sprintf('Cannot create metadata for non-objects. Got: %s', \gettype($value)));
+            throw new NoSuchMetadataException(sprintf('Cannot create metadata for non-objects. Got: "%s".', \gettype($value)));
         }
 
         $class = ltrim(\is_object($value) ? \get_class($value) : $value, '\\');
@@ -138,34 +138,25 @@ class LazyLoadingMetadataFactory implements MetadataFactoryInterface
 
     private function mergeConstraints(ClassMetadata $metadata)
     {
+        if ($metadata->getReflectionClass()->isInterface()) {
+            return;
+        }
+
         // Include constraints from the parent class
         if ($parent = $metadata->getReflectionClass()->getParentClass()) {
             $metadata->mergeConstraints($this->getMetadataFor($parent->name));
         }
 
-        $interfaces = $metadata->getReflectionClass()->getInterfaces();
-
-        $interfaces = array_filter($interfaces, function (\ReflectionClass $interface) use ($parent, $interfaces) {
-            $interfaceName = $interface->getName();
-
-            if ($parent && $parent->implementsInterface($interfaceName)) {
-                return false;
-            }
-
-            foreach ($interfaces as $i) {
-                if ($i !== $interface && $i->implementsInterface($interfaceName)) {
-                    return false;
-                }
-            }
-
-            return true;
-        });
-
         // Include constraints from all directly implemented interfaces
-        foreach ($interfaces as $interface) {
+        foreach ($metadata->getReflectionClass()->getInterfaces() as $interface) {
             if ('Symfony\Component\Validator\GroupSequenceProviderInterface' === $interface->name) {
                 continue;
             }
+
+            if ($parent && \in_array($interface->getName(), $parent->getInterfaceNames(), true)) {
+                continue;
+            }
+
             $metadata->mergeConstraints($this->getMetadataFor($interface->name));
         }
     }

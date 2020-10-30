@@ -34,19 +34,15 @@ final class DateHandler implements SubscribingHandlerInterface
     public static function getSubscribingMethods()
     {
         $methods = [];
-        $deserializationTypes = ['DateTime', 'DateTimeImmutable', 'DateInterval'];
-        $serialisationTypes = ['DateTime', 'DateTimeImmutable', 'DateInterval'];
+        $types = ['DateTime', 'DateTimeImmutable', 'DateInterval'];
 
         foreach (['json', 'xml'] as $format) {
-            foreach ($deserializationTypes as $type) {
+            foreach ($types as $type) {
                 $methods[] = [
                     'type' => $type,
                     'direction' => GraphNavigatorInterface::DIRECTION_DESERIALIZATION,
                     'format' => $format,
                 ];
-            }
-
-            foreach ($serialisationTypes as $type) {
                 $methods[] = [
                     'type' => $type,
                     'format' => $format,
@@ -54,6 +50,13 @@ final class DateHandler implements SubscribingHandlerInterface
                     'method' => 'serialize' . $type,
                 ];
             }
+
+            $methods[] = [
+                'type' => 'DateTimeInterface',
+                'direction' => GraphNavigatorInterface::DIRECTION_DESERIALIZATION,
+                'format' => $format,
+                'method' => 'deserializeDateTimeFrom' . ucfirst($format),
+            ];
         }
 
         return $methods;
@@ -133,6 +136,7 @@ final class DateHandler implements SubscribingHandlerInterface
     private function isDataXmlNull($data): bool
     {
         $attributes = $data->attributes('xsi', true);
+
         return isset($attributes['nil'][0]) && 'true' === (string) $attributes['nil'][0];
     }
 
@@ -253,9 +257,16 @@ final class DateHandler implements SubscribingHandlerInterface
     {
         $dateInterval = null;
         try {
+            $f = 0.0;
+            if (preg_match('~\.\d+~', $data, $match)) {
+                $data = str_replace($match[0], '', $data);
+                $f = (float) $match[0];
+            }
+
             $dateInterval = new \DateInterval($data);
+            $dateInterval->f = $f;
         } catch (\Throwable $e) {
-            throw new RuntimeException(sprintf('Invalid dateinterval "%s", expected ISO 8601 format', $data), null, $e);
+            throw new RuntimeException(sprintf('Invalid dateinterval "%s", expected ISO 8601 format', $data), 0, $e);
         }
 
         return $dateInterval;

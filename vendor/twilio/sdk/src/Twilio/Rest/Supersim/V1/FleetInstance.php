@@ -26,10 +26,12 @@ use Twilio\Version;
  * @property \DateTime $dateUpdated
  * @property string $url
  * @property bool $dataEnabled
+ * @property int $dataLimit
  * @property string $dataMetering
  * @property bool $commandsEnabled
  * @property string $commandsUrl
  * @property string $commandsMethod
+ * @property string $networkAccessProfileSid
  */
 class FleetInstance extends InstanceResource {
     /**
@@ -51,10 +53,12 @@ class FleetInstance extends InstanceResource {
             'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
             'url' => Values::array_get($payload, 'url'),
             'dataEnabled' => Values::array_get($payload, 'data_enabled'),
+            'dataLimit' => Values::array_get($payload, 'data_limit'),
             'dataMetering' => Values::array_get($payload, 'data_metering'),
             'commandsEnabled' => Values::array_get($payload, 'commands_enabled'),
             'commandsUrl' => Values::array_get($payload, 'commands_url'),
             'commandsMethod' => Values::array_get($payload, 'commands_method'),
+            'networkAccessProfileSid' => Values::array_get($payload, 'network_access_profile_sid'),
         ];
 
         $this->solution = ['sid' => $sid ?: $this->properties['sid'], ];

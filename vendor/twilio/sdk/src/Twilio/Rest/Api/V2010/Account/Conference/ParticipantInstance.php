@@ -19,6 +19,7 @@ use Twilio\Version;
 /**
  * @property string $accountSid
  * @property string $callSid
+ * @property string $label
  * @property string $callSidToCoach
  * @property bool $coaching
  * @property string $conferenceSid
@@ -39,7 +40,8 @@ class ParticipantInstance extends InstanceResource {
      * @param mixed[] $payload The response payload
      * @param string $accountSid The SID of the Account that created the resource
      * @param string $conferenceSid The SID of the conference the participant is in
-     * @param string $callSid The Call SID of the resource to fetch
+     * @param string $callSid The Call SID or URL encoded label of the participant
+     *                        to fetch
      */
     public function __construct(Version $version, array $payload, string $accountSid, string $conferenceSid, string $callSid = null) {
         parent::__construct($version);
@@ -48,6 +50,7 @@ class ParticipantInstance extends InstanceResource {
         $this->properties = [
             'accountSid' => Values::array_get($payload, 'account_sid'),
             'callSid' => Values::array_get($payload, 'call_sid'),
+            'label' => Values::array_get($payload, 'label'),
             'callSidToCoach' => Values::array_get($payload, 'call_sid_to_coach'),
             'coaching' => Values::array_get($payload, 'coaching'),
             'conferenceSid' => Values::array_get($payload, 'conference_sid'),

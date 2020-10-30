@@ -12,7 +12,7 @@
 namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
 
 use Doctrine\Common\Annotations\Reader;
-use Doctrine\Common\Persistence\Proxy;
+use Doctrine\Persistence\Proxy;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
@@ -69,7 +69,7 @@ class ControllerListener implements EventSubscriberInterface
             } else {
                 if (\is_array($classConfigurations[$key])) {
                     if (!\is_array($methodConfigurations[$key])) {
-                        throw new \UnexpectedValueException('Configurations should both be an array or both not be an array');
+                        throw new \UnexpectedValueException('Configurations should both be an array or both not be an array.');
                     }
                     $configurations[$key] = array_merge($classConfigurations[$key], $methodConfigurations[$key]);
                 } else {
@@ -115,13 +115,14 @@ class ControllerListener implements EventSubscriberInterface
 
     private static function getRealClass(string $class): string
     {
-        if (!class_exists(Proxy::class)) {
-            return $class;
-        }
-        if (false === $pos = strrpos($class, '\\'.Proxy::MARKER.'\\')) {
-            return $class;
+        if (class_exists(Proxy::class)) {
+            if (false === $pos = strrpos($class, '\\'.Proxy::MARKER.'\\')) {
+                return $class;
+            }
+
+            return substr($class, $pos + Proxy::MARKER_LENGTH + 2);
         }
 
-        return substr($class, $pos + Proxy::MARKER_LENGTH + 2);
+        return $class;
     }
 }

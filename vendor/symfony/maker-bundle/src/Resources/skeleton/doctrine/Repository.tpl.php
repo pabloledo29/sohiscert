@@ -4,7 +4,7 @@ namespace <?= $namespace; ?>;
 
 use <?= $entity_full_class_name; ?>;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use <?= $doctrine_registry_class; ?>;
 <?= $with_password_upgrade ? "use Symfony\Component\Security\Core\Exception\UnsupportedUserException;\n" : '' ?>
 <?= $with_password_upgrade ? "use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;\n" : '' ?>
 <?= $with_password_upgrade ? "use Symfony\Component\Security\Core\User\UserInterface;\n" : '' ?>
@@ -21,7 +21,9 @@ class <?= $class_name; ?> extends ServiceEntityRepository<?= $with_password_upgr
     {
         parent::__construct($registry, <?= $entity_class_name; ?>::class);
     }
+<?php if ($include_example_comments): // When adding a new method without existing default comments, the blank line is automatically added.?>
 
+<?php endif; ?>
 <?php if ($with_password_upgrade): ?>
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
@@ -38,6 +40,7 @@ class <?= $class_name; ?> extends ServiceEntityRepository<?= $with_password_upgr
     }
 
 <?php endif ?>
+<?php if ($include_example_comments): ?>
     // /**
     //  * @return <?= $entity_class_name ?>[] Returns an array of <?= $entity_class_name ?> objects
     //  */
@@ -66,4 +69,5 @@ class <?= $class_name; ?> extends ServiceEntityRepository<?= $with_password_upgr
         ;
     }
     */
+<?php endif; ?>
 }
