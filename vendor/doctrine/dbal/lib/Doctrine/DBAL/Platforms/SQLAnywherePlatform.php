@@ -2,7 +2,7 @@
 
 namespace Doctrine\DBAL\Platforms;
 
-use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\LockMode;
 use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Schema\ColumnDiff;
@@ -14,11 +14,9 @@ use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Schema\TableDiff;
 use Doctrine\DBAL\TransactionIsolationLevel;
 use InvalidArgumentException;
-
 use function array_merge;
 use function array_unique;
 use function array_values;
-use function assert;
 use function count;
 use function explode;
 use function func_get_args;
@@ -35,8 +33,6 @@ use function substr;
 /**
  * The SQLAnywherePlatform provides the behavior, features and SQL dialect of the
  * SAP Sybase SQL Anywhere 10 database platform.
- *
- * @deprecated Use SQLAnywhere 16 or newer
  */
 class SQLAnywherePlatform extends AbstractPlatform
 {
@@ -300,11 +296,11 @@ class SQLAnywherePlatform extends AbstractPlatform
     /**
      * {@inheritdoc}
      */
-    public function getBigIntTypeDeclarationSQL(array $column)
+    public function getBigIntTypeDeclarationSQL(array $columnDef)
     {
-        $column['integer_type'] = 'BIGINT';
+        $columnDef['integer_type'] = 'BIGINT';
 
-        return $this->_getCommonIntegerTypeDeclarationSQL($column);
+        return $this->_getCommonIntegerTypeDeclarationSQL($columnDef);
     }
 
     /**
@@ -326,7 +322,7 @@ class SQLAnywherePlatform extends AbstractPlatform
     /**
      * {@inheritdoc}
      */
-    public function getBlobTypeDeclarationSQL(array $column)
+    public function getBlobTypeDeclarationSQL(array $field)
     {
         return 'LONG BINARY';
     }
@@ -339,9 +335,9 @@ class SQLAnywherePlatform extends AbstractPlatform
      * Otherwise by just omitting the NOT NULL clause,
      * SQL Anywhere will declare them NOT NULL nonetheless.
      */
-    public function getBooleanTypeDeclarationSQL(array $column)
+    public function getBooleanTypeDeclarationSQL(array $columnDef)
     {
-        $nullClause = isset($column['notnull']) && (bool) $column['notnull'] === false ? ' NULL' : '';
+        $nullClause = isset($columnDef['notnull']) && (bool) $columnDef['notnull'] === false ? ' NULL' : '';
 
         return 'BIT' . $nullClause;
     }
@@ -349,7 +345,7 @@ class SQLAnywherePlatform extends AbstractPlatform
     /**
      * {@inheritdoc}
      */
-    public function getClobTypeDeclarationSQL(array $column)
+    public function getClobTypeDeclarationSQL(array $field)
     {
         return 'TEXT';
     }
@@ -501,7 +497,7 @@ class SQLAnywherePlatform extends AbstractPlatform
     /**
      * {@inheritdoc}
      */
-    public function getDateTimeTypeDeclarationSQL(array $column)
+    public function getDateTimeTypeDeclarationSQL(array $fieldDeclaration)
     {
         return 'DATETIME';
     }
@@ -517,7 +513,7 @@ class SQLAnywherePlatform extends AbstractPlatform
     /**
      * {@inheritdoc}
      */
-    public function getDateTypeDeclarationSQL(array $column)
+    public function getDateTypeDeclarationSQL(array $fieldDeclaration)
     {
         return 'DATE';
     }
@@ -551,7 +547,7 @@ class SQLAnywherePlatform extends AbstractPlatform
 
         if (! is_string($index)) {
             throw new InvalidArgumentException(
-                __METHOD__ . '() expects $index parameter to be string or ' . Index::class . '.'
+                'SQLAnywherePlatform::getDropIndexSQL() expects $index parameter to be string or ' . Index::class . '.'
             );
         }
 
@@ -565,7 +561,7 @@ class SQLAnywherePlatform extends AbstractPlatform
 
         if (! is_string($table)) {
             throw new InvalidArgumentException(
-                __METHOD__ . '() expects $table parameter to be string or ' . Index::class . '.'
+                'SQLAnywherePlatform::getDropIndexSQL() expects $table parameter to be string or ' . Index::class . '.'
             );
         }
 
@@ -632,15 +628,17 @@ class SQLAnywherePlatform extends AbstractPlatform
             case self::FOREIGN_KEY_MATCH_SIMPLE:
                 return 'SIMPLE';
 
+                break;
             case self::FOREIGN_KEY_MATCH_FULL:
                 return 'FULL';
 
+                break;
             case self::FOREIGN_KEY_MATCH_SIMPLE_UNIQUE:
                 return 'UNIQUE SIMPLE';
 
+                break;
             case self::FOREIGN_KEY_MATCH_FULL_UNIQUE:
                 return 'UNIQUE FULL';
-
             default:
                 throw new InvalidArgumentException('Invalid foreign key match type: ' . $type);
         }
@@ -680,7 +678,7 @@ class SQLAnywherePlatform extends AbstractPlatform
     /**
      * {@inheritdoc}
      */
-    public function getGuidTypeDeclarationSQL(array $column)
+    public function getGuidTypeDeclarationSQL(array $field)
     {
         return 'UNIQUEIDENTIFIER';
     }
@@ -691,17 +689,17 @@ class SQLAnywherePlatform extends AbstractPlatform
     public function getIndexDeclarationSQL($name, Index $index)
     {
         // Index declaration in statements like CREATE TABLE is not supported.
-        throw Exception::notSupported(__METHOD__);
+        throw DBALException::notSupported(__METHOD__);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getIntegerTypeDeclarationSQL(array $column)
+    public function getIntegerTypeDeclarationSQL(array $columnDef)
     {
-        $column['integer_type'] = 'INT';
+        $columnDef['integer_type'] = 'INT';
 
-        return $this->_getCommonIntegerTypeDeclarationSQL($column);
+        return $this->_getCommonIntegerTypeDeclarationSQL($columnDef);
     }
 
     /**
@@ -876,7 +874,7 @@ SQL
     /**
      * {@inheritdoc}
      */
-    public function getListTableIndexesSQL($table, $database = null)
+    public function getListTableIndexesSQL($table, $currentDatabase = null)
     {
         $user = '';
 
@@ -1041,11 +1039,11 @@ SQL
     /**
      * {@inheritdoc}
      */
-    public function getSmallIntTypeDeclarationSQL(array $column)
+    public function getSmallIntTypeDeclarationSQL(array $columnDef)
     {
-        $column['integer_type'] = 'SMALLINT';
+        $columnDef['integer_type'] = 'SMALLINT';
 
-        return $this->_getCommonIntegerTypeDeclarationSQL($column);
+        return $this->_getCommonIntegerTypeDeclarationSQL($columnDef);
     }
 
     /**
@@ -1090,13 +1088,13 @@ SQL
     /**
      * {@inheritdoc}
      */
-    public function getSubstringExpression($string, $start, $length = null)
+    public function getSubstringExpression($value, $from, $length = null)
     {
         if ($length === null) {
-            return 'SUBSTRING(' . $string . ', ' . $start . ')';
+            return 'SUBSTRING(' . $value . ', ' . $from . ')';
         }
 
-        return 'SUBSTRING(' . $string . ', ' . $start . ', ' . $length . ')';
+        return 'SUBSTRING(' . $value . ', ' . $from . ', ' . $length . ')';
     }
 
     /**
@@ -1118,7 +1116,7 @@ SQL
     /**
      * {@inheritdoc}
      */
-    public function getTimeTypeDeclarationSQL(array $column)
+    public function getTimeTypeDeclarationSQL(array $fieldDeclaration)
     {
         return 'TIME';
     }
@@ -1126,16 +1124,14 @@ SQL
     /**
      * {@inheritdoc}
      */
-    public function getTrimExpression($str, $mode = TrimMode::UNSPECIFIED, $char = false)
+    public function getTrimExpression($str, $pos = TrimMode::UNSPECIFIED, $char = false)
     {
         if (! $char) {
-            switch ($mode) {
+            switch ($pos) {
                 case TrimMode::LEADING:
                     return $this->getLtrimExpression($str);
-
                 case TrimMode::TRAILING:
                     return $this->getRtrimExpression($str);
-
                 default:
                     return 'TRIM(' . $str . ')';
             }
@@ -1143,17 +1139,14 @@ SQL
 
         $pattern = "'%[^' + " . $char . " + ']%'";
 
-        switch ($mode) {
+        switch ($pos) {
             case TrimMode::LEADING:
                 return 'SUBSTR(' . $str . ', PATINDEX(' . $pattern . ', ' . $str . '))';
-
             case TrimMode::TRAILING:
                 return 'REVERSE(SUBSTR(REVERSE(' . $str . '), PATINDEX(' . $pattern . ', REVERSE(' . $str . '))))';
-
             default:
                 return 'REVERSE(SUBSTR(REVERSE(SUBSTR(' . $str . ', PATINDEX(' . $pattern . ', ' . $str . '))), ' .
-                    'PATINDEX(' . $pattern . ', ' .
-                    'REVERSE(SUBSTR(' . $str . ', PATINDEX(' . $pattern . ', ' . $str . '))))))';
+                    'PATINDEX(' . $pattern . ', REVERSE(SUBSTR(' . $str . ', PATINDEX(' . $pattern . ', ' . $str . '))))))';
         }
     }
 
@@ -1239,18 +1232,18 @@ SQL
     /**
      * {@inheritdoc}
      */
-    protected function _getCommonIntegerTypeDeclarationSQL(array $column)
+    protected function _getCommonIntegerTypeDeclarationSQL(array $columnDef)
     {
-        $unsigned      = ! empty($column['unsigned']) ? 'UNSIGNED ' : '';
-        $autoincrement = ! empty($column['autoincrement']) ? ' IDENTITY' : '';
+        $unsigned      = ! empty($columnDef['unsigned']) ? 'UNSIGNED ' : '';
+        $autoincrement = ! empty($columnDef['autoincrement']) ? ' IDENTITY' : '';
 
-        return $unsigned . $column['integer_type'] . $autoincrement;
+        return $unsigned . $columnDef['integer_type'] . $autoincrement;
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function _getCreateTableSQL($name, array $columns, array $options = [])
+    protected function _getCreateTableSQL($tableName, array $columns, array $options = [])
     {
         $columnListSql = $this->getColumnDeclarationListSQL($columns);
         $indexSql      = [];
@@ -1262,9 +1255,9 @@ SQL
         }
 
         if (! empty($options['indexes'])) {
+            /** @var Index $index */
             foreach ((array) $options['indexes'] as $index) {
-                assert($index instanceof Index);
-                $indexSql[] = $this->getCreateIndexSQL($index, $name);
+                $indexSql[] = $this->getCreateIndexSQL($index, $tableName);
             }
         }
 
@@ -1275,8 +1268,7 @@ SQL
                 $flags = ' CLUSTERED ';
             }
 
-            $columnListSql .= ', PRIMARY KEY' . $flags
-                . ' (' . implode(', ', array_unique(array_values((array) $options['primary']))) . ')';
+            $columnListSql .= ', PRIMARY KEY' . $flags . ' (' . implode(', ', array_unique(array_values((array) $options['primary']))) . ')';
         }
 
         if (! empty($options['foreignKeys'])) {
@@ -1285,7 +1277,7 @@ SQL
             }
         }
 
-        $query = 'CREATE TABLE ' . $name . ' (' . $columnListSql;
+        $query = 'CREATE TABLE ' . $tableName . ' (' . $columnListSql;
         $check = $this->getCheckDeclarationSQL($columns);
 
         if (! empty($check)) {
@@ -1304,17 +1296,13 @@ SQL
     {
         switch ($level) {
             case TransactionIsolationLevel::READ_UNCOMMITTED:
-                return '0';
-
+                return 0;
             case TransactionIsolationLevel::READ_COMMITTED:
-                return '1';
-
+                return 1;
             case TransactionIsolationLevel::REPEATABLE_READ:
-                return '2';
-
+                return 2;
             case TransactionIsolationLevel::SERIALIZABLE:
-                return '3';
-
+                return 3;
             default:
                 throw new InvalidArgumentException('Invalid isolation level:' . $level);
         }
@@ -1338,7 +1326,7 @@ SQL
         return $matches[1] . $limitOffsetClause . ' ' . $matches[3];
     }
 
-    private function getTopClauseSQL(?int $limit, ?int $offset): string
+    private function getTopClauseSQL(?int $limit, ?int $offset) : string
     {
         if ($offset > 0) {
             return sprintf('TOP %s START AT %d', $limit ?? 'ALL', $offset + 1);
@@ -1398,8 +1386,8 @@ SQL
 
         if (! $constraint->isPrimary() && ! $constraint->isUnique()) {
             throw new InvalidArgumentException(
-                'Can only create primary, unique or foreign key constraint declarations, no common index declarations'
-                    . ' with getTableConstraintDeclarationSQL().'
+                'Can only create primary, unique or foreign key constraint declarations, no common index declarations ' .
+                'with getTableConstraintDeclarationSQL().'
             );
         }
 
@@ -1422,8 +1410,7 @@ SQL
         }
 
         if ($constraint->isPrimary()) {
-            return $sql . 'PRIMARY KEY ' . $flags
-                . '(' . $this->getIndexFieldDeclarationListSQL($constraintColumns) . ')';
+            return $sql . 'PRIMARY KEY ' . $flags . '(' . $this->getIndexFieldDeclarationListSQL($constraintColumns) . ')';
         }
 
         return $sql . 'UNIQUE ' . $flags . '(' . $this->getIndexFieldDeclarationListSQL($constraintColumns) . ')';

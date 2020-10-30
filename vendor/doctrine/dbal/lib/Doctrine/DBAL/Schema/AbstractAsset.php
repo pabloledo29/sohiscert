@@ -3,7 +3,6 @@
 namespace Doctrine\DBAL\Schema;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-
 use function array_map;
 use function crc32;
 use function dechex;
@@ -31,7 +30,7 @@ abstract class AbstractAsset
      *
      * @var string|null
      */
-    protected $_namespace;
+    protected $_namespace = null;
 
     /** @var bool */
     protected $_quoted = false;
@@ -49,13 +48,11 @@ abstract class AbstractAsset
             $this->_quoted = true;
             $name          = $this->trimQuotes($name);
         }
-
         if (strpos($name, '.') !== false) {
             $parts            = explode('.', $name);
             $this->_namespace = $parts[0];
             $name             = $parts[1];
         }
-
         $this->_name = $name;
     }
 

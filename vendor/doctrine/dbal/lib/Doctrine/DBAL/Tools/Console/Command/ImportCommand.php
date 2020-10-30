@@ -2,8 +2,8 @@
 
 namespace Doctrine\DBAL\Tools\Console\Command;
 
-use Doctrine\DBAL\Driver\PDO\Connection as PDOConnection;
-use Doctrine\DBAL\Driver\PDO\Statement as PDOStatement;
+use Doctrine\DBAL\Driver\PDOConnection;
+use Doctrine\DBAL\Driver\PDOStatement;
 use InvalidArgumentException;
 use PDOException;
 use RuntimeException;
@@ -11,7 +11,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-
+use const PHP_EOL;
 use function assert;
 use function error_get_last;
 use function file_exists;
@@ -19,8 +19,6 @@ use function file_get_contents;
 use function is_readable;
 use function realpath;
 use function sprintf;
-
-use const PHP_EOL;
 
 /**
  * Task for executing arbitrary SQL that can come from a file or directly from
@@ -30,7 +28,9 @@ use const PHP_EOL;
  */
 class ImportCommand extends Command
 {
-    /** @return void */
+    /**
+     * {@inheritdoc}
+     */
     protected function configure()
     {
         $this
@@ -85,14 +85,9 @@ EOT
             $sql = @file_get_contents($filePath);
 
             if ($sql === false) {
-                $message = sprintf("Unable to read SQL file '<info>%s</info>'", $filePath);
-                $error   = error_get_last();
-
-                if ($error !== null) {
-                    $message .= ': ' . $error['message'];
-                }
-
-                throw new RuntimeException($message);
+                throw new RuntimeException(
+                    sprintf("Unable to read SQL file '<info>%s</info>': %s", $filePath, error_get_last()['message'])
+                );
             }
 
             if ($conn instanceof PDOConnection) {

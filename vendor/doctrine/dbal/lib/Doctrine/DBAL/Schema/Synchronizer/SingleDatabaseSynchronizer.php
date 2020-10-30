@@ -7,13 +7,10 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\Comparator;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Visitor\DropSchemaSqlCollector;
-
 use function count;
 
 /**
  * Schema Synchronizer for Default DBAL Connection.
- *
- * @deprecated
  */
 class SingleDatabaseSynchronizer extends AbstractSchemaSynchronizer
 {

@@ -16,17 +16,23 @@ final class MariaDb1027Platform extends MySqlPlatform
      *
      * @link https://mariadb.com/kb/en/library/json-data-type/
      */
-    public function getJsonTypeDeclarationSQL(array $column): string
+    public function getJsonTypeDeclarationSQL(array $field) : string
     {
         return 'LONGTEXT';
     }
 
-    protected function getReservedKeywordsClass(): string
+    /**
+     * {@inheritdoc}
+     */
+    protected function getReservedKeywordsClass() : string
     {
         return Keywords\MariaDb102Keywords::class;
     }
 
-    protected function initializeDoctrineTypeMappings(): void
+    /**
+     * {@inheritdoc}
+     */
+    protected function initializeDoctrineTypeMappings() : void
     {
         parent::initializeDoctrineTypeMappings();
 

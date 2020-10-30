@@ -3,7 +3,6 @@
 namespace Doctrine\DBAL\Schema;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-
 use function array_keys;
 use function array_map;
 use function in_array;
@@ -63,13 +62,8 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
      * @param string|null  $name               Name of the foreign key constraint.
      * @param mixed[]      $options            Options associated with the foreign key constraint.
      */
-    public function __construct(
-        array $localColumnNames,
-        $foreignTableName,
-        array $foreignColumnNames,
-        $name = null,
-        array $options = []
-    ) {
+    public function __construct(array $localColumnNames, $foreignTableName, array $foreignColumnNames, $name = null, array $options = [])
+    {
         if ($name !== null) {
             $this->_setName($name);
         }
@@ -91,7 +85,7 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
      *
      * @return Identifier[]
      */
-    private function createIdentifierMap(array $names): array
+    private function createIdentifierMap(array $names) : array
     {
         $identifiers = [];
 
@@ -239,7 +233,7 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
         $position = strrpos($name, '.');
 
         if ($position !== false) {
-            $name = substr($name, $position + 1);
+            $name = substr($name, $position);
         }
 
         return strtolower($name);
@@ -371,7 +365,7 @@ class ForeignKeyConstraint extends AbstractAsset implements Constraint
             }
         }
 
-        return null;
+        return false;
     }
 
     /**

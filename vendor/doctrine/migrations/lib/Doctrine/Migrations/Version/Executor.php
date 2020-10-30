@@ -235,23 +235,21 @@ final class Executor implements ExecutorInterface
         }
 
         $stopwatchEvent->stop();
-        $periods    = $stopwatchEvent->getPeriods();
-        $lastPeriod = $periods[count($periods) -1];
 
-        $versionExecutionResult->setTime($lastPeriod->getDuration());
-        $versionExecutionResult->setMemory($lastPeriod->getMemory());
+        $versionExecutionResult->setTime($stopwatchEvent->getDuration());
+        $versionExecutionResult->setMemory($stopwatchEvent->getMemory());
 
         if ($direction === Direction::UP) {
             $this->outputWriter->write(sprintf(
                 "\n  <info>++</info> migrated (took %sms, used %s memory)",
-                $lastPeriod->getDuration(),
-                BytesFormatter::formatBytes($lastPeriod->getMemory())
+                $stopwatchEvent->getDuration(),
+                BytesFormatter::formatBytes($stopwatchEvent->getMemory())
             ));
         } else {
             $this->outputWriter->write(sprintf(
                 "\n  <info>--</info> reverted (took %sms, used %s memory)",
-                $lastPeriod->getDuration(),
-                BytesFormatter::formatBytes($lastPeriod->getMemory())
+                $stopwatchEvent->getDuration(),
+                BytesFormatter::formatBytes($stopwatchEvent->getMemory())
             ));
         }
 
@@ -346,9 +344,9 @@ final class Executor implements ExecutorInterface
             $this->outputSqlQuery($key, $query);
 
             if (! isset($this->params[$key])) {
-                $this->connection->executeUpdate($query);
+                $this->connection->executeQuery($query);
             } else {
-                $this->connection->executeUpdate($query, $this->params[$key], $this->types[$key]);
+                $this->connection->executeQuery($query, $this->params[$key], $this->types[$key]);
             }
 
             $stopwatchEvent->stop();

@@ -5,13 +5,12 @@ namespace Doctrine\DBAL\Event;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Schema\TableDiff;
-
 use function array_merge;
 use function func_get_args;
 use function is_array;
 
 /**
- * Event Arguments used when SQL queries for removing table columns are generated inside {@link AbstractPlatform}.
+ * Event Arguments used when SQL queries for removing table columns are generated inside Doctrine\DBAL\Platform\*Platform.
  */
 class SchemaAlterTableRemoveColumnEventArgs extends SchemaEventArgs
 {
@@ -63,7 +62,7 @@ class SchemaAlterTableRemoveColumnEventArgs extends SchemaEventArgs
      *
      * @param string|string[] $sql
      *
-     * @return SchemaAlterTableRemoveColumnEventArgs
+     * @return \Doctrine\DBAL\Event\SchemaAlterTableRemoveColumnEventArgs
      */
     public function addSql($sql)
     {

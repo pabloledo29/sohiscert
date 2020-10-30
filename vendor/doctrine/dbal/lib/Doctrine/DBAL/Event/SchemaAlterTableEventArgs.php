@@ -4,13 +4,12 @@ namespace Doctrine\DBAL\Event;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\TableDiff;
-
 use function array_merge;
 use function func_get_args;
 use function is_array;
 
 /**
- * Event Arguments used when SQL queries for creating tables are generated inside {@link AbstractPlatform}.
+ * Event Arguments used when SQL queries for creating tables are generated inside Doctrine\DBAL\Platform\*Platform.
  */
 class SchemaAlterTableEventArgs extends SchemaEventArgs
 {
@@ -50,7 +49,7 @@ class SchemaAlterTableEventArgs extends SchemaEventArgs
      *
      * @param string|string[] $sql
      *
-     * @return SchemaAlterTableEventArgs
+     * @return \Doctrine\DBAL\Event\SchemaAlterTableEventArgs
      */
     public function addSql($sql)
     {

@@ -3,7 +3,6 @@
 namespace Doctrine\DBAL\Schema;
 
 use Doctrine\DBAL\Schema\Visitor\Visitor;
-
 use function count;
 use function sprintf;
 
@@ -19,7 +18,7 @@ class Sequence extends AbstractAsset
     protected $initialValue = 1;
 
     /** @var int|null */
-    protected $cache;
+    protected $cache = null;
 
     /**
      * @param string   $name
@@ -62,7 +61,7 @@ class Sequence extends AbstractAsset
     /**
      * @param int $allocationSize
      *
-     * @return Sequence
+     * @return \Doctrine\DBAL\Schema\Sequence
      */
     public function setAllocationSize($allocationSize)
     {
@@ -74,7 +73,7 @@ class Sequence extends AbstractAsset
     /**
      * @param int $initialValue
      *
-     * @return Sequence
+     * @return \Doctrine\DBAL\Schema\Sequence
      */
     public function setInitialValue($initialValue)
     {
@@ -86,7 +85,7 @@ class Sequence extends AbstractAsset
     /**
      * @param int $cache
      *
-     * @return Sequence
+     * @return \Doctrine\DBAL\Schema\Sequence
      */
     public function setCache($cache)
     {

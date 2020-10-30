@@ -4,7 +4,6 @@ namespace Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-
 use function assert;
 use function fopen;
 use function fseek;
@@ -20,9 +19,9 @@ class BlobType extends Type
     /**
      * {@inheritdoc}
      */
-    public function getSQLDeclaration(array $column, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
     {
-        return $platform->getBlobTypeDeclarationSQL($column);
+        return $platform->getBlobTypeDeclarationSQL($fieldDeclaration);
     }
 
     /**

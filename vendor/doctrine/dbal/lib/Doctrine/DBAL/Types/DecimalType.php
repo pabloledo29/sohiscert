@@ -20,9 +20,9 @@ class DecimalType extends Type
     /**
      * {@inheritdoc}
      */
-    public function getSQLDeclaration(array $column, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
     {
-        return $platform->getDecimalTypeDeclarationSQL($column);
+        return $platform->getDecimalTypeDeclarationSQL($fieldDeclaration);
     }
 
     /**

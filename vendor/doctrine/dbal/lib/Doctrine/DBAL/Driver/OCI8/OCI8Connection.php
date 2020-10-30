@@ -2,12 +2,13 @@
 
 namespace Doctrine\DBAL\Driver\OCI8;
 
-use Doctrine\DBAL\Driver\Connection as ConnectionInterface;
-use Doctrine\DBAL\Driver\OCI8\Exception\SequenceDoesNotExist;
+use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\Driver\ServerInfoAwareConnection;
 use Doctrine\DBAL\ParameterType;
 use UnexpectedValueException;
-
+use const OCI_COMMIT_ON_SUCCESS;
+use const OCI_DEFAULT;
+use const OCI_NO_AUTO_COMMIT;
 use function addcslashes;
 use function func_get_args;
 use function is_float;
@@ -22,15 +23,10 @@ use function preg_match;
 use function sprintf;
 use function str_replace;
 
-use const OCI_COMMIT_ON_SUCCESS;
-use const OCI_NO_AUTO_COMMIT;
-
 /**
  * OCI8 implementation of the Connection interface.
- *
- * @deprecated Use {@link Connection} instead
  */
-class OCI8Connection implements ConnectionInterface, ServerInfoAwareConnection
+class OCI8Connection implements Connection, ServerInfoAwareConnection
 {
     /** @var resource */
     protected $dbh;
@@ -40,8 +36,6 @@ class OCI8Connection implements ConnectionInterface, ServerInfoAwareConnection
 
     /**
      * Creates a Connection to an Oracle Database using oci8 extension.
-     *
-     * @internal The connection can be only instantiated by its driver.
      *
      * @param string $username
      * @param string $password
@@ -57,7 +51,7 @@ class OCI8Connection implements ConnectionInterface, ServerInfoAwareConnection
         $password,
         $db,
         $charset = '',
-        $sessionMode = OCI_NO_AUTO_COMMIT,
+        $sessionMode = OCI_DEFAULT,
         $persistent = false
     ) {
         $dbh = $persistent
@@ -109,9 +103,9 @@ class OCI8Connection implements ConnectionInterface, ServerInfoAwareConnection
     /**
      * {@inheritdoc}
      */
-    public function prepare($sql)
+    public function prepare($prepareString)
     {
-        return new Statement($this->dbh, $sql, $this);
+        return new OCI8Statement($this->dbh, $prepareString, $this);
     }
 
     /**
@@ -136,7 +130,6 @@ class OCI8Connection implements ConnectionInterface, ServerInfoAwareConnection
         if (is_int($value) || is_float($value)) {
             return $value;
         }
-
         $value = str_replace("'", "''", $value);
 
         return "'" . addcslashes($value, "\000\n\r\\\032") . "'";
@@ -145,9 +138,9 @@ class OCI8Connection implements ConnectionInterface, ServerInfoAwareConnection
     /**
      * {@inheritdoc}
      */
-    public function exec($sql)
+    public function exec($statement)
     {
-        $stmt = $this->prepare($sql);
+        $stmt = $this->prepare($statement);
         $stmt->execute();
 
         return $stmt->rowCount();
@@ -155,8 +148,6 @@ class OCI8Connection implements ConnectionInterface, ServerInfoAwareConnection
 
     /**
      * {@inheritdoc}
-     *
-     * @return int|false
      */
     public function lastInsertId($name = null)
     {
@@ -169,7 +160,7 @@ class OCI8Connection implements ConnectionInterface, ServerInfoAwareConnection
         $result = $stmt->fetchColumn();
 
         if ($result === false) {
-            throw SequenceDoesNotExist::new();
+            throw new OCI8Exception('lastInsertId failed: Query was executed but no result was returned.');
         }
 
         return (int) $result;
@@ -177,8 +168,6 @@ class OCI8Connection implements ConnectionInterface, ServerInfoAwareConnection
 
     /**
      * Returns the current execution mode.
-     *
-     * @internal
      *
      * @return int
      */
@@ -205,7 +194,6 @@ class OCI8Connection implements ConnectionInterface, ServerInfoAwareConnection
         if (! oci_commit($this->dbh)) {
             throw OCI8Exception::fromErrorInfo($this->errorInfo());
         }
-
         $this->executeMode = OCI_COMMIT_ON_SUCCESS;
 
         return true;
@@ -219,7 +207,6 @@ class OCI8Connection implements ConnectionInterface, ServerInfoAwareConnection
         if (! oci_rollback($this->dbh)) {
             throw OCI8Exception::fromErrorInfo($this->errorInfo());
         }
-
         $this->executeMode = OCI_COMMIT_ON_SUCCESS;
 
         return true;
@@ -227,24 +214,19 @@ class OCI8Connection implements ConnectionInterface, ServerInfoAwareConnection
 
     /**
      * {@inheritdoc}
-     *
-     * @deprecated The error information is available via exceptions.
      */
     public function errorCode()
     {
         $error = oci_error($this->dbh);
-
         if ($error !== false) {
-            return $error['code'];
+            $error = $error['code'];
         }
 
-        return null;
+        return $error;
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @deprecated The error information is available via exceptions.
      */
     public function errorInfo()
     {
