@@ -5,7 +5,6 @@ namespace Doctrine\DBAL;
 use Doctrine\Common\Cache\Cache;
 use Doctrine\DBAL\Logging\SQLLogger;
 use Doctrine\DBAL\Schema\AbstractAsset;
-
 use function preg_match;
 
 /**
@@ -81,8 +80,7 @@ class Configuration
     {
         $this->_attributes['filterSchemaAssetsExpression'] = $filterExpression;
         if ($filterExpression) {
-            $this->_attributes['filterSchemaAssetsExpressionCallable']
-                = $this->buildSchemaAssetsFilterFromExpression($filterExpression);
+            $this->_attributes['filterSchemaAssetsExpressionCallable'] = $this->buildSchemaAssetsFilterFromExpression($filterExpression);
         } else {
             $this->_attributes['filterSchemaAssetsExpressionCallable'] = null;
         }
@@ -103,13 +101,12 @@ class Configuration
     /**
      * @param string $filterExpression
      */
-    private function buildSchemaAssetsFilterFromExpression($filterExpression): callable
+    private function buildSchemaAssetsFilterFromExpression($filterExpression) : callable
     {
         return static function ($assetName) use ($filterExpression) {
             if ($assetName instanceof AbstractAsset) {
                 $assetName = $assetName->getName();
             }
-
             return preg_match($filterExpression, $assetName);
         };
     }
@@ -117,17 +114,16 @@ class Configuration
     /**
      * Sets the callable to use to filter schema assets.
      */
-    public function setSchemaAssetsFilter(?callable $callable = null): ?callable
+    public function setSchemaAssetsFilter(?callable $callable = null) : ?callable
     {
-        $this->_attributes['filterSchemaAssetsExpression'] = null;
-
+        $this->_attributes['filterSchemaAssetsExpression']                = null;
         return $this->_attributes['filterSchemaAssetsExpressionCallable'] = $callable;
     }
 
     /**
      * Returns the callable to use to filter schema assets.
      */
-    public function getSchemaAssetsFilter(): ?callable
+    public function getSchemaAssetsFilter() : ?callable
     {
         return $this->_attributes['filterSchemaAssetsExpressionCallable'] ?? null;
     }
@@ -142,8 +138,6 @@ class Configuration
      * @see   getAutoCommit
      *
      * @param bool $autoCommit True to enable auto-commit mode; false to disable it.
-     *
-     * @return void
      */
     public function setAutoCommit($autoCommit)
     {

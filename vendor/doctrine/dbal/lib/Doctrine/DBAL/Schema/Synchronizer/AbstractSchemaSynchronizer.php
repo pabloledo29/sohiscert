@@ -7,8 +7,6 @@ use Throwable;
 
 /**
  * Abstract schema synchronizer with methods for executing batches of SQL.
- *
- * @deprecated
  */
 abstract class AbstractSchemaSynchronizer implements SchemaSynchronizer
 {
@@ -22,8 +20,6 @@ abstract class AbstractSchemaSynchronizer implements SchemaSynchronizer
 
     /**
      * @param string[] $sql
-     *
-     * @return void
      */
     protected function processSqlSafely(array $sql)
     {
@@ -37,8 +33,6 @@ abstract class AbstractSchemaSynchronizer implements SchemaSynchronizer
 
     /**
      * @param string[] $sql
-     *
-     * @return void
      */
     protected function processSql(array $sql)
     {

@@ -3,12 +3,10 @@
 namespace Doctrine\DBAL\Platforms;
 
 use Doctrine\DBAL\Schema\Sequence;
-
+use const PREG_OFFSET_CAPTURE;
 use function preg_match;
 use function preg_match_all;
 use function substr_count;
-
-use const PREG_OFFSET_CAPTURE;
 
 /**
  * Platform to ensure compatibility of Doctrine with Microsoft SQL Server 2012 version.
@@ -68,9 +66,9 @@ class SQLServer2012Platform extends SQLServer2008Platform
     /**
      * {@inheritdoc}
      */
-    public function getSequenceNextValSQL($sequence)
+    public function getSequenceNextValSQL($sequenceName)
     {
-        return 'SELECT NEXT VALUE FOR ' . $sequence;
+        return 'SELECT NEXT VALUE FOR ' . $sequenceName;
     }
 
     /**
@@ -107,11 +105,10 @@ class SQLServer2012Platform extends SQLServer2008Platform
         $matchesCount = preg_match_all('/[\\s]+order\\s+by\\s/im', $query, $matches, PREG_OFFSET_CAPTURE);
         $orderByPos   = false;
         if ($matchesCount > 0) {
-            $orderByPos = $matches[0][$matchesCount - 1][1];
+            $orderByPos = $matches[0][($matchesCount - 1)][1];
         }
 
-        if (
-            $orderByPos === false
+        if ($orderByPos === false
             || substr_count($query, '(', $orderByPos) - substr_count($query, ')', $orderByPos)
         ) {
             if (preg_match('/^SELECT\s+DISTINCT/im', $query)) {

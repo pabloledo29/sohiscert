@@ -19,7 +19,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '8670a5fd0a0a40e377070ccf004976c42dd694c9',
+    'reference' => '8399571614740fc0227e25419d6a9c3dc58493f6',
     'name' => '__root__',
   ),
   'versions' => 
@@ -31,7 +31,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '8670a5fd0a0a40e377070ccf004976c42dd694c9',
+      'reference' => '8399571614740fc0227e25419d6a9c3dc58493f6',
     ),
     'behat/transliterator' => 
     array (
@@ -107,12 +107,12 @@ private static $installed = array (
     ),
     'doctrine/dbal' => 
     array (
-      'pretty_version' => '2.11.0',
-      'version' => '2.11.0.0',
+      'pretty_version' => 'v2.9.3',
+      'version' => '2.9.3.0',
       'aliases' => 
       array (
       ),
-      'reference' => '0d4e1a8b29dd987704842f0465aded378f441dca',
+      'reference' => '7345cd59edfa2036eb0fa4264b77ae2576842035',
     ),
     'doctrine/doctrine-bundle' => 
     array (

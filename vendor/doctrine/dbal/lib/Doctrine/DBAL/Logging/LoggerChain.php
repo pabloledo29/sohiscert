@@ -11,17 +11,7 @@ class LoggerChain implements SQLLogger
     private $loggers = [];
 
     /**
-     * @param SQLLogger[] $loggers
-     */
-    public function __construct(array $loggers = [])
-    {
-        $this->loggers = $loggers;
-    }
-
-    /**
      * Adds a logger in the chain.
-     *
-     * @deprecated Inject list of loggers via constructor instead
      *
      * @return void
      */

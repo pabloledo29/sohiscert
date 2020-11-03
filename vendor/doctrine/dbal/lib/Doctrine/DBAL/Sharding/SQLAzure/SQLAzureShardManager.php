@@ -7,13 +7,12 @@ use Doctrine\DBAL\Sharding\ShardingException;
 use Doctrine\DBAL\Sharding\ShardManager;
 use Doctrine\DBAL\Types\Type;
 use RuntimeException;
-
+use function is_bool;
+use function is_scalar;
 use function sprintf;
 
 /**
  * Sharding using the SQL Azure Federations support.
- *
- * @deprecated
  */
 class SQLAzureShardManager implements ShardManager
 {
@@ -126,6 +125,10 @@ class SQLAzureShardManager implements ShardManager
             throw ShardingException::activeTransaction();
         }
 
+        if ($distributionValue === null || is_bool($distributionValue) || ! is_scalar($distributionValue)) {
+            throw ShardingException::noShardDistributionValue();
+        }
+
         $platform = $this->conn->getDatabasePlatform();
         $sql      = sprintf(
             'USE FEDERATION %s (%s = %s) WITH RESET, FILTERING = %s;',
@@ -160,7 +163,7 @@ class SQLAzureShardManager implements ShardManager
                       INNER JOIN sys.federations f ON f.federation_id = d.federation_id
                       WHERE f.name = ' . $this->conn->quote($this->federationName);
 
-        return $this->conn->fetchAllAssociative($sql);
+        return $this->conn->fetchAll($sql);
     }
 
      /**
@@ -178,7 +181,7 @@ class SQLAzureShardManager implements ShardManager
 
         foreach ($shards as $shard) {
             $this->selectShard($shard['rangeLow']);
-            foreach ($this->conn->fetchAllAssociative($sql, $params, $types) as $row) {
+            foreach ($this->conn->fetchAll($sql, $params, $types) as $row) {
                 $result[] = $row;
             }
         }

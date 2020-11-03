@@ -7,7 +7,7 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\Column;
 
 /**
- * Event Arguments used when the portable column definition is generated inside {@link AbstractPlatform}.
+ * Event Arguments used when the portable column definition is generated inside Doctrine\DBAL\Schema\AbstractSchemaManager.
  */
 class SchemaColumnDefinitionEventArgs extends SchemaEventArgs
 {
@@ -47,7 +47,7 @@ class SchemaColumnDefinitionEventArgs extends SchemaEventArgs
      * Allows to clear the column which means the column will be excluded from
      * tables column list.
      *
-     * @return SchemaColumnDefinitionEventArgs
+     * @return \Doctrine\DBAL\Event\SchemaColumnDefinitionEventArgs
      */
     public function setColumn(?Column $column = null)
     {
@@ -97,8 +97,6 @@ class SchemaColumnDefinitionEventArgs extends SchemaEventArgs
     }
 
     /**
-     * @deprecated Use SchemaColumnDefinitionEventArgs::getConnection() and Connection::getDatabasePlatform() instead.
-     *
      * @return AbstractPlatform
      */
     public function getDatabasePlatform()

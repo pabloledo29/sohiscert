@@ -7,7 +7,7 @@
         "ext-iconv": "*",
         "composer/package-versions-deprecated": "^1.11",
         "data-dog/pager-bundle": "^0.2.12",
-        "doctrine/dbal": "2.11",
+        "doctrine/dbal": "2.9.*",
         "doctrine/doctrine-bundle": "^2.1",
         "doctrine/doctrine-migrations-bundle": "^2.2",
         "doctrine/migrations": "2.2",

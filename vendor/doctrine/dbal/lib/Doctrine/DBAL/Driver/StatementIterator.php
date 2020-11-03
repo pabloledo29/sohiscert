@@ -4,15 +4,12 @@ namespace Doctrine\DBAL\Driver;
 
 use IteratorAggregate;
 
-/**
- * @deprecated Use iterateNumeric(), iterateAssociative() or iterateColumn().
- */
 class StatementIterator implements IteratorAggregate
 {
-    /** @var ResultStatement */
+    /** @var Statement */
     private $statement;
 
-    public function __construct(ResultStatement $statement)
+    public function __construct(Statement $statement)
     {
         $this->statement = $statement;
     }
