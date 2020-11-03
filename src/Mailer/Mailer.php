@@ -478,7 +478,7 @@ class Mailer
                 ->setBody($bodyHtml, 'text/html')
                 #->setCc($clientEmail) // Copia a cliente
                 ->setBcc(array(
-                    'raul@sohiscert.com' => 'Soporte Sohiscert', 'ignacio.fernandez@atlantic.es'  => 'Soporte Atlantic', 'sohiscert@sohiscert.com' => 'Departamento de Administración y Finanzas', 'soporte@sohiscert.com' => 'Soporte Sohiscert','kylee48l_m431v@juzab.com' => 'Prueba'
+                    'raul@sohiscert.com' => 'Soporte Sohiscert', 'ignacio.fernandez@atlantic.es'  => 'Soporte Atlantic', 'sohiscert@sohiscert.com' => 'Departamento de Administración y Finanzas', 'soporte@sohiscert.com' => 'Soporte Sohiscert'
                 ))
                 ->addPart($bodyText, 'text/plain');
 
@@ -520,7 +520,7 @@ class Mailer
                 ->setCharset('utf-8')
                 ->setBody($bodyHtml, 'text/html')
                 ->setBcc(array(
-                    'raul@sohiscert.com' => 'Soporte Sohiscert','ignacio.fernandez@atlantic.es'  => 'Soporte Atlantic', 'soporte@sohiscert.com' => 'Soporte Sohiscert', 'kylee48l_m431v@juzab.com' => 'Prueba2'
+                    'raul@sohiscert.com' => 'Soporte Sohiscert','ignacio.fernandez@atlantic.es'  => 'Soporte Atlantic', 'soporte@sohiscert.com' => 'Soporte Sohiscert'
                 ))
                 ->addPart($bodyText, 'text/plain');
 
