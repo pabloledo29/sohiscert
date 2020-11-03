@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => 'a02cad501d8013f6a9533440c8224538b0d6aa86',
+    'reference' => 'c256e02e5ce45173005a2612922363cfe4e96ff8',
     'name' => '__root__',
   ),
   'versions' => 
@@ -18,7 +18,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => 'a02cad501d8013f6a9533440c8224538b0d6aa86',
+      'reference' => 'c256e02e5ce45173005a2612922363cfe4e96ff8',
     ),
     'behat/transliterator' => 
     array (
@@ -671,15 +671,6 @@
       array (
       ),
       'reference' => '157a252222251310fe50c71012b4e72f01325850',
-    ),
-    'symfony/orm-pack' => 
-    array (
-      'pretty_version' => 'v1.2.0',
-      'version' => '1.2.0.0',
-      'aliases' => 
-      array (
-      ),
-      'reference' => '21ac491414b5815e5ebb7425908c1d1568d2e775',
     ),
     'symfony/polyfill-ctype' => 
     array (
