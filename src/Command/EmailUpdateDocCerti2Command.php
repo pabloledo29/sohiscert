@@ -16,17 +16,16 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use App\Entity\OpNopTransform;
-
 use App\Entity\DocumentosFTP;
 use Swift_Mailer;
 use Swift_SmtpTransport;
 /**
- * Class EmaildoccarSendCommand
+ * Class EmailUpdateDocCertiCommand
  * @package App\Command
  */
-class EmaildoccarSendCommand extends Command
+class EmailUpdateDocCerti2Command extends Command
 {
-    protected static $defaultName = 'email:emaildoccar:send';
+    protected static $defaultName = 'email:emaildoccerti2:send';
     public function __construct(string $path_update_logs,string $ftp_server, string $ftp_user_name, string $ftp_user_pass, $mailer,$em)
     {
         $this->path_update_logs = $path_update_logs;
@@ -48,6 +47,7 @@ class EmaildoccarSendCommand extends Command
     protected function configure()
     {
         $this
+            ->setName('email:emaildoccerti:send')
             ->setDescription('Send simple email message')
             ->addOption('from', null, InputOption::VALUE_REQUIRED, 'The from address of the message')
             ->addOption('to', null, InputOption::VALUE_REQUIRED, 'The to address of the message')
@@ -72,7 +72,7 @@ EOF
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         # Definimos Variable de Cominezo de Ejecución 
         $now = date("Y-m-d H:i:s");
@@ -115,70 +115,73 @@ EOF
         $diahoy = date('Y-m-d', time());
         $diahoy = strtotime($diahoy);
 
-        $semantes = '2018-01-22';
+        $semantes = '2019-01-22';
         #$semantes = date('Y-m-d', strtotime('-1 week'));
         $semantes = strtotime($semantes);
 
         
         # Rutas para Pruebas
-        $rutasftp = array('carta' => '/sitio3');
+        $rutasftp = array('certificado' => '/SITIO2');
         #$rutasftp = array('factura' => '/facturasintranet');
+
         $em = $this->em;
+
         $mapeo_nop = $em->getRepository(OpNopTransform::class)->findAll();
         $lista_mapeo = [];
         foreach ($mapeo_nop as $mapeo){
             $lista_mapeo[$mapeo->getOpNop()] = $mapeo->getopNopTransform();
         }
+
         #MNN Creamos el archivo update de reccorridos de archivos de certificados
         $urlBase = $this->path_update_logs;
 
-        # Definimos Variable de Fin de Ejecución 
+        # Definimos Variable de Fin de Ejecución  
         $end = date("Y-m-d H:i:s");
 
         # Definimos la Ruta Completa y el Nombre del Fichero LOG que se va a generar
-        $path_file = $urlBase.'register_recorridos_CARTA_'.date("d_m_Y").'.log';
+        $path_file = $urlBase.'register_recorridos_CERTI_'.date("d_m_Y").'.log';
 
         # Abrimos el Archivo con Permisos de Sobrescritura
         $log = fopen($path_file, "w+");
 
-        fwrite($log,("\n* ARCHIVOS DE CARTAS\n"));
+        fwrite($log,("\n* ARCHIVOS DE CERTIFICADOS\n"));
 
         #MNN
-        $conn_id = ftp_connect($this->ftp_server);
-
-            # Inciamos Sesión
-        $login_result = ftp_login($conn_id, $this->ftp_user_name, $this->ftp_user_pass); 
-        # Verificamos la Conexión
-        if ((!$conn_id) || (!$login_result)) {  
-            /*echo "\n ¡La conexión FTP ha fallado!";
-            echo "\n Se intentó conectar al $ftp_server por el usuario $ftp_user_name"; 
-            echo " \n";*/
-            exit(); 
-
-        } else {
-            echo "\n Conexión a $this->ftp_server realizada con éxito, por el usuario " . $this->ftp_user_name . " \n";
-        }
-
 
         # Recorremos los Directorios FTP definidos anteriormente en las rutas
         # Definimos la Ruta
-
         foreach ($rutasftp as $tipodoc => $ruta) {
 
+            # Establecemos Conexión FTP
+            $conn_id = ftp_connect($this->ftp_server); 
 
-           # Habilitamos la Conexión Pasiva del FTP
-           ftp_pasv($conn_id, true);
+            # Inciamos Sesión
+            $login_result = ftp_login($conn_id, $this->ftp_user_name,$this->ftp_user_pass); 
 
-           # Obtener el número de archivos contenidos en el directorio actual
-           $lista= ftp_nlist($conn_id,$ruta);
-           $numarch = count($lista);
+            # Verificamos la Conexión FTP
+            if ((!$conn_id) || (!$login_result)) {  
+                echo "\n ¡La conexión FTP ha fallado!\n";
+                echo "\n Se intentó conectar al $this->ftp_server por el usuario $this->ftp_user_name"; 
+                echo " \n";
+                exit(); 
+
+            } else {
+                echo "\n Conexión a $this->ftp_server realizada con éxito, por el usuario " .$this->ftp_user_name . " \n";
+            }
+
+            # Habilitamos la Conexión Pasiva del FTP
+            ftp_pasv($conn_id, true);
+
+            # Obtener el número de archivos contenidos en el directorio actual
+            $lista = ftp_nlist($conn_id, $ruta);
+            $numarch = count($lista);
 
 
             echo "\n -> Documentos, " . $tipodoc . ": " . $numarch . " archivos \n";
 
             switch ($tipodoc) {
 
-                case 'carta':
+                case 'certificado':
                     # Total de Certificados
                     $totalCert = $numarch;
                     break;
@@ -198,13 +201,12 @@ EOF
 
             # Recorremos Archivo por Archivo por Directorio
 
-            for ($i=0; $i < $numarch/2 ; $i++) {
-           
+            for ($i=$numarch/2+1; $i < $numarch ; $i++) {
+                
                 switch ($tipodoc) {
                    
 
-                    case 'carta':
-                       
+                    case 'certificado':
                         # Certificados Procesados
                         $procCert = $contArch++;
                         break;
@@ -221,23 +223,22 @@ EOF
 
                 if ($docftp==-1){
                     unset($docftp);
-                  
-                    ftp_close($conn_id);
+                    #unset($conn_id);
+                    ftp_close($conn_id); 
                     unset($conn_id);
-                    
                    
                     
                     fwrite($log,("\n FALLO, INTENTANDO CONECTAR DE NUEVO"));
                     
-                    
-                    $conn_id = ftp_connect($this->ftp_server);
+
+                    $conn_id = ftp_connect($this->ftp_server); 
 
                     # Inciamos Sesión
                     $login_result = ftp_login($conn_id, $this->ftp_user_name, $this->ftp_user_pass); 
 
-                    if (!$login_result) {  
+                    if ((!$conn_id) || (!$login_result)) {  
                         echo "\n ¡La conexión FTP ha fallado DESPUES DEL ERROR!\n";
-                        echo " \n"; 
+                        echo " \n";
                         exit(); 
 
                     } else {
@@ -246,9 +247,8 @@ EOF
                     }
 
                     $docftp = ftp_mdtm($conn_id, $lista[$i]);
-                    
                 }
-               
+                
 
                 $fmoddoc = date("Y-m-d", $docftp);
                 $fecha_bruta=$fmoddoc;
@@ -293,15 +293,15 @@ EOF
                     
                     
 
-                  
+                    
                     $archivo = $em->getRepository(DocumentosFTP::class)->findOneByNbDoc($lista[$i]);
-                    //var_dump($archivo);
+
                     switch ($tipodoc) {
                         
                         
 
 
-                        case 'carta':
+                        case 'certificado':
                             
                             # Obtenemos la Fecha de Modificación del Archivo FTP
                             $docftp = ftp_mdtm($conn_id, $lista[$i]);
@@ -318,14 +318,16 @@ EOF
                                 #  - eliminar la cadena de texto hasta la posción del "-"
                                 #  - y al texto resultante le quitamos el "-" y la extensión ".pdf"
                                 $posg = strrpos($lista[$i], '-');
+                                
                                 #var_dump($posg);
                                 $op = substr($lista[$i], 0, $posg);
+                                
                                 #var_dump($op);
                                 $op = substr(strrchr($op, '/'), 1);
                                 #var_dump($op);
                                 $op = trim($op, '-');
                                 #var_dump($op);
-                                /*$encontrado = false;
+                               /* $encontrado = false;
                                 foreach ($lista_mapeo as $mapeo_key => $mapeo_value){
                                     if(strpos($mapeo_value,str_replace("AE","",$op))!==false && !$encontrado){
                                         $encontrado = true;
@@ -362,22 +364,22 @@ EOF
                                         $nbop = substr($op, ($uposg + 1), $tamnc);
                                         #echo "\n If 3 \n";
                                     }
-                                //}
+                         //   }
                                 
                                 #var_dump($nbop);   
 
                                 # Obtenemos el Código del Operador a partir del Nombre
-                                #$cons = $em->container->get('doctrine')->getManager();
+                                #$cons = $this->getContainer()->get('doctrine')->getManager();
 
                                 #MNN Consulta para la versión inferior a PHP 7.0
-                                #$datosOp = $cons->getRepository(Operator::class)->findOneByOpNop($nbop);
+                                #$datosOp = $cons->getRepository('AppBundle:Operator')->findOneByOpNop($nbop);
 
                                 # Consultas
 
                                 #$datosOp = $cons->getRepository(Operator::class)->findOneByOpNop($nbop);
 
                                 #MNN consulta para versión PHP 5.6
-                                $query = $em->createQuery('SELECT ope.codigo, ope.opNop, ope.opEma, reg.reDeno
+                                 $query = $em->createQuery('SELECT ope.codigo, ope.opNop, ope.opEma, ope.opCdp, reg.reDeno, ope.opCif, ope.opDenoop
                                                              FROM App\Entity\Operator ope
                                                              INNER JOIN App\Entity\Register reg WITH ope.opRegistro=reg.id
                                                             WHERE ope.opNop = :nom')->setParameter('nom', $nbop);
@@ -406,7 +408,7 @@ EOF
 
                                         foreach ($registro as $key => $value) {
                                             # code...
-                                            echo "\n - " . $key . ": " . $value;
+                                            #echo "\n - " . $key . ": " . $value;
                                             $operador[$key] = $value;
                                         }
                                         
@@ -431,26 +433,34 @@ EOF
                                         $docNew->setOpCdp(" ");
                                     }
 
-                                    $docNew->setOpNop($nbop);
-                                    $docNew->setTipoDoc($tipodoc);
-                                    $docNew->setNbDoc($nbdoc);
-                                    $docNew->setFechaDoc(new \DateTime($fechadoc));
+                                    if ($operador["opEma"]!=''){
+
+                                        $docNew->setOpNop($nbop);
+                                        $docNew->setTipoDoc($tipodoc);
+                                        $docNew->setNbDoc($nbdoc);
+                                        $docNew->setFechaDoc(new \DateTime($fechadoc));
 
 
-                                    $em->persist($docNew);
-                                    $em->flush();
+                                        $em->persist($docNew);
+                                        $em->flush();
+
+                                    }
 
                                     #var_dump($docNew);
                                     #exit('Certificado Grabado BB.DD.');
                                     
-                                    if (isset($operador["opEma"])) {
+                                    #if (isset($operador["opEma"])) {
+
+                                    if ($operador["opEma"]!=''){
                                         # code...
                                         $datamail = array(
                                             "operator" => $nbop,
                                             "tipo" => $tipodoc,
                                             "documento" => $nbdoc,
                                             "mail" => $operador["opEma"],
-                                            "alcance"=>$operador["reDeno"]
+                                            "alcance"=>$operador["reDeno"],
+                                            "cif"=>$operador["opCif"],
+                                            "nombre"=>$operador["opDenoop"]
                                         );
 
                                     }else{
@@ -514,10 +524,18 @@ EOF
                                             #exit('Fecha Registro Modificada');
 
                                             # Obtenemos los Datos del Operador a partir del Nombre para recuperar el Mail 
-                                            #$cons = $em->container->get('doctrine')->getManager();
-                                            #$datosOp = $cons->getRepository(Operator::class)->findOneByOpNop($nbop);
+                                            #$cons = $this->getContainer()->get('doctrine')->getManager();
+                                            #$datosOp = $cons->getRepository('AppBundle:Operator')->findOneByOpNop($nbop);
                                             
-                                            $query = $em->createQuery('SELECT ope.codigo, ope.opNop, ope.opEma, reg.reDeno
+
+                                            /*
+                                            SELECT e.id, e.opNop, e.codigo, e.opDenoop, e.opCif, r.reDeno, e.opEst, e.opTpex, e.opTel
+                                            FROM AppBundle:Operator e INNER JOIN AppBundle:Register r WITH e.opRegistro = r.id
+                                            WHERE e.opCif like :cif and e.opDenoop like :denoop AND e.opTpex != :optpex
+                                            order by e.id DESC"
+                                            */
+
+                                            $query = $em->createQuery('SELECT ope.codigo, ope.opNop, ope.opEma, ope.opCdp, reg.reDeno, ope.opCif, ope.opDenoop
                                                              FROM App\Entity\Operator ope
                                                              INNER JOIN App\Entity\Register reg WITH ope.opRegistro=reg.id
                                                             WHERE ope.opNop = :nom')->setParameter('nom', $nbop);
@@ -544,14 +562,17 @@ EOF
                                                 }
 
                                                 # Parámetros para el Envío del Mail
-                                                if (isset($operador["opEma"])) {
+                                                #if (isset($operador["opEma"])) {
+                                                if ($operador["opEma"]!=''){
                                                     # code...
                                                     $datamail = array(
                                                         "operator" => $nbop,
                                                         "tipo" => $tipodoc,
                                                         "documento" => $nbdoc,
                                                         "mail" => $operador["opEma"],
-                                                        "alcance"=>$operador["reDeno"]
+                                                        "alcance"=>$operador["reDeno"],
+                                                        "cif"=>$operador["opCif"],
+                                                        "nombre"=>$operador["opDenoop"]
                                                     );
 
                                                 }else{
@@ -575,13 +596,7 @@ EOF
                             }
 
                             break;
-
-
-                       
-
-                        
-
-                        
+          
                         default:
                             # code...
                             break;
@@ -591,58 +606,55 @@ EOF
                     # Si Existen Datos de Actualización para Remitir por Mail 
                     #
                     if (isset($datamail)) {
-                        if ($datamail['mail']!=''){
-                            var_dump($datamail["mail"]);
-                             
+                         if ($datamail['mail']!=''){
+                            var_dump($datamail);
                         if($datamail["mail"] != null){
                             $datamail["mail"] = array_filter(preg_split('[;,/ ]',trim($datamail["mail"])));
                                 if($datamail["mail"][0]){
                                     $datamail["mail"] = $datamail["mail"][0];
-                                    str_replace("ñ","n",$datamail["mail"]);
-                                    str_replace("á","a",$datamail["mail"]);
-                                        str_replace("é","e",$datamail["mail"]);
-                                        str_replace("í","i",$datamail["mail"]);
-                                        str_replace("ó","o",$datamail["mail"]);
-                                        str_replace("ú","u",$datamail["mail"]);
+                                    #str_replace("ñ","n",$datamail["mail"]);
+                                    #str_replace("á","a",$datamail["mail"]);
+                                    #    str_replace("é","e",$datamail["mail"]);
+                                    #    str_replace("í","i",$datamail["mail"]);
+                                    #    str_replace("ó","o",$datamail["mail"]);
+                                    #    str_replace("ú","u",$datamail["mail"]);
                                     if($datamail["mail"]==null || ($datamail["mail"] != [] && $datamail["mail"] != null && $datamail["mail"] != "" && !filter_var($datamail["mail"], FILTER_VALIDATE_EMAIL))){
-                                        $path_file_fail = $urlBase.'register_falladas_CART_'.date("d_m_Y").'.log';
+                                        $path_file_fail = $urlBase.'register_falladas_CERT_'.date("d_m_Y").'.log';
                                         $open_file = fopen($path_file_fail,'a+');
                                         fwrite($open_file,date("Y-m-d H:i:s"). "---->" .implode($datamail));
                                         fclose($open_file);
                                         $datamail["mail"] = null;
-                                    } 
+                                    }
                                 }
                             }
-                           /* $mailerServiceName = sprintf('swiftmailer.mailer.%s', $input->getOption('mailer'));
-                        if (!$em->container->has($mailerServiceName)) {
-                            throw new \InvalidArgumentException(sprintf('The mailer "%s" does not exist', $input->getOption('mailer')));
-                        }*/
+                           
+                            switch ($input->getOption('body-source')) {
+                                case 'file':
+                                    $filename = $input->getOption('body');
+                                    $content = file_get_contents($filename);
+                                    if ($content === false) {
+                                        throw new \Exception('Could not get contents from ' . $filename);
+                                    }
+                                    $input->setOption('body', $content);
+                                    break;
 
-                        switch ($input->getOption('body-source')) {
-                            case 'file':
-                                $filename = $input->getOption('body');
-                                $content = file_get_contents($filename);
-                                if ($content === false) {
-                                    throw new \Exception('Could not get contents from ' . $filename);
-                                }
-                                $input->setOption('body', $content);
-                                break;
+                                case 'stdin':
+                                    break;
 
-                            case 'stdin':
-                                break;
+                                default:
+                                    throw new \InvalidArgumentException('Body-input option should be "stdin" or "file"');
+                            }
 
-                            default:
-                                throw new \InvalidArgumentException('Body-input option should be "stdin" or "file"');
-                        }
+                            $message = $this->createMessage($input, $datamail);
+                            $mailer = $this->mailer;
+                            $output->writeln(sprintf('<info>Sent %s emails<info>', $mailer->send($message)));
+                            
+                            $contMail++;
 
-                        $message = $this->createMessage($input, $datamail);
-                        $mailer = $this->mailer;
-                        $output->writeln(sprintf('<info>Sent %s emails<info>', $mailer->send($message)));
-                        
-                        $contMail++;
-                        unset($datamail);
-                        # exit('Envió de Mail Realizado');
-                        }
+                            #Limpiamos 
+                            unset($datamail);
+                            # exit('Envió de Mail Realizado');
+                        } 
                     }
                     
                 }else{
@@ -651,7 +663,7 @@ EOF
                     switch ($tipodoc) {
                         
 
-                        case 'carta':
+                        case 'certificado':
                             # Certificados No Válidos
                             $docNVCert = $docNV++;;
                             break;
@@ -681,7 +693,7 @@ EOF
         $end = date("Y-m-d H:i:s");
 
         # Definimos la Ruta Completa y el Nombre del Fichero LOG que se va a generar
-        $path_file = $urlBase.'update_datedocuments_CARTAS_'.date("d_m_Y").'.log';
+        $path_file = $urlBase.'update_datedocuments_CERTIFICACIONES_'.date("d_m_Y").'.log';
 
         # Abrimos el Archivo con Permisos de Sobrescritura
         $log = fopen($path_file, "w+");
@@ -701,7 +713,7 @@ EOF
         # Escribimos Información sobre Certificados
         fwrite(
             $log,
-            ("\n - Cartas => Total: ". $totalCert ." | Procesados: ". $procCert ." | Nuevos: ". $cerNew ." | Actualizados: ". $cerUpdate ." | Sin Operador: ". $cerSO ."\n")
+            ("\n - Certificados => Total: ". $totalCert ." | Procesados: ". $procCert ." | Nuevos: ". $cerNew ." | Actualizados: ". $cerUpdate ." | Sin Operador: ". $cerSO ."\n")
         );
 
         # Escribimos Información sobre Cartas
@@ -719,7 +731,7 @@ EOF
         # Escribimos Información sobre Documentos No Válidos
         fwrite(
             $log,
-            ("\n - Documentos NO Válidos => Cartas: ". $docNVFact ." | Cartas: " . $docNVCert ." | Cartas: " . $docNVCart ." | Análisis: " . $docNVAna . "\n")
+            ("\n - Documentos NO Válidos => Facturas: ". $docNVFact ." | Certificados: " . $docNVCert ." | Cartas: " . $docNVCart ." | Análisis: " . $docNVAna . "\n")
         );
 
         # Escribimos Información sobre Mails Enviados
@@ -768,7 +780,7 @@ EOF
     /*public function isEnabled()
     {
         $em = new ContainerBuilder();
-        return $em->get('customswiftmailer');
+        return $em->has('swiftmailer.mailer.mailer_mail');
     }*/
 
     /**
@@ -797,8 +809,7 @@ EOF
             case 'analisis':
             case 'certificado':
             case 'carta':
-
-                $tipodoc2="Comunicación Decisión de Certificación";
+                
                 $nbdoc = substr($datos['documento'], 8);
 
                 break;
@@ -811,8 +822,8 @@ EOF
 
         $from  = 'noreply@sohiscert.com';
         $to = $destino;
-        //$to = 'manuel.navarro@atlantic.es';
-        $subject = "Alta de documento en Área Privada web: Comunicación Decisión de Certificación"; 
+        //$to = 'ignacio.fernandez@atlantic.es';
+        $subject = "Alta de documento en Área Privada web: Certificado"; 
         
         /*MNN Modificamos la plantilla */
 
@@ -874,7 +885,7 @@ EOF
                                                     </tr>
                                                     <tr>
                                                         <td>
-                                                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Tipo de documento: <b>' . ucwords($tipodoc2) . '</b></p>
+                                                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Tipo de documento: <b>' . ucwords($tipodoc) . '</b></p>
                                                         </td>
                                                     </tr>
                                                     <tr>

@@ -24,9 +24,9 @@ use Swift_SmtpTransport;
  * Class EmaildoccarSendCommand
  * @package App\Command
  */
-class EmaildoccarSendCommand extends Command
+class EmaildoccarSend2Command extends Command
 {
-    protected static $defaultName = 'email:emaildoccar:send';
+    protected static $defaultName = 'email:emaildoccar2:send';
     public function __construct(string $path_update_logs,string $ftp_server, string $ftp_user_name, string $ftp_user_pass, $mailer,$em)
     {
         $this->path_update_logs = $path_update_logs;
@@ -162,7 +162,6 @@ EOF
 
         # Recorremos los Directorios FTP definidos anteriormente en las rutas
         # Definimos la Ruta
-
         foreach ($rutasftp as $tipodoc => $ruta) {
 
 
@@ -198,8 +197,8 @@ EOF
 
             # Recorremos Archivo por Archivo por Directorio
 
-            for ($i=0; $i < $numarch/2 ; $i++) {
-           
+            for ($i=($numarch/2+1); $i < $numarch ; $i++) {
+                
                 switch ($tipodoc) {
                    
 
@@ -325,7 +324,7 @@ EOF
                                 #var_dump($op);
                                 $op = trim($op, '-');
                                 #var_dump($op);
-                                /*$encontrado = false;
+                             /* $encontrado = false;
                                 foreach ($lista_mapeo as $mapeo_key => $mapeo_value){
                                     if(strpos($mapeo_value,str_replace("AE","",$op))!==false && !$encontrado){
                                         $encontrado = true;

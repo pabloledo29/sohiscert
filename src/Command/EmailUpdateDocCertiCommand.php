@@ -15,7 +15,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
- 
+use App\Entity\OpNopTransform;
 use App\Entity\DocumentosFTP;
 use Swift_Mailer;
 use Swift_SmtpTransport;
@@ -125,6 +125,13 @@ EOF
         #$rutasftp = array('factura' => '/facturasintranet');
 
         $em = $this->em;
+
+        $mapeo_nop = $em->getRepository(OpNopTransform::class)->findAll();
+        $lista_mapeo = [];
+        foreach ($mapeo_nop as $mapeo){
+            $lista_mapeo[$mapeo->getOpNop()] = $mapeo->getopNopTransform();
+        }
+
         #MNN Creamos el archivo update de reccorridos de archivos de certificados
         $urlBase = $this->path_update_logs;
 
@@ -194,7 +201,7 @@ EOF
 
             # Recorremos Archivo por Archivo por Directorio
 
-            for ($i=0; $i < $numarch ; $i++) {
+            for ($i=0; $i < $numarch/2 ; $i++) {
                 
                 switch ($tipodoc) {
                    
@@ -320,36 +327,44 @@ EOF
                                 #var_dump($op);
                                 $op = trim($op, '-');
                                 #var_dump($op);
+                                /*$encontrado = false;
+                                foreach ($lista_mapeo as $mapeo_key => $mapeo_value){
+                                    if(strpos($mapeo_value,str_replace("AE","",$op))!==false && !$encontrado){
+                                        $encontrado = true;
+                                        $nbop = $mapeo_key;
 
-
-                                # Si el Documento No Contiene más '-' o No Empiece por F ni por 1
-                                if ((strrpos($op, '-') == false && strrpos($op, ' ') == false) || (strcmp(substr($op, 0, 1), 'F') <> 0 && strcmp(substr($op, 0, 1), '1') <> 0)) {
-                                    
-                                    $nbop = $op;
-                                    #echo "\n If 1 \n";
-
-                                    # Si el Documenta Comienza por F, 1 o S
-                                }elseif (strcmp(substr($op, 0, 1), 'F') == 0 || strcmp(substr($op, 0, 1), '1') == 0 || strcmp(substr($op, 0, 1), 'S') == 0) {
-                                    
-                                    # Obtenemos el Nombre del Operador a partir de la última
-                                    # posición del '-'
-                                    $tamnc = strlen($op);
-                                    $uposg = strrpos($op, '-');
-
-                                    $nbop = substr($op, ($uposg + 1), $tamnc);
-                                    #echo "\n If 2 \n";
-
-                                    # Si el Documento Comienza por NAQS o NOP
-                                }elseif (strcmp(substr($op, 0, 4), 'NAQS') == 0 || strcmp(substr($op, 0, 3), 'NOP') == 0) {
-                                    
-                                    # Obtenemos el Nombre del Operador a partir de la última
-                                    # posición del '(espacio)'
-                                    $tamnc = strlen($op);
-                                    $uposg = strrpos($op, ' ');
-
-                                    $nbop = substr($op, ($uposg + 1), $tamnc);
-                                    #echo "\n If 3 \n";
+                                    }
                                 }
+                                if(!$encontrado){*/
+                                    # Si el Documento No Contiene más '-' o No Empiece por F ni por 1
+                                    if ((strrpos($op, '-') == false && strrpos($op, ' ') == false) || (strcmp(substr($op, 0, 1), 'F') <> 0 && strcmp(substr($op, 0, 1), '1') <> 0)) {
+                                        
+                                        $nbop = $op;
+                                        #echo "\n If 1 \n";
+
+                                        # Si el Documenta Comienza por F, 1 o S
+                                    }elseif (strcmp(substr($op, 0, 1), 'F') == 0 || strcmp(substr($op, 0, 1), '1') == 0 || strcmp(substr($op, 0, 1), 'S') == 0) {
+                                        
+                                        # Obtenemos el Nombre del Operador a partir de la última
+                                        # posición del '-'
+                                        $tamnc = strlen($op);
+                                        $uposg = strrpos($op, '-');
+
+                                        $nbop = substr($op, ($uposg + 1), $tamnc);
+                                        #echo "\n If 2 \n";
+
+                                        # Si el Documento Comienza por NAQS o NOP
+                                    }elseif (strcmp(substr($op, 0, 4), 'NAQS') == 0 || strcmp(substr($op, 0, 3), 'NOP') == 0) {
+                                        
+                                        # Obtenemos el Nombre del Operador a partir de la última
+                                        # posición del '(espacio)'
+                                        $tamnc = strlen($op);
+                                        $uposg = strrpos($op, ' ');
+
+                                        $nbop = substr($op, ($uposg + 1), $tamnc);
+                                        #echo "\n If 3 \n";
+                                    }
+                           // }
                                 
                                 #var_dump($nbop);   
 
@@ -639,7 +654,7 @@ EOF
                             #Limpiamos 
                             unset($datamail);
                             # exit('Envió de Mail Realizado');
-                        }   
+                        } 
                     }
                     
                 }else{

@@ -163,9 +163,16 @@ services:
     App\Command\EmaildoccarSendCommand:
         tags: { name: 'console.command', command: "email:emaildoccar:send" }
         arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@mailer','@doctrine.orm.entity_manager']
+    App\Command\EmaildoccarSend2Command:
+        tags: { name: 'console.command', command: "email:emaildoccar2:send" }
+        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@mailer','@doctrine.orm.entity_manager']
 
     App\Command\EmailUpdateDocCertiCommand:
         tags: { name: 'console.command', command: "email:emaildoccerti:send" }
+        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@mailer','@doctrine.orm.entity_manager']
+        
+    App\Command\EmailUpdateDocCerti2Command:
+        tags: { name: 'console.command', command: "email:emaildoccerti2:send" }
         arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@mailer','@doctrine.orm.entity_manager']
 
 #=======================================================================================================================
