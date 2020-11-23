@@ -8,7 +8,3 @@
 /opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console cache:pool:clear cache.app
 /opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console cache:pool:clear cache.system
 /opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console cache:pool:clear cache.validator
-/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console cache.annotations
-/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console doctrine.result_cache_pool
-/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console doctrine.system_cache_pool
-/opt/rh/rh-php72/root/usr/bin/php /opt/app-root/src/bin/console cache.property_access
