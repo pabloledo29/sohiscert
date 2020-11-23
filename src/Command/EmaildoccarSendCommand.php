@@ -124,11 +124,11 @@ EOF
         $rutasftp = array('carta' => '/sitio3');
         #$rutasftp = array('factura' => '/facturasintranet');
         $em = $this->em;
-        $mapeo_nop = $em->getRepository(OpNopTransform::class)->findAll();
+        /*$mapeo_nop = $em->getRepository(OpNopTransform::class)->findAll();
         $lista_mapeo = [];
         foreach ($mapeo_nop as $mapeo){
             $lista_mapeo[$mapeo->getOpNop()] = $mapeo->getopNopTransform();
-        }
+        }*/
         #MNN Creamos el archivo update de reccorridos de archivos de certificados
         $urlBase = $this->path_update_logs;
 
