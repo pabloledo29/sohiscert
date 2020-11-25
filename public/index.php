@@ -1,27 +1,20 @@
-<?php
+<!doctype html>
+<html lang="es">
+<head>
+	<title>Página en mantenimeinto</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+	<link href="app/css/style.css" rel="stylesheet" type="text/css"/>
 
-use App\Kernel;
-use Symfony\Component\ErrorHandler\Debug;
-use Symfony\Component\HttpFoundation\Request;
+</head>
+<body style="text-align:center;">
 
-require dirname(__DIR__).'/config/bootstrap.php';
+ 	<div>
+ 		<img src="images/logo-vector-sohiscert.jpg" alt="Logo de sohiscert" witdth="250px" height="250px">
+ 		<p>Por razones ajenas a nuestra voluntad, temporalmente no está disponible el área privada de clientes.</p>
 
-if ($_SERVER['APP_DEBUG']) {
-    umask(0000);
+		<p style="margin-bottom: 2em;">Estamos trabajando en solucionarlo con la mayor brevedad posible.</p>
 
-    Debug::enable();
-}
-
-if ($trustedProxies = $_SERVER['TRUSTED_PROXIES'] ?? $_ENV['TRUSTED_PROXIES'] ?? false) {
-    Request::setTrustedProxies(explode(',', $trustedProxies), Request::HEADER_X_FORWARDED_ALL ^ Request::HEADER_X_FORWARDED_HOST);
-}
-
-if ($trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? $_ENV['TRUSTED_HOSTS'] ?? false) {
-    Request::setTrustedHosts([$trustedHosts]);
-}
-
-$kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
-$request = Request::createFromGlobals();
-$response = $kernel->handle($request);
-$response->send();
-$kernel->terminate($request, $response);
+		<p><strong>Disculpen las molestias.</strong></p>
+	</div>
+</body>
+</html>
