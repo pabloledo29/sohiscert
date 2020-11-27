@@ -1,0 +1,25 @@
+{% extends 'base_full.html.twig' %}
+
+{% block title %}Nueva transformación de número de expediente{% endblock %}
+
+{% block content %}
+
+<div class="box box-info">
+                    <div class="box-header">
+                        <i class="fa fa-user"></i>
+
+                        <h3 class="box-title">Mapa de número de expediente</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+
+
+    <h1>Nuevo Mapeo del número de expediente</h1>
+
+    {{ include('nop_transform/_form.html.twig') }}
+    <div  style="margin:1em 0;">
+        <a class="btn btn-success" href="{{ path('nop_transform_index') }}">Volver al listado</a>
+    </div>
+    </div>
+    </div>
+{% endblock %}

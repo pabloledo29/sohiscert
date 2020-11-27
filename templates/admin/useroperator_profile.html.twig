@@ -74,6 +74,7 @@
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
+
                         {% if userOperator.clientId is not null %}
                         
                             <strong><i class="fa fa-user margin-r-5"></i> Denominacion: </strong>
@@ -125,7 +126,6 @@
                             </div>
 
                         {% endif %}
-
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
@@ -133,7 +133,7 @@
                             <h4></h4>
 
                             <p></p>
-                        </div>
+
                         <div class="input-group-btn">
                             <form id="refreshForm" action="{{ path('admin_useroperator_update') }}" method="post">
                                 <input name="id" type="hidden" value="{{ userOperator.id }}"/>
@@ -142,6 +142,7 @@
                                 </button>
                             </form>
                         </div>
+                   
                     </div>
                     <!-- /.box-footer -->
                 </div>

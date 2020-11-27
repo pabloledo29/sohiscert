@@ -1,0 +1,92 @@
+{% extends 'base_full.html.twig' %}
+
+{% block title %}Listado NopTransform{% endblock %}
+
+{% block content %}
+
+     <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Mapeo de número de expediente
+            <small>Transformacion de operador</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-group"></i> Transformación</a></li>
+            <li class="active">Listado</li>
+        </ol>
+    </section
+  <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                 <div class="box box-info">
+                    <div class="box-header">
+                        <i class="fa fa-th-list"></i>
+                        <h3 class="box-title">Listado de operadores con "/" </h3>
+                        {% for type, messages in app.session.flashbag.all() %}
+                           {% for message in messages %}
+                                <div class="flash-{{ type }}">
+                                    <div class="form-box" id="login-box">
+                                        <div class="alert alert-success alert-dismissable">
+                                            <i class="fa fa-ban"></i>
+                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                            <b></b>{{ message }}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                        </div>
+                         <div class="box box-info">
+                    <div class="box-header">
+                        <i class="fa fa-user"></i>
+
+                        <h3 class="box-title">Listado de datos </h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+
+                            <table class="table">
+                                <a class="btn btn-success" href="{{ path('nop_transform_new') }}">Nuevo elemento</a>
+        <thead>
+            <tr>
+                <th>Identificador</th>
+                <th>Número de expediente</th>
+                <th>Número de expediente trasformado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for nop_transform in nop_transforms %}
+            <tr>
+                <td>{{ nop_transform.id }}</td>
+                <td>{{ nop_transform.opNop }}</td>
+                <td>{{ nop_transform.opNopTransform }}</td>
+                <td>
+                    
+                    <a class="btn btn-success" href="{{ path('nop_transform_edit', {'id': nop_transform.id}) }}">Editar</a>
+                    <a class="btn btn-success" href="{{ path('nop_transform_delete', {'id': nop_transform.id}) }}">Eliminar</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">No se encontró ningún resultado</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+
+                        </div>         
+
+            </div>
+        </div>
+    </section>
+    
+{% endblock %}
+
+    
+
+
+   

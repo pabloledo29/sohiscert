@@ -1,0 +1,6 @@
+<div style="margin:1em 0;"><form method="post" action="{{ path('nop_transform_delete', {'id': nop_transform.id}) }}" onsubmit="return confirm('¿Estás seguro que quieres borrar este elemento?');">
+    <input type="hidden" name="_method" value="DELETE">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ nop_transform.id) }}">
+    <button class="btn btn-success">Borrar</button>
+</form>
+</div>

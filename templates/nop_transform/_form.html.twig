@@ -1,0 +1,17 @@
+{{ form_start(form) }}
+
+
+	<div class="form-group {% if form.opNop.vars.valid==false %}has-error{% endif %}">
+        {{ form_label (form.opNop)}}
+       	{{ form_widget(form.opNop) }}
+        <div id="error_email" class="error-block"><span class="label label-danger" >{{ form.opNop.vars.errors }}</span></div>
+   	</div>
+   	<div class="form-group {% if form.opNop.vars.valid==false %}has-error{% endif %}">
+        {{ form_label (form.opNopTransform)}}
+       	{{ form_widget(form.opNopTransform) }}
+        <div id="error_email" class="error-block"><span class="label label-danger" >{{ form.opNop.vars.errors }}</span></div>
+   	</div>
+   	<div class="input-group-btn">
+    	<button class="btn btn-success"><i class="fa fa-save"></i> {{ button_label|default('Guardar') }}</button>
+    </div>
+{{ form_end(form) }}

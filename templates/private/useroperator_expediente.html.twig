@@ -208,7 +208,7 @@
                                 <div><label>Actividad:</label></div>
                                 {% for industrias in operator.opIndustrias %}
                                     {% if industrias.inActividadI.ainDeno is defined %}
-                                        {% if industrias.inActividadI.ainDeno  | default('') not in mostrados and industrias.inActividadI.inSitr != 'DL' and industrias.inActividadI.inSitr != 'B' %}
+                                        {% if industrias.inActividadI.ainDeno  | default('') not in mostrados and industrias.inSit != 'DL' and industrias.inSit != 'B' %}
                                             <div><label> - </label><span> {{ industrias.inActividadI.ainDeno }} </span>
                                             </div>
                                             {% set mostrados = mostrados|merge([industrias.inActividadI.ainDeno | default('')]) %}
@@ -377,6 +377,6 @@
         </div>
     </section><!-- /.content -->
 <script>
-        setInterval('window.location.reload()', 10000);
+        setInterval('window.location.reload()', 20000);
     </script>
 {% endblock %}

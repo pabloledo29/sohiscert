@@ -77,7 +77,7 @@
                         {% endif %}
 
                         {% if estado is defined %}
-                            <div {% if operator.opEst == 'P' %}class="callout callout-danger"{% endif %}>
+                            <div {% if operator.opEst == 'P'  %}class="callout callout-danger"{% endif %}>
                                 <label>Estado: </label><span> {{ estado }} </span>
                             </div>
                         {% endif %}
@@ -113,7 +113,7 @@
                                     
                 
                                     {% if productoPae.pipEst is defined %}
-                                     {% if  productoPae.pipEst != 'DL' and productoPae.pipEst != 'B'%}
+                                     {% if  productoPae.pipEst != 'DL' and productoPae.pipEst != 'B' %}
                                         <br>
                                         <div><label>Marca Comercial: </label><span> {{ productoPae.pipPro }} </span></div>
                                         <div><label>Descripción: </label><span> {{ productoPae.pipDsc }} </span></div>
