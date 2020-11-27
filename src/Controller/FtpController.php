@@ -9,6 +9,7 @@ namespace App\Controller;
 use App\Entity\Client;
 use App\Entity\DocumentosFTP;
 use App\Entity\Operator;
+use App\Entity\OpNopTransform;
 use Symfony\Component\Routing\Annotation\Route;
 
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
@@ -103,8 +104,15 @@ class FtpController extends AbstractController
         
             $clientId = preg_split('/\/|-/', $path_aux);
         
+          
         
-        
+        $mapeo_nop = $this->getDoctrine()->getManager()->getRepository(OpNopTransform::class)->findAll();
+        $lista_mapeo = [];
+        foreach ($mapeo_nop as $mapeo){
+            $lista_mapeo[$mapeo->getOpNop()] = $mapeo->getopNopTransform();
+        }
+
+   
         // Si solo hubiese un cliente para un usuario esta sería la manera más logica
 //        if ($clientId !== $user->getClientId()->getCodigo()) {
 //            throw $this->createAccessDeniedException();
@@ -115,6 +123,7 @@ class FtpController extends AbstractController
         $list = [];
         foreach ($clients as $cod) {
             array_push($list,  str_replace("/","",$cod['opNop']));
+
         }
        
         
@@ -132,7 +141,9 @@ class FtpController extends AbstractController
                 $client_aux= 'SHC-' . $clientId[($i + 1)] . '-' . $clientId[($i +2)];
                 
             }
-            if (in_array($client_aux, $list_aux)) {
+        
+
+            if (in_array($client_aux, $list_aux) || in_array($client_aux, $lista_mapeo) ) {
                 
                 $encontrado =true;
             }
@@ -589,12 +600,11 @@ class FtpController extends AbstractController
             $type = 'Última Comunicación Comisión';
         }
 
-        
+     
         if (count($fileList) > 0) {
             if($query == 'cartas'){
                 $fileList = array_reverse($fileList);
 
-                
             }
             $path = reset($fileList);
             
