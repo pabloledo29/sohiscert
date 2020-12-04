@@ -57,7 +57,7 @@ parameters:
         RN: 'NAE'
     ftp_server: '195.55.254.241' #'sohiscert3.ddns.cyberoam.com'
     ftp_user_name: 'userftp1'
-    ftp_user_pass: 'AtlIntTec.12'
+    ftp_user_pass: 'Servidor@2020'
     mailchimp_api_key: 'bccbc65594b97af78b8d502147d008b6-us19' #Elemento duplicado mailchimp.yaml
     twilio_sid: SK277c0d83b4164e6e0b86127b5518a027
     twilio_token: 9HZEOuM9aOtXTJKlZTA00NpYuJg3qRn1
