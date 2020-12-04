@@ -4,7 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    gsbase_host: sohiscert3.ddns.cyberoam.com #82.159.232.128
+    gsbase_host: '195.55.254.241' #sohiscert3.ddns.cyberoam.com #82.159.232.128
     gsbase_port: 8121
     gsbase_user: __*web
     gsbase_pass: S0h1scert
@@ -55,7 +55,7 @@ parameters:
         RT: 'TAE'
         RS: 'SAE'
         RN: 'NAE'
-    ftp_server: 'sohiscert3.ddns.cyberoam.com'
+    ftp_server: '195.55.254.241' #'sohiscert3.ddns.cyberoam.com'
     ftp_user_name: 'userftp1'
     ftp_user_pass: 'AtlIntTec.12'
     mailchimp_api_key: 'bccbc65594b97af78b8d502147d008b6-us19' #Elemento duplicado mailchimp.yaml
@@ -213,10 +213,10 @@ services:
     App\Command\UpdateGanaderiasCommand:
         tags: { name: 'console.command', command: "gsbase:update:ganaderias" }
         arguments: ['%path_update_logs%','@toolsupdate','@gsbase', '@gsbasexml','@doctrine.orm.entity_manager']
-
-    App\Command\UpdateDateDocumentsOperatorsClientCommand:
-        tags: { name: 'console.command', command: "gsbase:update:datedocuments" }       
     
+    App\Command\UpdateDateDocumentsOperatorsClientCommand:
+        tags: { name: 'console.command', command: 'gsbase:update:datedocuments' }
+
     App\Command\UpdateCultivosRecCommand:
         tags: { name: 'console.command', command: "gsbase:update:cultivosrec" }
         arguments: ['%path_update_logs%','@toolsupdate','@gsbase', '@gsbasexml','@doctrine.orm.entity_manager']         

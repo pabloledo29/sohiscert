@@ -20,19 +20,19 @@ class Ftp
      * Rutas de documentos en Servidor FTP Sohiscert.
      */
     //const FTP_BILLING = "/test";
-    const FTP_BILLING = "/facturasintranet"; # Directorio anterior: "/RAIZ/SOHISCERT-GERENCIA/DEPARTAMENTO DE CONTABILIDAD/FACTURAS 2016/";
+    const FTP_BILLING = "/DEPARTAMENTO DE CONTABILIDAD/FACTURAS 2016"; # Directorio anterior: "/RAIZ/SOHISCERT-GERENCIA/DEPARTAMENTO DE CONTABILIDAD/FACTURAS 2016/";
     const FTP_DOC = "/Documentos/Documentos/";
     const FTP_GENERAL = "/Documentos/General/";
     //const FTP_CERTIFICADOS = "/test";
-    const FTP_CERTIFICADOS = "/sitio2";
+    const FTP_CERTIFICADOS = "/DEPARTAMENTO ADMINISTRACION/ARCHIVO DIGITAL";
     //const FTP_ANALISIS = "/test/acceso directo";
-    const FTP_ANALISIS = "/sitio1";
-    const FTP_CARTAS = "/sitio3";
+    const FTP_ANALISIS = "/DEPARTAMENTO DE CONTROL/RESULTADOS ANALÍTICOS";
+    const FTP_CARTAS = "/DEPARTAMENTO CERTIFICACION/DECISIÓN DE CERTIFICACIÓN/COMUNICACION DE LA COMISION DE CERTIFICACION";
     //const FTP_CARTAS = "/test";
-    const FTP_UPLOADS = "/";
+    const FTP_UPLOADS = "/subidas";
     // MNN Nueva ruta para conclusiones
     //const FTP_CONCLUSIONES = "/test/acceso directo";
-    const FTP_CONCLUSIONES = "/sitio4CON"; 
+    const FTP_CONCLUSIONES = "/DEPARTAMENTO DE CONTROL/3. CONCLUSIONES/AREA PRIVADA";  
     
 
     protected $ftp;
@@ -440,7 +440,7 @@ class Ftp
                     }
                 
             
-            
+            //TODO : CERTLIST estará vacío
             $certList[]= array_values($certList)[$cont_i];
             
         }
