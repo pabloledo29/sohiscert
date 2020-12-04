@@ -121,7 +121,7 @@ EOF
 
         
         # Rutas para Pruebas
-        $rutasftp = array('certificado' => '/SITIO2');
+        $rutasftp = array('certificado' => '/DEPARTAMENTO ADMINISTRACION/ARCHIVO DIGITAL');
         #$rutasftp = array('factura' => '/facturasintranet');
 
         $em = $this->em;

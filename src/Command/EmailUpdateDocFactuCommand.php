@@ -15,7 +15,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
- 
+use App\Entity\OpNopTransform;
 use App\Entity\DocumentosFTP;
 use Swift_Mailer;
 use Swift_SmtpTransport;
@@ -119,12 +119,18 @@ EOF
         $semantes = '2019-01-22';
         #$semantes = date('Y-m-d', strtotime('-1 week'));
         $semantes = strtotime($semantes);
- 
+        
         
         # Rutas para Pruebas
-        $rutasftp = array('factura' => '/facturasintranet');
+        $rutasftp = array('factura' => '/DEPARTAMENTO DE CONTABILIDAD/FACTURAS 2016');
         #$rutasftp = array('factura' => '/facturasintranet');
         $em = $this->em;
+        
+        $mapeo_nop = $em->getRepository(OpNopTransform::class)->findAll();
+        $lista_mapeo = [];
+        foreach ($mapeo_nop as $mapeo){
+            $lista_mapeo[$mapeo->getOpNop()] = $mapeo->getopNopTransform();
+        }
 
         #MNN Creamos el archivo update de reccorridos de archivos de certificados
         $urlBase = $this->path_update_logs;
@@ -314,6 +320,16 @@ EOF
                                 $op = substr($lista[$i], $posg);
                                 $op = trim($op, '-');
                                 $nbop = trim($op, '.pdf');
+
+                                $encontrado = false;
+                                foreach ($lista_mapeo as $mapeo_key => $mapeo_value){
+                                    if(strpos($mapeo_value,str_replace("AE","",$op))!==false && !$encontrado){
+                                        $encontrado = true;
+                                        $nbop = $mapeo_key;
+
+                                    }
+                                }
+                             
                                 #var_dump($nbop);
 
                                 # Obtenemos el Código del Operador a partir del Nombre

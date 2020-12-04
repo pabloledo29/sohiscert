@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
  
-
+use App\Entity\OpNopTransform;
 use App\Entity\DocumentosFTP;
 use App\Entity\Operator;
 use Swift_Mailer;
@@ -122,13 +122,17 @@ EOF
         $semantes = '2019-01-22';
         #$semantes = date('Y-m-d', strtotime('-1 week'));
         $semantes = strtotime($semantes);
-
+        
         
         # Rutas para Pruebas
-        $rutasftp = array('conclusiones' => '/sitio4CON');
+        $rutasftp = array('conclusiones' => '/DEPARTAMENTO DE CONTROL/3. CONCLUSIONES/AREA PRIVADA');
         #$rutasftp = array('factura' => '/facturasintranet');
         $em = $this->em;
-
+        $mapeo_nop = $em->getRepository(OpNopTransform::class)->findAll();
+        $lista_mapeo = [];
+        foreach ($mapeo_nop as $mapeo){
+            $lista_mapeo[$mapeo->getOpNop()] = $mapeo->getopNopTransform();
+        }
         #MNN Creamos el archivo update de reccorridos de archivos de certificados
         $urlBase = $this->path_update_logs;
 
@@ -321,31 +325,43 @@ EOF
                                 #$op = trim($op, '-');
                                 $op= substr($op, 0, -4);
                                 
+                                $encontrado = false;
+                                foreach ($lista_mapeo as $mapeo_key => $mapeo_value){
+                                    if(strpos($mapeo_value,str_replace("AE","",$op))!==false && !$encontrado){
+                                        $encontrado = true;
+                                        $nbop = $mapeo_key;
 
-                                #Recorremos el array
-                                $porciones = explode("-", $op);
-                                $operador2=null;
-                                for ($j=0; $j < count($porciones) ; $j++) {
-                                    # Obtenemos el Código del Operador a partir del Nombre
-                                    $cons = $em;
-                                        
-                                    #MNN Consulta para la versión superior a PHP 7.0
-                                    $datosOp = $cons->getRepository(Operator::class)->findOneByOpNop($porciones[$j]);
-                                    
-                                    if (isset($datosOp) && count($datosOp) > 0){
-                                  
-                                        $operador2=$porciones[$j];
                                     }
-
-                                }    
-                                if(!$operador2){
-                                    continue 2;
                                 }
                                 
-                                if (strcmp(substr($op, 0, 4), 'F27-') == 0 or strcmp(substr($op, 0, 4), 'F194')== 0){
+                                if(!$encontrado){
+                                    #Recorremos el array
+                                    $porciones = explode("-", $op);
                                     
-                                    $nbop = $operador2;
+                                    $operador2=null;
+                                    for ($j=0; $j < count($porciones) ; $j++) {
+                                        # Obtenemos el Código del Operador a partir del Nombre
+                                        $cons = $em;
+                                            
+                                        #MNN Consulta para la versión superior a PHP 7.0
+                                        $datosOp = $cons->getRepository(Operator::class)->findOneByOpNop($porciones[$j]);
+                                        
+                                        if (isset($datosOp) && count($datosOp) > 0){
+                                      
+                                            $operador2=$porciones[$j];
+                                        }
 
+                                    }
+
+                                    if(!$operador2){
+                                        continue 2;
+                                    }
+                                    
+                                    if (strcmp(substr($op, 0, 4), 'F27-') == 0 or strcmp(substr($op, 0, 4), 'F194')== 0){
+                                        
+                                        $nbop = $operador2;
+
+                                    }
                                 }#else{
                                   #  $nbop='XX';
                                 #}

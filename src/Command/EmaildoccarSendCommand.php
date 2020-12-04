@@ -121,7 +121,7 @@ EOF
 
         
         # Rutas para Pruebas
-        $rutasftp = array('carta' => '/sitio3');
+        $rutasftp = array('carta' => '/DEPARTAMENTO CERTIFICACION/DECISIÓN DE CERTIFICACIÓN/COMUNICACION DE LA COMISION DE CERTIFICACION');
         #$rutasftp = array('factura' => '/facturasintranet');
         $em = $this->em;
         $mapeo_nop = $em->getRepository(OpNopTransform::class)->findAll();
