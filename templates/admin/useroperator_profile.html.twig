@@ -95,14 +95,11 @@
                                     {{ userOperator.clientId.contact.cnApe1|default('') }}
                                     {{ userOperator.clientId.contact.cnApe2 |default('') }} </p>
                             {% endif %}
-                            <strong><i class="fa fa-phone margin-r-5"></i> Teléfono: </strong><p class="text-muted"
-                                                                                                 id="tel"> {{ userOperator.clientId.clTel }} </p>
+                            <strong><i class="fa fa-phone margin-r-5"></i> Teléfono: </strong><p class="text-muted" id="tel"> {{ userOperator.clientId.clTel }} </p>
                             <strong><i class="fa fa-fax margin-r-5"></i> Fax: </strong><p class="text-muted"
                                                                                           id="fax"> {{ userOperator.clientId.clFax }} </p>
-                            <strong><i class="fa fa-envelope-o margin-r-5"></i> Email: </strong><p class="text-muted"
-                                                                                                   id="email"> {{ userOperator.clientId.clEma }} </p>
+                            <strong><i class="fa fa-envelope-o margin-r-5"></i> Email: </strong><p class="text-muted" id="email"> {{ userOperator.clientId.clEma }} </p>
                         
-
                             <div align="right">
                                 {#<span>Actualizado el#}
                                 {#<span id="updtime">#}
@@ -113,7 +110,7 @@
                                 {#{% endif %}</span>#}
                                 {#</span>#}
                                 {% if updateLog is not null %}
-                                    <span>Actualizado el: {{ updateLog.timeStamp|date('d/m/Y') }}
+                                    <span >Actualizado el: {{ updateLog.timeStamp|date('d/m/Y') }}
                                  </span>
                                 {% endif %}
                             </div>
@@ -129,7 +126,7 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <div id="updMsg" class="hidden">
+                        <div id="updMsg" >
                             <h4></h4>
 
                             <p></p>
@@ -137,9 +134,7 @@
                         <div class="input-group-btn">
                             <form id="refreshForm" action="{{ path('admin_useroperator_update') }}" method="post">
                                 <input name="id" type="hidden" value="{{ userOperator.id }}"/>
-                                <button id="refresh" class="pull-right btn btn-info"><i class="fa fa-refresh"></i>
-                                    Actualizar
-                                </button>
+                                <button id="refresh" class="pull-right btn btn-info"><i class="fa fa-refresh"></i>Actualizar</button>
                             </form>
                         </div>
                    
