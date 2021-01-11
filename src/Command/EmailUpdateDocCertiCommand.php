@@ -200,8 +200,8 @@ EOF
             echo "\n Procesando " . $tipodoc . "... \n";
 
             # Recorremos Archivo por Archivo por Directorio
-
-            for ($i=0; $i < $numarch/2 ; $i++) {
+            $calc_for = $numarch/2;
+            for ($i=0; $i < $calc_for ; $i++) {
                 
                 switch ($tipodoc) {
                    
@@ -336,14 +336,17 @@ EOF
                                     }
                                 }
                                 if(!$encontrado){
+                                    $optimizar_string1 = substr($op, 0, 1);
+                                    $optimizar_string2 = strcmp($optimizar_string1, 'F');
+                                    $optimizar_string3 = strcmp($optimizar_string1, '1');
                                     # Si el Documento No Contiene más '-' o No Empiece por F ni por 1
-                                    if ((strrpos($op, '-') == false && strrpos($op, ' ') == false) || (strcmp(substr($op, 0, 1), 'F') <> 0 && strcmp(substr($op, 0, 1), '1') <> 0)) {
+                                    if ((strrpos($op, '-') == false && strrpos($op, ' ') == false) || ($optimizar_string2 <> 0 && $optimizar_string3 <> 0)) {
                                         
                                         $nbop = $op;
                                         #echo "\n If 1 \n";
 
                                         # Si el Documenta Comienza por F, 1 o S
-                                    }elseif (strcmp(substr($op, 0, 1), 'F') == 0 || strcmp(substr($op, 0, 1), '1') == 0 || strcmp(substr($op, 0, 1), 'S') == 0) {
+                                    }elseif ($optimizar_string2 || $optimizar_string3 == 0 || strcmp($optimizar_string1, 'S') == 0) {
                                         
                                         # Obtenemos el Nombre del Operador a partir de la última
                                         # posición del '-'
