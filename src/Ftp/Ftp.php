@@ -546,8 +546,9 @@ class Ftp
                     
                     #dump($posg);
                     #exit;
-                    $nbcert = substr($keycert, 0,$posg ) . "-0" . $listnummin[$valuecert];
-                    $nbcert2 = substr($keycert, 0,$posg ) . "-" . $listnummin[$valuecert];
+                    $optimizacion_string1 =substr($keycert, 0,$posg );
+                    $nbcert = $optimizacion_string1 . "-0" . $listnummin[$valuecert];
+                    $nbcert2 = $optimizacion_string1 . "-" . $listnummin[$valuecert];
                     #dump($nbcert);
                     # Recorremos el nuevo array resultante sin los archivos que contienen 'Untitled'
                     foreach ($listcert as $keylistcert => $valuelistcert) {
