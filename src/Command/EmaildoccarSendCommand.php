@@ -338,7 +338,7 @@ EOF
                                     $optimizar_string2 = strcmp($optimizar_string1, 'F');
                                     $optimizar_string3 = strcmp($optimizar_string1, '1');
                                     # Si el Documento No Contiene más '-' o No Empiece por F ni por 1
-                                    if ((strrpos($op, '-') == false && strrpos($op, ' ') == false) || (strcmp($optimizar_string2 <> 0 && $optimizar_string3 <> 0)) {
+                                    if ((strrpos($op, '-') == false && strrpos($op, ' ') == false) || ($optimizar_string2 <> 0 && $optimizar_string3 <> 0)) {
                                         
                                         $nbop = $op;
                                         #echo "\n If 1 \n";
