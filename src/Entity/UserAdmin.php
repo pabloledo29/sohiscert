@@ -23,7 +23,6 @@ class UserAdmin extends User
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-
     
 
     /**
@@ -36,7 +35,4 @@ class UserAdmin extends User
         return $this->id;
     }
 
-    
-
-    
 }

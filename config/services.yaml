@@ -38,7 +38,7 @@ parameters:
     repo_dir: '../' #'http://intranet-clientesshc.e4ff.pro-eu-west-1.openshiftapps.com'
     email_from_address: 'noreply@sohiscert.com'
     email_from_name: 'Area Privada Sohiscert'
-    mail_to: 'sohiscert@sohiscert.com'
+    mail_to: 'alba@sohiscert.com'
     mailer_transport: 'smtp'
     mailer_port: 587
     mailer_host: 'smtp.ionos.es'
