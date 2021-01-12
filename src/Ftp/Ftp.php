@@ -299,8 +299,8 @@ class Ftp
                 $filename = explode("-", $listado[$i]);   
               
                 $filename_aux = substr(strrchr($filename[0], "/"),1);
-                
-                if(strlen($filename_aux) <=4 ){                    
+                $strlen_filename = strlen($filename_aux);
+                if($strlen_filename <=4 ){                    
                     if(count($filename)>2){
                         if(!is_null($filename[2])){
                             $filename_aux=$filename[2];
@@ -311,7 +311,7 @@ class Ftp
                             }
                         }
                     }
-                } else if(strlen($filename_aux)==12 && is_numeric($filename_aux)){
+                } else if($strlen_filename==12 && is_numeric($filename_aux)){
                     if(count($filename)>1){
                         if(!is_null($filename[1])){
                             $filename_aux=$filename[1];
@@ -429,7 +429,9 @@ class Ftp
             $cont_i = 0;
             $encontrado = false;
                $values_cerList = array_values($certList); 
-                while($cont_i < count($listAux) && !$encontrado){
+
+                $listAux_count = count($listAux); 
+                while($cont_i < $listAux_count && !$encontrado){
                         if(strcmp(str_replace('AE', '', $values_cerList[$cont_i]), 
                             array_values($listAux)[count($listAux)-1])===0){
                             $position=$cont_i;
@@ -547,8 +549,9 @@ class Ftp
                     #dump($posg);
                     #exit;
                     $optimizacion_string1 =substr($keycert, 0,$posg );
-                    $nbcert = $optimizacion_string1 . "-0" . $listnummin[$valuecert];
-                    $nbcert2 = $optimizacion_string1 . "-" . $listnummin[$valuecert];
+                    $listnummin_value = $listnummin[$valuecert];
+                    $nbcert = $optimizacion_string1 . "-0" . $listnummin_value;
+                    $nbcert2 = $optimizacion_string1 . "-" . $listnummin_value;
                     #dump($nbcert);
                     # Recorremos el nuevo array resultante sin los archivos que contienen 'Untitled'
                     foreach ($listcert as $keylistcert => $valuelistcert) {
