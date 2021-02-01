@@ -21,7 +21,7 @@ use Swift_Mailer;
 use Swift_SmtpTransport;
 
 /**
- * Class EmailUpdateDocFactuCommand
+ * Class EmailUpdateDocFactuCommand2
  * @package App\Command
  */
 class EmailUpdateDocFactuCommand2 extends Command
