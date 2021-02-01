@@ -147,6 +147,12 @@ services:
     App\Command\EmailUpdateDocFactuCommand:
         tags: { name: 'console.command', command: 'email:emaildocfactu:send'}
         arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@mailer','@doctrine.orm.entity_manager']
+    App\Command\EmailUpdateDocFactuCommand2:
+        tags: { name: 'console.command', command: 'email:emaildocfactu2:send'}
+        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@mailer','@doctrine.orm.entity_manager']
+    App\Command\EmailUpdateDocFactuCommand3:
+        tags: { name: 'console.command', command: 'email:emaildocfactu3:send'}
+        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@mailer','@doctrine.orm.entity_manager']
 
     App\Command\EmailUpdateDocConcluCommand:
         tags: { name: 'console.command', command: 'email:emaildoccon:send'}
@@ -166,6 +172,9 @@ services:
     App\Command\EmaildoccarSend2Command:
         tags: { name: 'console.command', command: "email:emaildoccar2:send" }
         arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@mailer','@doctrine.orm.entity_manager']
+    App\Command\EmaildoccarSend3Command:
+        tags: { name: 'console.command', command: "email:emaildoccar3:send" }
+        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@mailer','@doctrine.orm.entity_manager']    
 
     App\Command\EmailUpdateDocCertiCommand:
         tags: { name: 'console.command', command: "email:emaildoccerti:send" }
@@ -173,6 +182,10 @@ services:
         
     App\Command\EmailUpdateDocCerti2Command:
         tags: { name: 'console.command', command: "email:emaildoccerti2:send" }
+        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@mailer','@doctrine.orm.entity_manager']
+
+     App\Command\EmailUpdateDocCerti3Command:
+        tags: { name: 'console.command', command: "email:emaildoccerti3:send" }
         arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@mailer','@doctrine.orm.entity_manager']
 
 #=======================================================================================================================
