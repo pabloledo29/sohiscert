@@ -16,17 +16,17 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use App\Entity\OpNopTransform;
+
 use App\Entity\DocumentosFTP;
 use Swift_Mailer;
 use Swift_SmtpTransport;
-
 /**
- * Class EmailUpdateDocFactuCommand2
+ * Class EmaildoccarSend3Command
  * @package App\Command
  */
-class EmailUpdateDocFactuCommand2 extends Command
+class EmaildoccarSend3Command extends Command
 {
-    protected static $defaultName = 'email:emaildocfactu2:send';
+    protected static $defaultName = 'email:emaildoccar3:send';
     public function __construct(string $path_update_logs,string $ftp_server, string $ftp_user_name, string $ftp_user_pass, $mailer,$em)
     {
         $this->path_update_logs = $path_update_logs;
@@ -48,7 +48,6 @@ class EmailUpdateDocFactuCommand2 extends Command
     protected function configure()
     {
         $this
-            ->setName('email:emaildocfactu:send')
             ->setDescription('Send simple email message')
             ->addOption('from', null, InputOption::VALUE_REQUIRED, 'The from address of the message')
             ->addOption('to', null, InputOption::VALUE_REQUIRED, 'The to address of the message')
@@ -73,7 +72,7 @@ EOF
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output) :int 
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         # Definimos Variable de Cominezo de Ejecución 
         $now = date("Y-m-d H:i:s");
@@ -116,22 +115,20 @@ EOF
         $diahoy = date('Y-m-d', time());
         $diahoy = strtotime($diahoy);
 
-        $semantes = '2019-01-22';
+        $semantes = '2018-01-22';
         #$semantes = date('Y-m-d', strtotime('-1 week'));
         $semantes = strtotime($semantes);
-        
+
         
         # Rutas para Pruebas
-        $rutasftp = array('factura' => '/DEPARTAMENTO DE CONTABILIDAD/FACTURAS 2016');
+        $rutasftp = array('carta' => '/DEPARTAMENTO CERTIFICACION/DECISIÓN DE CERTIFICACIÓN/COMUNICACION DE LA COMISION DE CERTIFICACION');
         #$rutasftp = array('factura' => '/facturasintranet');
         $em = $this->em;
-        
         $mapeo_nop = $em->getRepository(OpNopTransform::class)->findAll();
         $lista_mapeo = [];
         foreach ($mapeo_nop as $mapeo){
             $lista_mapeo[$mapeo->getOpNop()] = $mapeo->getopNopTransform();
         }
-
         #MNN Creamos el archivo update de reccorridos de archivos de certificados
         $urlBase = $this->path_update_logs;
 
@@ -139,12 +136,12 @@ EOF
         $end = date("Y-m-d H:i:s");
 
         # Definimos la Ruta Completa y el Nombre del Fichero LOG que se va a generar
-        $path_file = $urlBase.'register_recorridos_FACTU_'.date("d_m_Y").'.log';
+        $path_file = $urlBase.'register_recorridos_CARTA_'.date("d_m_Y").'.log';
 
         # Abrimos el Archivo con Permisos de Sobrescritura
         $log = fopen($path_file, "w+");
 
-        fwrite($log,("\n* ARCHIVOS DE FACTURACION\n"));
+        fwrite($log,("\n* ARCHIVOS DE CARTAS\n"));
 
         #MNN
         $conn_id = ftp_connect($this->ftp_server);
@@ -162,28 +159,29 @@ EOF
             echo "\n Conexión a $this->ftp_server realizada con éxito, por el usuario " . $this->ftp_user_name . " \n";
         }
 
+
         # Recorremos los Directorios FTP definidos anteriormente en las rutas
         # Definimos la Ruta
         foreach ($rutasftp as $tipodoc => $ruta) {
 
 
-            # Habilitamos la Conexión Pasiva del FTP
-            ftp_pasv($conn_id, true);
+           # Habilitamos la Conexión Pasiva del FTP
+           ftp_pasv($conn_id, true);
 
-            # Obtener el número de archivos contenidos en el directorio actual
-            $lista= ftp_nlist($conn_id,$ruta);
-            $numarch = count($lista);
+           # Obtener el número de archivos contenidos en el directorio actual
+           $lista= ftp_nlist($conn_id,$ruta);
+           $numarch = count($lista);
 
 
             echo "\n -> Documentos, " . $tipodoc . ": " . $numarch . " archivos \n";
 
             switch ($tipodoc) {
 
-                case 'factura':
-                    # Total de Facturas
-                    $totalFact = $numarch;
+                case 'carta':
+                    # Total de Certificados
+                    $totalCert = $numarch;
                     break;
-
+            
                 
                 default:
                     # code...
@@ -198,17 +196,18 @@ EOF
             echo "\n Procesando " . $tipodoc . "... \n";
 
             # Recorremos Archivo por Archivo por Directorio
-            $numarch_total = ($numarch*2/3) + 2;
+            $calc_for2=(2*$numarch/3)+2;
 
-            for ($i=($numarch/3)+1; $i < $numarch_total ; $i++) {
+            for ($i=$calc_for2; $i < $numarch ; $i++) {
                 
                 switch ($tipodoc) {
-                    case 'factura':
-                        # Facturas Procesadas
-                        $procFact = $contArch++;
-                        break;
+                   
 
-                    
+                    case 'carta':
+                       
+                        # Certificados Procesados
+                        $procCert = $contArch++;
+                        break;
                     
                     default:
                         # code...
@@ -217,7 +216,6 @@ EOF
                 #echo "█\n" ;
 
                 # Obtenemos la Fecha de Modificación del Archivo FTP
-                
                 unset($docftp);
                 $docftp = ftp_mdtm($conn_id, $lista[$i]);
 
@@ -226,6 +224,7 @@ EOF
                   
                     ftp_close($conn_id);
                     unset($conn_id);
+                    
                    
                     
                     fwrite($log,("\n FALLO, INTENTANDO CONECTAR DE NUEVO"));
@@ -249,8 +248,7 @@ EOF
                     $docftp = ftp_mdtm($conn_id, $lista[$i]);
                     
                 }
-                
-
+               
 
                 $fmoddoc = date("Y-m-d", $docftp);
                 $fecha_bruta=$fmoddoc;
@@ -297,32 +295,37 @@ EOF
 
                   
                     $archivo = $em->getRepository(DocumentosFTP::class)->findOneByNbDoc($lista[$i]);
-
+                    //var_dump($archivo);
                     switch ($tipodoc) {
                         
-                        case 'factura':
+                        
 
+
+                        case 'carta':
+                            
                             # Obtenemos la Fecha de Modificación del Archivo FTP
                             $docftp = ftp_mdtm($conn_id, $lista[$i]);
                             $fechadoc = date("Y-m-d H:i:s", $docftp);
 
                             #var_dump($archivo);
-                            #exit('Valor Documento');
+                            #exit('Valor Certificado');
 
-                            # Si NO Existe la Factura en BB.DD.
+                             # Si NO Existe la Factura en BB.DD.
                             if (!isset($archivo)) {
                                 
                                 # Obtenemos el Operador para ello
                                 #  - tenemos que localizar la posición del último "-"
                                 #  - eliminar la cadena de texto hasta la posción del "-"
                                 #  - y al texto resultante le quitamos el "-" y la extensión ".pdf"
-                                $posg = strpos($lista[$i], '-');
-
-                                $op = substr($lista[$i], $posg);
+                                $posg = strrpos($lista[$i], '-');
+                                #var_dump($posg);
+                                $op = substr($lista[$i], 0, $posg);
+                                #var_dump($op);
+                                $op = substr(strrchr($op, '/'), 1);
+                                #var_dump($op);
                                 $op = trim($op, '-');
-                                $nbop = trim($op, '.pdf');
-
-                                $encontrado = false;
+                                #var_dump($op);
+                              $encontrado = false;
                                 foreach ($lista_mapeo as $mapeo_key => $mapeo_value){
                                     if(strpos($mapeo_value,str_replace("AE","",$op))!==false && !$encontrado){
                                         $encontrado = true;
@@ -330,42 +333,90 @@ EOF
 
                                     }
                                 }
-                             
-                                #var_dump($nbop);
+                                if(!$encontrado){
+                                    $optimizar_string1 = substr($op, 0, 1);
+                                    $optimizar_string2 = strcmp($optimizar_string1, 'F');
+                                    $optimizar_string3 = strcmp($optimizar_string1, '1');
+                                    # Si el Documento No Contiene más '-' o No Empiece por F ni por 1
+                                    if ((strrpos($op, '-') == false && strrpos($op, ' ') == false) || ($optimizar_string2 <> 0 && $optimizar_string3 <> 0)) {
+                                        
+                                        $nbop = $op;
+                                        #echo "\n If 1 \n";
+
+                                        # Si el Documenta Comienza por F, 1 o S
+                                    }elseif ($optimizar_string2 == 0 || $optimizar_string3 == 0 || strcmp($optimizar_string1, 'S') == 0) {
+                                        
+                                        # Obtenemos el Nombre del Operador a partir de la última
+                                        # posición del '-'
+                                        $tamnc = strlen($op);
+                                        $uposg = strrpos($op, '-');
+
+                                        $nbop = substr($op, ($uposg + 1), $tamnc);
+                                        #echo "\n If 2 \n";
+
+                                        # Si el Documento Comienza por NAQS o NOP
+                                    }elseif (strcmp(substr($op, 0, 4), 'NAQS') == 0 || strcmp(substr($op, 0, 3), 'NOP') == 0) {
+                                        
+                                        # Obtenemos el Nombre del Operador a partir de la última
+                                        # posición del '(espacio)'
+                                        $tamnc = strlen($op);
+                                        $uposg = strrpos($op, ' ');
+
+                                        $nbop = substr($op, ($uposg + 1), $tamnc);
+                                        #echo "\n If 3 \n";
+                                    }
+                                }
+                                
+                                #var_dump($nbop);   
 
                                 # Obtenemos el Código del Operador a partir del Nombre
                                 #$cons = $em->container->get('doctrine')->getManager();
+
+                                #MNN Consulta para la versión inferior a PHP 7.0
                                 #$datosOp = $cons->getRepository(Operator::class)->findOneByOpNop($nbop);
-                               
-                                $query = $em->createQuery('SELECT ope.codigo, ope.opNop, ope.opEma, ope.opCdp, reg.reDeno
+
+                                # Consultas
+
+                                #$datosOp = $cons->getRepository(Operator::class)->findOneByOpNop($nbop);
+
+                                #MNN consulta para versión PHP 5.6
+                                $query = $em->createQuery('SELECT ope.codigo, ope.opNop, ope.opEma, reg.reDeno
                                                              FROM App\Entity\Operator ope
                                                              INNER JOIN App\Entity\Register reg WITH ope.opRegistro=reg.id
                                                             WHERE ope.opNop = :nom')->setParameter('nom', $nbop);
 
-                                
-
                                 $datosOp = $query->getResult();
+
+                            
+                                
+                                #$datosOp = $cons->getRepository(Operator::class)->findOneBy(array('opNop' => $nbop));
 
                                 $operador = array();
 
+                                #var_dump(count($datosOp));
+                                #var_dump($datosOp);
+                                #exit('Datos del Operador');
 
-                                                                                         
                                 # Si el Operador Existe, NO es Nulo, en el Sistema
                                 if (count($datosOp) > 0) {
 
-                                    # Actualzamos el Contador de Facturas Nuevas
-                                    $facNew++;
+                                    # Actualzamos el Contador de Certificados Nuevos
+                                    $cerNew++;
 
                                     foreach ($datosOp as $registro) {
                                         #var_dump($registro);
+                                        #exit('Registro');
 
                                         foreach ($registro as $key => $value) {
-
-                                            #echo "\n - " . $key . ": " . $value;
+                                            # code...
+                                            echo "\n - " . $key . ": " . $value;
                                             $operador[$key] = $value;
                                         }
                                         
                                     }
+
+                                    #var_dump($operador);
+                                    #exit("\n Hasta Datos Operador \n");
 
                                     # Recuperamos Sólo el Nombre del Documeto para Almacenar Sin la Ruta 
                                     # $nbdoc = substr($lista[$i], 18);
@@ -383,21 +434,19 @@ EOF
                                         $docNew->setOpCdp(" ");
                                     }
 
-                                    if ($operador["opEma"]!=''){
-                                        $docNew->setOpNop($nbop);
-                                        $docNew->setTipoDoc($tipodoc);
-                                        $docNew->setNbDoc($nbdoc);
-                                        $docNew->setFechaDoc(new \DateTime($fechadoc));
+                                    $docNew->setOpNop($nbop);
+                                    $docNew->setTipoDoc($tipodoc);
+                                    $docNew->setNbDoc($nbdoc);
+                                    $docNew->setFechaDoc(new \DateTime($fechadoc));
 
 
-                                        $em->persist($docNew);
-                                        $em->flush();
-                                    }    
+                                    $em->persist($docNew);
+                                    $em->flush();
 
-
-
-                                    #if (isset($operador["opEma"])) {
-                                    if ($operador["opEma"]!=''){
+                                    #var_dump($docNew);
+                                    #exit('Certificado Grabado BB.DD.');
+                                    
+                                    if (isset($operador["opEma"])) {
                                         # code...
                                         $datamail = array(
                                             "operator" => $nbop,
@@ -409,23 +458,20 @@ EOF
 
                                     }else{
 
-                                        # Actualzamos el Contador de Facturas Incorrectas, Sin E-mail
-                                        $facSO++;
+                                        # Actualzamos el Contador de Certificados Incorrectos, Sin E-mail
+                                        $cerSO++;
                                     }
-
                                     
-
                                 }else{
-
-                                    # Actualzamos el Contador de Facturas Incorrectas, Sin Operador
-                                    $facSO++;
+                                    # Actualzamos el Contador de Certificados Incorrectos, Sin Operador
+                                    $cerSO++;
                                 }
 
-                            }/*else{
-                                # Si Existe la Factura en la BB.DD.
+                            }else{
+                                # Si Existe el Ceertificado en la BB.DD.
                                 
                                 # Asignamos Archivo a una Variable Nueva para Evitar Errores de Trabajo
-                                $registro = $archivo; 
+                                $registro = $archivo;
                                 
                                 #var_dump($registro);
                                 #exit('Archivo');
@@ -456,7 +502,6 @@ EOF
                                         # Comparamos la Fecha del Documento del Servidor FTP con
                                         # la Fecha del mismo Documento almacenada en BB.DD.
                                         if (strcmp($fechadoc, $fechaalm) <> 0) {
-
                                             # Asignamos Valores del Registro para su posterior envio
                                             # y Actualizamos la Fecha del Documento del Registro
                                             #$registro->getOpCdp();
@@ -475,15 +520,10 @@ EOF
                                             #$cons = $em->container->get('doctrine')->getManager();
                                             #$datosOp = $cons->getRepository(Operator::class)->findOneByOpNop($nbop);
                                             
-                                            $query = $em->createQuery('SELECT ope.codigo, ope.opNop, ope.opEma, ope.opCdp, reg.reDeno
+                                            $query = $em->createQuery('SELECT ope.codigo, ope.opNop, ope.opEma, reg.reDeno
                                                              FROM App\Entity\Operator ope
                                                              INNER JOIN App\Entity\Register reg WITH ope.opRegistro=reg.id
                                                             WHERE ope.opNop = :nom')->setParameter('nom', $nbop);
-
-
-
-
-                                            
 
                                             $datosOp = $query->getResult();
 
@@ -492,44 +532,24 @@ EOF
                                             # Si el Operador Existe, NO es Nulo, en el Sistema
                                             if (count($datosOp) > 0) {
 
-                                                # Actualzamos el Contador de Facturas Actualizadas
-                                                $facUpdate++;
+                                                # Actualzamos el Contador de Certificados Actualizados
+                                                $cerUpdate++;
 
                                                 foreach ($datosOp as $registro) {
                                                     #var_dump($registro);
 
                                                     foreach ($registro as $key => $value) {
-                                                        # code...
+
                                                         # echo "\n - " . $key . ": " . $value;
                                                         $operador[$key] = $value;
                                                     }
                                                     
                                                 }
 
-
-                                                #var_dump($operador["opEma"]));
-
-
                                                 # Parámetros para el Envío del Mail
-                                                #if (isset($operador["opEma"])) {
-                                                
-
-
-                                                #if (isset($operador["opEma"])) {
-                                                if ($operador["opEma"]!=''){
-                                     
-
-                                                    /*if (filter_var($operador["opEma"], FILTER_VALIDATE_EMAIL)) {
-                                                        var_dump($datamail);
-                                                    }else{
-                                                        var_dump($datamail);
-                                                        exit('PARA AQUI');
-                                                    } */
-
-
-
+                                                if (isset($operador["opEma"])) {
                                                     # code...
-                              /*                      $datamail = array(
+                                                    $datamail = array(
                                                         "operator" => $nbop,
                                                         "tipo" => $tipodoc,
                                                         "documento" => $nbdoc,
@@ -539,26 +559,32 @@ EOF
 
                                                 }else{
 
-                                                    # Actualzamos el Contador de Facturas Incorrectas, Sin E-mail
-                                                    $facSO++;
+                                                    # Actualzamos el Contador de Certificados Incorrectos, Sin E-mail
+                                                    $cerSO++;
                                                 }
 
-                                                # var_dump($datamail);
+                                                #var_dump($datamail);
                                                 # exit('Parámetros para Envío Mail de Documento Actualizado');
                                             }else{
 
-                                                # Actualzamos el Contador de Facturas Incorrectas, Sin Operador
-                                                $facSO++;
+                                                # Actualzamos el Contador de Certificados Incorrectos, Sin Operador
+                                                $cerSO++;
                                             }
                                         }
                                     }
 
-                                # exit('Entro en Facturas Existentes');
+                                # exit('Entro en Certificados Existentes');
                                 }
-                            }*/
+                            }
+
                             break;
 
-  
+
+                       
+
+                        
+
+                        
                         default:
                             # code...
                             break;
@@ -567,12 +593,10 @@ EOF
                     #
                     # Si Existen Datos de Actualización para Remitir por Mail 
                     #
-
-                    
                     if (isset($datamail)) {
-
                         if ($datamail['mail']!=''){
-                            var_dump($datamail);
+                            var_dump($datamail["mail"]);
+                             
                         if($datamail["mail"] != null){
                             $datamail["mail"] = array_filter(preg_split('[;,/ ]',trim($datamail["mail"])));
                                 if($datamail["mail"][0]){
@@ -584,58 +608,56 @@ EOF
                                         str_replace("ó","o",$datamail["mail"]);
                                         str_replace("ú","u",$datamail["mail"]);
                                     if($datamail["mail"]==null || ($datamail["mail"] != [] && $datamail["mail"] != null && $datamail["mail"] != "" && !filter_var($datamail["mail"], FILTER_VALIDATE_EMAIL))){
-                                        $path_file_fail = $urlBase.'register_falladas_FACT_'.date("d_m_Y").'.log';
+                                        $path_file_fail = $urlBase.'register_falladas_CART_'.date("d_m_Y").'.log';
                                         $open_file = fopen($path_file_fail,'a+');
                                         fwrite($open_file,date("Y-m-d H:i:s"). "---->" .implode($datamail));
                                         fclose($open_file);
                                         $datamail["mail"] = null;
-                                    }
+                                    } 
                                 }
                             }
+                           /* $mailerServiceName = sprintf('swiftmailer.mailer.%s', $input->getOption('mailer'));
+                        if (!$em->container->has($mailerServiceName)) {
+                            throw new \InvalidArgumentException(sprintf('The mailer "%s" does not exist', $input->getOption('mailer')));
+                        }*/
 
-                            switch ($input->getOption('body-source')) {
-                                case 'file':
-                                    $filename = $input->getOption('body');
-                                    $content = file_get_contents($filename);
-                                    if ($content === false) {
-                                        throw new \Exception('Could not get contents from ' . $filename);
-                                    }
-                                    $input->setOption('body', $content);
-                                    break;
+                        switch ($input->getOption('body-source')) {
+                            case 'file':
+                                $filename = $input->getOption('body');
+                                $content = file_get_contents($filename);
+                                if ($content === false) {
+                                    throw new \Exception('Could not get contents from ' . $filename);
+                                }
+                                $input->setOption('body', $content);
+                                break;
 
-                                case 'stdin':
-                                    break;
+                            case 'stdin':
+                                break;
 
-                                default:
-                                    throw new \InvalidArgumentException('Body-input option should be "stdin" or "file"');
-                            }
-
-                            $message = $this->createMessage($input, $datamail);
-                            $mailer = $this->mailer;
-                            $output->writeln(sprintf('<info>Sent %s emails<info>', $mailer->send($message)));
-                        
-                            $contMail++;
-
-                            #Limpiamos array
-                            unset($datamail);
-
-                        # exit('Envió de Mail Realizado');
-                        }else{
-                            dump($datamail["mail"]);
+                            default:
+                                throw new \InvalidArgumentException('Body-input option should be "stdin" or "file"');
                         }
-                       
+
+                        $message = $this->createMessage($input, $datamail);
+                        $mailer = $this->mailer;
+                        $output->writeln(sprintf('<info>Sent %s emails<info>', $mailer->send($message)));
+                        
+                        $contMail++;
+                        unset($datamail);
+                        # exit('Envió de Mail Realizado');
+                        }
                     }
                     
                 }else{
 
                     # Documentos NO Válidos
                     switch ($tipodoc) {
-                        case 'factura':
-                            # Facturas No Procesadas
-                            $docNVFact = $docNV++;;
-                            break;
-
                         
+
+                        case 'carta':
+                            # Certificados No Válidos
+                            $docNVCert = $docNV++;;
+                            break;
                         
                         default:
                             # code...
@@ -662,7 +684,7 @@ EOF
         $end = date("Y-m-d H:i:s");
 
         # Definimos la Ruta Completa y el Nombre del Fichero LOG que se va a generar
-        $path_file = $urlBase.'update_datedocuments_FACTURACION_'.date("d_m_Y").'.log';
+        $path_file = $urlBase.'update_datedocuments_CARTAS_'.date("d_m_Y").'.log';
 
         # Abrimos el Archivo con Permisos de Sobrescritura
         $log = fopen($path_file, "w+");
@@ -674,16 +696,16 @@ EOF
         );
 
         # Escribimos Información sobre Facturas
-        fwrite(
-            $log,
-            ("\n - Facturas => Total: ". $totalFact ." | Procesadas: ". $procFact ." | Nuevas: ". $facNew ." | Actualizadas: ". $facUpdate ." | Sin Operador: ". $facSO ."\n")
-        );
-
-        # Escribimos Información sobre Certificados
         /*fwrite(
             $log,
-            ("\n - Certificados => Total: ". $totalCert ." | Procesados: ". $procCert ." | Nuevos: ". $cerNew ." | Actualizados: ". $cerUpdate ." | Sin Operador: ". $cerSO ."\n")
+            ("\n - Facturas => Total: ". $totalFact ." | Procesadas: ". $procFact ." | Nuevas: ". $facNew ." | Actualizadas: ". $facUpdate ." | Sin Operador: ". $facSO ."\n")
         );*/
+
+        # Escribimos Información sobre Certificados
+        fwrite(
+            $log,
+            ("\n - Cartas => Total: ". $totalCert ." | Procesados: ". $procCert ." | Nuevos: ". $cerNew ." | Actualizados: ". $cerUpdate ." | Sin Operador: ". $cerSO ."\n")
+        );
 
         # Escribimos Información sobre Cartas
         /*fwrite(
@@ -700,7 +722,7 @@ EOF
         # Escribimos Información sobre Documentos No Válidos
         fwrite(
             $log,
-            ("\n - Documentos NO Válidos => Facturas: ". $docNVFact ." | Certificados: " . $docNVCert ." | Cartas: " . $docNVCart ." | Análisis: " . $docNVAna . "\n")
+            ("\n - Documentos NO Válidos => Cartas: ". $docNVFact ." | Cartas: " . $docNVCert ." | Cartas: " . $docNVCart ." | Análisis: " . $docNVAna . "\n")
         );
 
         # Escribimos Información sobre Mails Enviados
@@ -749,7 +771,7 @@ EOF
     /*public function isEnabled()
     {
         $em = new ContainerBuilder();
-        return $em->has('swiftmailer.mailer.mailer_mail');
+        return $em->get('customswiftmailer');
     }*/
 
     /**
@@ -778,7 +800,8 @@ EOF
             case 'analisis':
             case 'certificado':
             case 'carta':
-                
+
+                $tipodoc2="Comunicación Decisión de Certificación";
                 $nbdoc = substr($datos['documento'], 8);
 
                 break;
@@ -791,8 +814,8 @@ EOF
 
         $from  = 'noreply@sohiscert.com';
         $to = $destino;
-        #$to = 'manuel.navarro@atlantic.es';
-        $subject = "Alta de documento en Área Privada web: Factura"; 
+        //$to = 'manuel.navarro@atlantic.es';
+        $subject = "Alta de documento en Área Privada web: Comunicación Decisión de Certificación"; 
         
         /*MNN Modificamos la plantilla */
 
@@ -854,7 +877,7 @@ EOF
                                                     </tr>
                                                     <tr>
                                                         <td>
-                                                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Tipo de documento: <b>' . ucwords($tipodoc) . '</b></p>
+                                                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Tipo de documento: <b>' . ucwords($tipodoc2) . '</b></p>
                                                         </td>
                                                     </tr>
                                                     <tr>
