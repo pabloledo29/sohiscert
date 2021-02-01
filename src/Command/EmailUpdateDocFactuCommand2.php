@@ -198,7 +198,7 @@ EOF
             echo "\n Procesando " . $tipodoc . "... \n";
 
             # Recorremos Archivo por Archivo por Directorio
-            $numarch_total = ($numarch/3) + 2;
+            $numarch_total = ($numarch*2/3) + 2;
 
             for ($i=($numarch/3)+1; $i < $numarch_total ; $i++) {
                 
