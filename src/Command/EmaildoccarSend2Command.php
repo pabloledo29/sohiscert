@@ -196,9 +196,9 @@ EOF
             echo "\n Procesando " . $tipodoc . "... \n";
 
             # Recorremos Archivo por Archivo por Directorio
-            $calc_for2=($numarch/2)+1;
-
-            for ($i=$calc_for2; $i < $numarch ; $i++) {
+            $calc_for2=($numarch/3)+1;
+            $numarch_total = (2*$numarch/3)+2;
+            for ($i=$calc_for2; $i < $numarch_total ; $i++) {
                 
                 switch ($tipodoc) {
                    

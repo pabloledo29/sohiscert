@@ -198,8 +198,8 @@ EOF
             echo "\n Procesando " . $tipodoc . "... \n";
 
             # Recorremos Archivo por Archivo por Directorio
-
-            for ($i=0; $i < $numarch ; $i++) {
+            $numarch_total = ($numarch/3) + 1;
+            for ($i=0; $i < $numarch_total ; $i++) {
                 
                 switch ($tipodoc) {
                     case 'factura':
@@ -572,7 +572,7 @@ EOF
 
                         if ($datamail['mail']!=''){
                             var_dump($datamail);
-                        if($datamail["mail"] != null){
+                        /*if($datamail["mail"] != null){
                             $datamail["mail"] = array_filter(preg_split('[;,/ ]',trim($datamail["mail"])));
                                 if($datamail["mail"][0]){
                                     $datamail["mail"] = $datamail["mail"][0];
@@ -613,7 +613,7 @@ EOF
                             $mailer = $this->mailer;
                             $output->writeln(sprintf('<info>Sent %s emails<info>', $mailer->send($message)));
                         
-                            $contMail++;
+                            $contMail++;*/
 
                             #Limpiamos array
                             unset($datamail);

@@ -23,9 +23,9 @@ use Swift_SmtpTransport;
  * Class EmailUpdateDocCertiCommand
  * @package App\Command
  */
-class EmailUpdateDocCertiCommand extends Command
+class EmailUpdateDocCerti2Command extends Command
 {
-    protected static $defaultName = 'email:emaildoccerti:send';
+    protected static $defaultName = 'email:emaildoccerti2:send';
     public function __construct(string $path_update_logs,string $ftp_server, string $ftp_user_name, string $ftp_user_pass, $mailer,$em)
     {
         $this->path_update_logs = $path_update_logs;
@@ -200,8 +200,8 @@ EOF
             echo "\n Procesando " . $tipodoc . "... \n";
 
             # Recorremos Archivo por Archivo por Directorio
-            $calc_for = $numarch/3+1;
-            for ($i=0; $i < $calc_for ; $i++) {
+            $calc_for2 = ($numarch/3)+2;
+            for ($i=$calc_for2; $i < $numarch ; $i++) {
                 
                 switch ($tipodoc) {
                    
@@ -346,7 +346,7 @@ EOF
                                         #echo "\n If 1 \n";
 
                                         # Si el Documenta Comienza por F, 1 o S
-                                    }elseif ($optimizar_string2 || $optimizar_string3 == 0 || strcmp($optimizar_string1, 'S') == 0) {
+                                    }elseif ($optimizar_string2 == 0 || $optimizar_string3 == 0 || strcmp($optimizar_string1, 'S') == 0) {
                                         
                                         # Obtenemos el Nombre del Operador a partir de la última
                                         # posición del '-'
