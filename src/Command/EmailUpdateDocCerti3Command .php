@@ -20,10 +20,10 @@ use App\Entity\DocumentosFTP;
 use Swift_Mailer;
 use Swift_SmtpTransport;
 /**
- * Class EmailUpdateDocCertiCommand
+ * Class EmailUpdateDocCerti3Command
  * @package App\Command
  */
-class EmailUpdateDocCerti2Command extends Command
+class EmailUpdateDocCerti3Command extends Command
 {
     protected static $defaultName = 'email:emaildoccerti3:send';
     public function __construct(string $path_update_logs,string $ftp_server, string $ftp_user_name, string $ftp_user_pass, $mailer,$em)

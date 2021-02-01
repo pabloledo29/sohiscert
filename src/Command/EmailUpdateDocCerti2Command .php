@@ -20,7 +20,7 @@ use App\Entity\DocumentosFTP;
 use Swift_Mailer;
 use Swift_SmtpTransport;
 /**
- * Class EmailUpdateDocCertiCommand
+ * Class EmailUpdateDocCerti2Command
  * @package App\Command
  */
 class EmailUpdateDocCerti2Command extends Command

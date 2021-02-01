@@ -21,7 +21,7 @@ use App\Entity\DocumentosFTP;
 use Swift_Mailer;
 use Swift_SmtpTransport;
 /**
- * Class EmaildoccarSendCommand
+ * Class EmaildoccarSend2Command
  * @package App\Command
  */
 class EmaildoccarSend2Command extends Command

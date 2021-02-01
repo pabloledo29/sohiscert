@@ -24,7 +24,7 @@ use Swift_SmtpTransport;
  * Class EmailUpdateDocFactuCommand
  * @package App\Command
  */
-class EmailUpdateDocFactuCommand extends Command
+class EmailUpdateDocFactuCommand2 extends Command
 {
     protected static $defaultName = 'email:emaildocfactu2:send';
     public function __construct(string $path_update_logs,string $ftp_server, string $ftp_user_name, string $ftp_user_pass, $mailer,$em)
