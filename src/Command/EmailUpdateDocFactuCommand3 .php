@@ -26,7 +26,7 @@ use Swift_SmtpTransport;
  */
 class EmailUpdateDocFactuCommand extends Command
 {
-    protected static $defaultName = 'email:emaildocfactu:send';
+    protected static $defaultName = 'email:emaildocfactu3:send';
     public function __construct(string $path_update_logs,string $ftp_server, string $ftp_user_name, string $ftp_user_pass, $mailer,$em)
     {
         $this->path_update_logs = $path_update_logs;
