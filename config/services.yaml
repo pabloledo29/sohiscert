@@ -184,7 +184,7 @@ services:
         tags: { name: 'console.command', command: "email:emaildoccerti2:send" }
         arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@mailer','@doctrine.orm.entity_manager']
 
-     App\Command\EmailUpdateDocCerti3Command:
+    App\Command\EmailUpdateDocCerti3Command:
         tags: { name: 'console.command', command: "email:emaildoccerti3:send" }
         arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@mailer','@doctrine.orm.entity_manager']
 
