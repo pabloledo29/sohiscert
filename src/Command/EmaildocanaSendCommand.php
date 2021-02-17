@@ -117,7 +117,7 @@ EOF
         
         # Rutas para Pruebas
         #$rutasftp = array('analisis' => '/sitio1');
-        $rutasftp = array('analisis' => '/sitio1');
+        $rutasftp = array('analisis' => '/DEPARTAMENTO DE CONTROL/RESULTADOS ANALÍTICOS');
         #$rutasftp = array('factura' => '/facturasintranet');
 
 
