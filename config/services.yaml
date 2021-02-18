@@ -347,6 +347,9 @@ services:
 #======================================================================
    
     App\Mailchimp\Provider\MailchimpDynamicProvider:
+        arguments: [App\Repository\UserOperatorRepository,"@service_container"]
+   
+    App\Mailchimp\Provider\MailchimpDynamicProvider:
         arguments: [App\Repository\UserOperatorRepository,"@service_container"] 
 
     welp_mailchimp.provider.factory:
