@@ -1371,7 +1371,7 @@ class DocExpController extends AbstractController
 
         $docs['GG/Acuerdo de Sublicencia y Certificación GLOBALGAP.pdf'] = $path .'GG/Acuerdo de Sublicencia y Certificación GLOBALGAP.pdf';
 
-        $docs['GG/F266-04-Datos operadores GG.xls'] = $path . 'GG/F266-04-Datos operadores GG.xls';
+        #$docs['GG/F266-04-Datos operadores GG.xls'] = $path . 'GG/F266-04-Datos operadores GG.xls';
 
         #$docs['GG/150302_GG_Sublicense-and-CertificationAgreement_V4_en_es.pdf'] = $path .'GG/150302_GG_Sublicense-and-Certification-Agreement_V4_en_es.pdf';
 
