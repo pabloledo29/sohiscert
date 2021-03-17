@@ -1253,8 +1253,9 @@ class DocExpController extends AbstractController
      */
     private function userAdminGeneralDocs()
     {
-        $rootpath = $this->container->getParameter('web_root');
+        #$rootpath = $this->container->getParameter('web_root');
     
+        $rootpath='http://intranet-sohiscert4.e4ff.pro-eu-west-1.openshiftapps.com/public/'
         $docPath = 'docs/';
         $path = $rootpath . $docPath;
 
@@ -1262,7 +1263,7 @@ class DocExpController extends AbstractController
             'ECO/DIR-OP-18-3403-Circular informativa sanciones Autoridades Competentes.pdf';
 
         $docs['F229-02-Solicitud de cambio de titularidad producción ecológica'] = $path .
-            "ECO/F229-02-Solicitud Cambio de Titularidad ECO.docx";
+            'ECO/F229-02-Solicitud Cambio de Titularidad ECO.docx';
 
         $docs['F227-02-Solicitud de ampliación finca ecológica'] = $path .
             'ECO/FAE/F227-02-Cuestionario Ampliación Finca ECO.doc';
