@@ -1259,7 +1259,7 @@ class DocExpController extends AbstractController
         $docPath = 'docs/';
         $path = $rootpath . $docPath;
 
-        $docs['DIR-OP-18-3403-Circular informativa sanciones Autoridades Competentes'] = $path .
+        /*$docs['DIR-OP-18-3403-Circular informativa sanciones Autoridades Competentes'] = $path .
             'ECO/DIR-OP-18-3403-Circular informativa sanciones Autoridades Competentes.pdf';
 
         $docs['F229-02-Solicitud de cambio de titularidad producción ecológica'] = $path .
@@ -1293,12 +1293,12 @@ class DocExpController extends AbstractController
         $docs['F54-01 - Comunicaciones Produccion Integrada'] = $path .
             'PI/F54-01_Comunicaciones Produccion Integrada.xls';
 
-        $docs['Anexo-4-Acuerdo Marco'] = $path . 'IFS/Anexo4AcuerdoMarco.pdf';
+        $docs['Anexo-4-Acuerdo Marco'] = $path . 'IFS/Anexo4AcuerdoMarco.pdf';*/
 
 
         /* mnn; SUBIDA DE DOCUMENTOS NUWVOS*/
 
-       /* $docs['DIR-OP-18-3403-Circular informativa sanciones Autoridades Competentes'] = $path .
+        $docs['DIR-OP-18-3403-Circular informativa sanciones Autoridades Competentes'] = $path .
             'ECO/DIR-OP-18-3403-Circular informativa sanciones Autoridades Competentes.pdf';
 
         $docs['F229-02-Solicitud de cambio de titularidad producción ecológica'] = $path .
@@ -1408,7 +1408,7 @@ Mancha'] = $path . 'PI/OZ/F399-01-Solicitud entrega Contraetiquetas DOP Azafrán
         $docs['F54-01 - Comunicaciones Produccion Integrada'] = $path .
             'PI/F54-01_Comunicaciones Produccion Integrada.xls';
 
-        $docs['Anexo-4-Acuerdo Marco'] = $path . 'IFS/Anexo4AcuerdoMarcoIFS.pdf';*/
+        $docs['Anexo-4-Acuerdo Marco'] = $path . 'IFS/Anexo4AcuerdoMarcoIFS.pdf';
 
         /* fin mnn */
         return $this->render('admin/useradmin_generaldocs_list.html.twig', array('filelist' => $docs));
