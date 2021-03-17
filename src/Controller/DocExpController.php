@@ -1255,7 +1255,7 @@ class DocExpController extends AbstractController
     {
         #$rootpath = $this->container->getParameter('web_root');
     
-        $rootpath='http://intranet-sohiscert4.e4ff.pro-eu-west-1.openshiftapps.com/public/';
+        $rootpath='https://intranet-sohiscert4.e4ff.pro-eu-west-1.openshiftapps.com/public/';
         $docPath = 'docs/';
         $path = $rootpath . $docPath;
 
