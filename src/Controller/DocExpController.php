@@ -1407,7 +1407,7 @@ class DocExpController extends AbstractController
         
 
         $docs['F283-01-Declaración de aptitud de partidas Vinos Castilla La Mancha'] = $path .
-            'VINOS/CM/F283-01_Declaración Aptitud de Partida VINOS CM.doc';*/
+            'VINOS/CM/F283-01_Declaración Aptitud de Partida VINOS CM.doc';
 
         
         
@@ -1416,7 +1416,7 @@ class DocExpController extends AbstractController
         
 
         $docs['F54-01 - Comunicaciones Produccion Integrada'] = $path .
-            'PI/F54-01_Comunicaciones Produccion Integrada.xls';
+            'PI/F54-01_Comunicaciones Produccion Integrada.xls';*/
 
         
 
