@@ -1310,7 +1310,7 @@ class DocExpController extends AbstractController
 
         $docs['ECO/FAE/F227-02-Cuestionario Ampliación Finca ECO.doc'] = $path .'ECO/FAE/F227-02-Cuestionario Ampliación Finca ECO.doc';  
 
-        $docs['ECO/FAE/F223-02-Solicitud Autorización Semilla no ECO.doc'] = $path .'ECO/FAE/F223-03-Solicitud Autorización Semilla no ECO.doc';
+        $docs['ECO/FAE/F223-03-Solicitud Autorización Semilla no ECO.doc'] = $path .'ECO/FAE/F223-03-Solicitud Autorización Semilla no ECO.doc';
             
         $docs['ECO/FAE/F235-02-Programa de Producción Vegetal ECO.doc'] = $path .'ECO/FAE/F235-02-PPV ECO.doc.docx';
 
@@ -1361,7 +1361,7 @@ class DocExpController extends AbstractController
         $docs['F509-01-Solicitud autorización contraetiquetas D.O.P. Valtiendas'] = $path .'VINOS/CM/F509-01-Solicitud autorizacion Contraetiquetas DOP Valtiendas.docx';
 
 
-        $docs['F431-01-Comunicación embotellado Vino Calidad Canarias.'] = $path .'VINOS/CM/F431-01-Comunciación embotellado Vino Calidad Canarias.doc';
+        $docs['F431-01-Comunicación embotellado Vino Calidad Canarias'] = $path .'VINOS/CM/F431-01-Comunciación embotellado Vino Calidad Canarias.doc';
 
         $docs['F384-01-Ficha Equipamiento Técnico Bodegas CM'] = $path .'VINOS/CM/F384-01- Ficha Equipamiento Técnico Bodegas CM.docx';
 
@@ -1383,7 +1383,7 @@ class DocExpController extends AbstractController
 
         $docs['Logotipo SHC Producción Integrada'] = $path .'PI/Logotipo SHC Producción Integrada.jpg';
 
-        $docs['F399-01-Solicitud de entrega de contraetiqueta Azafrán de la Mancha ('] = $path . 'PI/OZ/F399-01-Solicitud entrega Contraetiquetas DOP Azafrán de la Mancha.docx';
+        $docs['F399-01-Solicitud de entrega de contraetiqueta Azafrán de la Mancha'] = $path . 'PI/OZ/F399-01-Solicitud entrega Contraetiquetas DOP Azafrán de la Mancha.docx';
 
         $docs['F456-01-Solicitud Cambio de Titularidad Azafrán'] = $path .'PI/OZ/F456-01-Solicitud Cambio de Titularidad Azafrán.docx';
      
@@ -1432,7 +1432,8 @@ class DocExpController extends AbstractController
      */
     private function useroperatorGeneralDocs(UserOperator $user)
     {
-        $rootpath = $this->container->getParameter('web_root');
+        #$rootpath = $this->container->getParameter('web_root');
+        $rootpath='https://intranet-sohiscert4.e4ff.pro-eu-west-1.openshiftapps.com/public/';
         $docPath = 'docs/';
         $path = $rootpath . $docPath;
 
@@ -1508,152 +1509,143 @@ class DocExpController extends AbstractController
             }
             
         }*/
-
+      
+        
         switch ($opReg) {
 
                 case '1': // ECO
-                    $docs['DIR-OP-18-3403-Circular informativa sanciones Autoridades Competentes'] = $path .
-                        'ECO/DIR-OP-18-3403-Circular informativa sanciones Autoridades Competentes.pdf';
 
-                    $docs['F229-02-Solicitud de cambio de titularidad producción ecológica'] = $path .
-                        'ECO/F229-02-Solicitud Cambio de Titularidad ECO.docx';
+                    $docs['ECO/DIR-OP-18-3403-Circular informativa sanciones Autoridades Competentes.pdf'] = $path .'ECO/DIR-OP-18-3403-Circular informativa sanciones Autoridades Competentes.pdf';
 
-                    $docs['Solicitud de RRPC en Andalucía'] = $path .
-                        "ECO/ANEXO I. Sol. RRPC.docx";
+                    $docs['ECO/F229-02-Solicitud Cambio de Titularidad ECO.docx'] = $path .'ECO/F229-02-Solicitud Cambio de Titularidad ECO.docx';
 
-                    $docs['NI3-01_Reglas Uso Marca SHC Producción Ecológica'] = $path .
-                            'ECO/NI3-01_Reglas Uso Marca SHC Producción Ecológica.pdf';    
+                    $docs['Solicitud de RRPC en Andalucía'] = $path ."ECO/ANEXO I. Sol. RRPC.docx";
 
-                    $docs['Logotipo Eurohoja'] = $path .
-                            'ECO/Logo Eurohoja.jpg';    
+                    $docs['NI3-01_Reglas Uso Marca SHC Producción Ecológica'] = $path .'ECO/NI3-01_Reglas Uso Marca SHC Producción Ecológica.pdf';    
+
+                    $docs['Logotipo Eurohoja'] = $path .'ECO/Logo Eurohoja.jpg';    
 
 
                     if (strcmp($operator->getOpSreg(), 'FAE') === 0) {
                         
 
-                        $docs['F227-02-Solicitud de ampliación finca ecológica'] = $path .
-                            'ECO/FAE/F227-02-Cuestionario Ampliación Finca ECO.doc';
-                        $docs['F223-02-Solicitud de autorización de uso de semillas no ecológicas'] = $path .
-                            'ECO/FAE/F223-02-Solicitud Autorización Semilla no ECO.doc';
+                        $docs['ECO/FAE/F227-02-Cuestionario Ampliación Finca ECO.doc'] = $path .'ECO/FAE/F227-02-Cuestionario Ampliación Finca ECO.doc';
+
+                        $docs['ECO/FAE/F223-03-Solicitud Autorización Semilla no ECO.doc'] = $path .'ECO/FAE/F223-03-Solicitud Autorización Semilla no ECO.doc';
                        /* $docs['F235-01-Comunicación programa de producción vegetal'] = $path .
                             'ECO/FAE/F235-01-Programa de Producción Vegetal ECO.doc';*/
 
-                        $docs['ECO/FAE/F235-02-Programa de Producción Vegetal ECO'] = $path .
-                         'ECO/FAE/F235-02-PPV ECO.doc.docx';
+                        $docs['ECO/FAE/F235-02-Programa de Producción Vegetal ECO.doc'] = $path .'ECO/FAE/F235-02-PPV ECO.doc.docx';
 
-                        $docs['ECO/Logotipo SHC En Conversión a la Agricultura Ecológica'] = $path .
-                         'ECO/FAE/Logo SHC-certificado por. Agricultura ECO.jpg';
+                        $docs['Logotipo SHC En Conversión a la Agricultura Ecológica'] = $path .'ECO/FAE/Logo SHC-certificado por. Agricultura ECO.jpg';
 
-                        $docs['ECO/Logotipo SHC Agricultura Ecológica'] = $path .
-                         'ECO/FAE/Logo SHC-certificado por. Conversion ECO.jpg';
+                        $docs['Logotipo SHC Agricultura Ecológica'] = $path .'ECO/FAE/Logo SHC-certificado por. Conversion ECO.jpg';
 
                         
                     } elseif (strcmp($operator->getOpSreg(), 'GAE')=== 0) {
 
-                        $docs['F234-01-Solicitud de ampliación ganadería ecológica'] = $path .
-                            'ECO/GAE/F234-01_Cuestionario Ampliacion Ganaderia ECO.doc';
-                        $docs['F236-02-Programa de ubicación de los colmenares apicultura ecológica'] = $path .
-                            'ECO/GAE/F236-02_Programa Anual de Ubicación de los Colmenares ECO.docx';
+                        $docs['ECO/GAE/F234-01_Cuestionario Ampliación Ganadería ECO.doc'] = $path .'ECO/GAE/F234-01_Cuestionario Ampliacion Ganaderia ECO.doc';
 
-                        $docs['ECO/Logotipo SHC Ganadería Ecológica'] = $path .
-                            "ECO/GAE/Logo SHC-certificado por. Acuicultura ECO.jpg";
+                        $docs['ECO/GAE/F236-02_Programa Anual de Ubicación de los Colmenares ECO.docx'] = $path .'ECO/GAE/F236-02_Programa Anual de Ubicación de los Colmenares ECO.docx';
 
-                        $docs['ECO/Logotipo SHC Acuicultura Ecológica'] = $path .
-                            'ECO/GAE/Logo SHC-certificado por. Ganadería ECO.jpg';
+                        $docs['Logotipo SHC Ganadería Ecológica'] = $path ."ECO/GAE/Logo SHC-certificado por. Acuicultura ECO.jpg";
+
+                        $docs['Logotipo SHC Acuicultura Ecológica'] = $path .'ECO/GAE/Logo SHC-certificado por. Ganadería ECO.jpg';
                         
                     }
-                    break;
+                break;
                     
                 case 'IFS ': //IFS - Tiene un espacio en blanco almacenado en base de datos después de IFS
 
                     //$docs['Anexo-4-Acuerdo Marco'] = $path . 'IFS/Anexo4AcuerdoMarco.pdf';
 
 
-                    if (strcmp($operator->getOpSreg(), 'IFS') == 0 ) {
-                        $docs['Anexo-4-Acuerdo Marco'] = $path . 'IFS/Anexo4AcuerdoMarcoIFS.pdf';
+                    if (strcmp($operator->getOpSreg(), 'IFS') === 0 ) {
+                        $docs['IFS/Anexo4AcuerdoMarco.pdf'] = $path . 'IFS/Anexo4AcuerdoMarcoIFS.pdf';
+
                         $docs['NI13-01_Reglas Uso Marca SHC IFS'] = $path . 'IFS/NI13-01_Reglas Uso Marca SHC IFS.pdf';
+
                         $docs['Logotipo IFS Global Markets Food'] = $path . 'IFS/IFS_Food_Box_RGB.jpg';
+
                         $docs['Logotipo IFS Food'] = $path . 'IFS/IFS_GMFood2_Logo.jpg';
+
                         $docs['Logotipo IFS Broker'] = $path . 'IFS/IFS_Broker_Box_RGB.jpg';
                     }
-                    break;
+                break;
                 
                 case '3': // VINOS
-                    $docs['F281-01-Programa de proveedores Vinos Andalucía'] = $path .
-                        'VINOS/F281-01-Comunicación de Proveedores.doc';
+                    $docs['VINOS/F281-01-Comunicación de Proveedores.doc'] = $path .'VINOS/F281-01-Comunicación de Proveedores.doc';
+
                     $docs['F375-02-Solicitud de Cambio de Titularidad de Vinos'] = $path . 'F375-02-Solicitud Cambio de Titularidad Vinos.docx';
                 
-                    $docs['NI6-03-Reglas Uso Marca SHC Vinos DOP-IGP-MC-Varietales'] = $path .
-                        'NI6-03-Reglas Uso Marca SHC Vinos DOP-IGP-MC-Varietales.pdf';
+                    $docs['NI6-03-Reglas Uso Marca SHC Vinos DOP-IGP-MC-Varietales'] = $path .'NI6-03-Reglas Uso Marca SHC Vinos DOP-IGP-MC-Varietales.pdf';
 
                     $docs['Logotipo SHC Vinos'] = $path . 'VINOS/Logotipo SHC Vinos.jpg';
+
                     $docs['Logotipo SHC Vinos con D.O.P.'] = $path . 'VINOS/Logotipo SHC Vino con DOP.jpg';
+
                     $docs['Logotipo SHC Vinos de la Tierra'] = $path . 'VINOS/Logotipo SHC Vino de la Tierra.jpg';
+
                     $docs['Logotipo SHC Vinos de Calidad'] = $path . 'VINOS/Logotipo SHC Vino de Calidad.jpg';
+
                     $docs['Logotipo SHC Vinos de Varietal'] = $path . 'VINOS/Logotipo SHC Vino Varietal.jpg';
+
                     $docs['Logotipo SHC Vinos de Marca Colectiva'] = $path . 'VINOS/Logotipo SHC Vino con Marca Colectiva.jpg';
 
                     if (in_array($operator->getOpSreg(), $vinosCM)) {
                         /*$docs['F283-01 - Declaración Aptitud de Partida'] = $path .
                             'VINOS/CM/F283-01_Declaración Aptitud de Partida VINOS CM.doc';*/
 
-                        $docs['F283-06 - Declaración Aptitud de Partida'] = $path .
-                            'VINOS/CM/F283-06-Declaración Aptitud de Partida VINOS.doc';
-                        $docs['F478-01-Solicitud autorización contraetiquetas Vino de la Tierra 
-de Castilla y León'] = $path .
-                            'VINOS/CM/F478-01-Solicitud autorizacion Contraetiquetas Vino de la Tierra de Castilla y León.docx';
+                        $docs['VINOS/CM/F283-06_Declaración Aptitud de Partida VINOS CM.doc'] = $path .'VINOS/CM/F283-06-Declaración Aptitud de Partida VINOS.doc';
 
-                        $docs['F509-01-Solicitud autorización contraetiquetas D.O.P. Valtiendas'] = $path .
-                            'VINOS/CM/F509-01-Solicitud autorizacion Contraetiquetas DOP Valtiendas.docx';
+                        $docs['F478-01-Solicitud autorización contraetiquetas Vino de la Tierra de Castilla y León'] = $path .'VINOS/CM/F478-01-Solicitud autorizacion Contraetiquetas Vino de la Tierra de Castilla y León.docx';
 
-                        $docs['F431-01-Comunicación embotellado Vino Calidad Canarias'] = $path .
-                            'VINOS/CM/F431-01-Comunciación embotellado Vino Calidad Canarias.doc';
+                        $docs['F509-01-Solicitud autorización contraetiquetas D.O.P. Valtiendas'] = $path .'VINOS/CM/F509-01-Solicitud autorizacion Contraetiquetas DOP Valtiendas.docx';
 
-                        $docs['F384-01-Ficha Equipamiento Técnico Bodegas CM'] = $path .
-                            'VINOS/CM/F384-01- Ficha Equipamiento Técnico Bodegas CM.docx';
+                        $docs['F431-01-Comunicación embotellado Vino Calidad Canarias'] = $path .'VINOS/CM/F431-01-Comunciación embotellado Vino Calidad Canarias.doc';
+
+                        $docs['F384-01-Ficha Equipamiento Técnico Bodegas CM'] = $path .'VINOS/CM/F384-01- Ficha Equipamiento Técnico Bodegas CM.docx';
 
                     }
-                    break;
+                break;
                 case '1OP':
-                    $docs['F266-04-Comunicaciones Globalgap'] = $path . 'GG/F266-04-Datos operadores GG.xls';
-                    $docs['150302_GG_Sublicense-and-Certification-Agreement'] = $path .
-                     'GG/150302_GG_Sublicense-and-Certification-Agreement_V4_en_es.pdf';
-                     $docs['Acuerdo de Sublicencia y Certificación GLOBALGAP'] = $path .
-                     'GG/Acuerdo de Sublicencia y Certificación GLOBALGAP.pdf';
+                    $docs['GG/F266-04-Datos operadores GG.xls'] = $path . 'GG/F266-04-Datos operadores GG.xls';
+
+                    $docs['GG/150302_GG_Sublicense-and-Certification-Agreement_V4_en_es.pdf'] = $path .'GG/150302_GG_Sublicense-and-Certification-Agreement_V4_en_es.pdf';
+                    
+                    $docs['GG/Acuerdo de Sublicencia y Certificación GLOBALGAP.pdf'] = $path .'GG/Acuerdo de Sublicencia y Certificación GLOBALGAP.pdf';
                     break;
                 case '2OP':
-                    $docs['F266-04-Comunicaciones Globalgap'] = $path . 'GG/F266-04-Datos operadores GG.xls';
-                    $docs['150302_GG_Sublicense-and-Certification-Agreement'] = $path .
-                     'GG/150302_GG_Sublicense-and-Certification-Agreement_V4_en_es.pdf';
-                    $docs['Acuerdo de Sublicencia y Certificación GLOBALGAP'] = $path .
-                     'GG/Acuerdo de Sublicencia y Certificación GLOBALGAP.pdf';
-                    break;
+                    $docs['GG/F266-04-Datos operadores GG.xls'] = $path . 'GG/F266-04-Datos operadores GG.xls';
+
+                    $docs['GG/150302_GG_Sublicense-and-Certification-Agreement_V4_en_es.pdf'] = $path .'GG/150302_GG_Sublicense-and-Certification-Agreement_V4_en_es.pdf';
+
+                    $docs['GG/Acuerdo de Sublicencia y Certificación GLOBALGAP.pdf'] = $path .'GG/Acuerdo de Sublicencia y Certificación GLOBALGAP.pdf';
+                break;
                 case '4': // Producción integrada
                     /*$docs['F54-01 - Comunicaciones Produccion Integrada'] = $path .
                         'PI/F54-01_Comunicaciones Produccion Integrada.xls';*/
-                    $docs['F54-02 - Comunicaciones Produccion Integrada'] = $path .
-                        'PI/F54-02-Comunicaciones Produccion Integrada.xls';
-                    $docs['NI5-01_Reglas Uso Marca SHC Producción Integrada'] = $path .
-                        'PI/NI5-01_Reglas Uso Marca SHC Producción Integrada.pdf';
+                    $docs['PI/F54-02_Comunicaciones Producción Integrada.xls'] = $path .'PI/F54-02-Comunicaciones Produccion Integrada.xls';
 
-                    $docs['Logotipo SHC Producción Integrada'] = $path .
-                     'PI/Logotipo SHC Producción Integrada.jpg';
+                    $docs['NI5-01_Reglas Uso Marca SHC Producción Integrada'] = $path .'PI/NI5-01_Reglas Uso Marca SHC Producción Integrada.pdf';
+
+                    $docs['Logotipo SHC Producción Integrada'] = $path .'PI/Logotipo SHC Producción Integrada.jpg';
                         
                         if (strcmp($operator->getOpSreg(), 'OZ') === 0 ){
 
-                            $docs['F399-01-Solicitud de entrega de contraetiqueta Azafrán de la 
-Mancha'] = $path . 'PI/OZ/F399-01-Solicitud entrega Contraetiquetas DOP Azafrán de la Mancha.docx';
-                            $docs['F456-01-Solicitud Cambio de Titularidad Azafrán'] = $path .
-                                'PI/OZ/F456-01-Solicitud Cambio de Titularidad Azafrán.docx';
-                            $docs['NI8-03-Reglas Uso Marca SHC Azafrán de La Mancha'] = $path .
-                                'PI/OZ/NI8-03-Reglas Uso Marca SHC Azafrán de La Mancha.pdf'; 
-                            $docs['Logotipo SHC Azafrán de la Mancha'] = $path .
-                                'PI/OZ/Logotipo SHC Azafrán de la Mancha.jpg';
+                            $docs['F399-01-Solicitud de entrega de contraetiqueta Azafrán de la Mancha'] = $path . 'PI/OZ/F399-01-Solicitud entrega Contraetiquetas DOP Azafrán de la Mancha.docx';
+
+                            $docs['F456-01-Solicitud Cambio de Titularidad Azafrán'] = $path .'PI/OZ/F456-01-Solicitud Cambio de Titularidad Azafrán.docx';
+ 
+                            $docs['NI8-03-Reglas Uso Marca SHC Azafrán de La Mancha'] = $path .'PI/OZ/NI8-03-Reglas Uso Marca SHC Azafrán de La Mancha.pdf'; 
+
+                            $docs['Logotipo SHC Azafrán de la Mancha'] = $path .'PI/OZ/Logotipo SHC Azafrán de la Mancha.jpg';
                         }
-                    break;
+                break;
 
                 case 'UNE':
                     $docs['NI23-01-Reglas Uso Marca SHC Insumos Normas UNE'] = $path . 'UNE/NI23-01-Reglas Uso Marca SHC Insumos Normas UNE.pdf';
+
                     $docs['Logotipo SHC Insumos UNE'] = $path . 'UNE/Logotipo SHC Insumos UNE.jpg';
 
                 break;
