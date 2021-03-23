@@ -7,10 +7,9 @@
   
 
 
-    <!--<div id="contain2" class="login-logo center"><img id="logo" src="https://sohiscert.com/wp-content/uploads/2018/07/logo-vector-sohiscert.jpg"></div>-->
-     <div id="contain2" class="login-logo center"><img id="logo" src="app/img/login/logo.svg"></div>
- 
-         <div id="entrar" class="center center_mnn2">CAMBIO DE CONTRASEÑA</div>
+    <div id="contain2" class="login-logo center"><img id="logo" src="https://sohiscert.com/wp-content/uploads/2018/07/logo-vector-sohiscert.jpg"></div>
+        <br>&nbsp;</br>
+        <div class="center" align="center">Cambio de contraseña</div>
         
         <br>&nbsp;</br>
     
@@ -24,13 +23,12 @@
                    
                 </div>
             {% endif %}
-            <label for="username" class="center center_mnn3">Usuario</label>
-            <input type="text" class="form-control-mnn" id="username" name="username" required="required" placeholder="Usuario"/>
-            <span class="glyphicon glyphicon-lock-mnn form-control-feedback"></span>
+            <label for="username">{{ 'resetting.request.username'|trans }}</label>
+            <input type="text" class="form-control" id="username" name="username" required="required" placeholder="Usuario"/>
         </div>
         <br>&nbsp;</br>
         <div class="footer">
-                    <input type="submit" value="RESTABLECER" class="btn-primary-mnn2 botonac"/> 
+                    <input type="submit" value="{{ 'resetting.request.submit'|trans }}" class="btn btn-primary btn-block btn-flat"/>
         </div>
     </form>
 </div>
