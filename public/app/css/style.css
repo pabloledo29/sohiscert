@@ -208,6 +208,11 @@ body {
 	text-decoration: none;
 }
 
+.logo-play a{
+    color:#AB1E13;
+    text-decoration: none;
+}
+
 
 	#contain{
 	display:flex;
