@@ -1354,7 +1354,7 @@ class DocExpController extends AbstractController
       
         $docs['Logotipo SHC Vinos de Marca Colectiva'] = $path . 'VINOS/Logotipo SHC Vino con Marca Colectiva.jpg';
 
-        $docs['VINOS/CM/F283-07_Declaración Aptitud de Partida VINOS CM.doc '] = $path .'VINOS/CM/F283-07-Declaracion Aptitud de Partida VINOS.doc';
+        $docs['VINOS/CM/F283-07_Declaración Aptitud de Partida VINOS CM.doc '] = $path .'VINOS/CM/F283-07-Declaracion Aptitud de Partida VINOS CM.doc';
 
         $docs['F478-01-Solicitud autorización contraetiquetas Vino de la Tierra de Castilla y León'] = $path .'VINOS/CM/F478-01-Solicitud autorizacion Contraetiquetas Vino de la Tierra de Castilla y León.docx';
 
@@ -1596,7 +1596,7 @@ class DocExpController extends AbstractController
                         /*$docs['F283-01 - Declaración Aptitud de Partida'] = $path .
                             'VINOS/CM/F283-01_Declaración Aptitud de Partida VINOS CM.doc';*/
 
-                        $docs['VINOS/CM/F283-07_Declaración Aptitud de Partida VINOS CM.doc'] = $path .'VINOS/CM/F283-07-Declaracion Aptitud de Partida VINOS.doc';
+                        $docs['VINOS/CM/F283-07_Declaración Aptitud de Partida VINOS CM.doc'] = $path .'VINOS/CM/F283-07-Declaracion Aptitud de Partida VINOS CM.doc';
 
                         $docs['F478-01-Solicitud autorización contraetiquetas Vino de la Tierra de Castilla y León'] = $path .'VINOS/CM/F478-01-Solicitud autorizacion Contraetiquetas Vino de la Tierra de Castilla y León.docx';
 
