@@ -115,13 +115,13 @@ EOF
         $diahoy = date('Y-m-d', time());
         $diahoy = strtotime($diahoy);
 
-        $semantes = '2019-01-22';
+        $semantes = '2021-03-25';
         #$semantes = date('Y-m-d', strtotime('-1 week'));
         $semantes = strtotime($semantes);
 
         
         # Rutas para Pruebas
-        $rutasftp = array('certificado' => '/DEPARTAMENTO CERTIFICACION/1 CERTIFICADOS\3 FIRM');
+        $rutasftp = array('certificado' => '/DEPARTAMENTO CERTIFICACION/1 CERTIFICADOS\3 FIRMADOS');
         #$rutasftp = array('factura' => '/facturasintranet');
 
         $em = $this->em;
@@ -824,8 +824,8 @@ EOF
         
 
         $from  = 'noreply@sohiscert.com';
-        //$to = $destino;
-        $to = 'manuel.navarro@atlantic.es';
+        $to = $destino;
+        //$to = 'manuel.navarro@atlantic.es';
         $subject = "Alta de documento en Área Privada web: Certificado"; 
         
         /*MNN Modificamos la plantilla */
