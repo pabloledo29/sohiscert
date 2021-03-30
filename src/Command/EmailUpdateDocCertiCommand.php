@@ -121,7 +121,7 @@ EOF
 
         
         # Rutas para Pruebas
-        $rutasftp = array('certificado' => '/DEPARTAMENTO CERTIFICACION/1 CERTIFICADOS\3 FIRMADOS');
+        $rutasftp = array('certificado' => '/DEPARTAMENTO CERTIFICACION/1 CERTIFICADOS\3 FIR');
         #$rutasftp = array('factura' => '/facturasintranet');
 
         $em = $this->em;
@@ -824,8 +824,8 @@ EOF
         
 
         $from  = 'noreply@sohiscert.com';
-        $to = $destino;
-        //$to = 'ignacio.fernandez@atlantic.es';
+        //$to = $destino;
+        $to = 'manuel.navarro@atlantic.es';
         $subject = "Alta de documento en Área Privada web: Certificado"; 
         
         /*MNN Modificamos la plantilla */
