@@ -160,7 +160,7 @@ EOF
 
             # Verificamos la Conexión FTP
             if ((!$conn_id) || (!$login_result)) {  
-                echo "\n ¡La conexión FTP ha fallado!\n";
+                echo "\n ¡La conexión FTP ha fallado.!\n";
                 echo "\n Se intentó conectar al $this->ftp_server por el usuario $this->ftp_user_name"; 
                 echo " \n";
                 exit(); 
