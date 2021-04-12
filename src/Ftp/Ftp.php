@@ -420,31 +420,33 @@ class Ftp
             }
         }
         if($query==='cartas'){
-            $listAux = [];
-           
-            foreach($certList as $line){
-                $listAux[] = str_replace('AE', '', $line);
-            }
-            sort($listAux,SORT_STRING);
-            
-            $cont_i = 0;
-            $encontrado = false;
-               $values_cerList = array_values($certList); 
-
-                $listAux_count = count($listAux); 
-                while($cont_i < $listAux_count && !$encontrado){
-                        if(strcmp(str_replace('AE', '', $values_cerList[$cont_i]), 
-                            array_values($listAux)[count($listAux)-1])===0){
-                            $position=$cont_i;
-                            $encontrado = true;
-                        }else{
-                            $cont_i++;
-                        }
-                    }
+            if (!empty($certList)){
+                $listAux = [];
+               
+                foreach($certList as $line){
+                    $listAux[] = str_replace('AE', '', $line);
+                }
+                sort($listAux,SORT_STRING);
                 
-            
-            //TODO : CERTLIST estará vacío
-            $certList[]= array_values($certList)[$cont_i];
+                $cont_i = 0;
+                $encontrado = false;
+                   $values_cerList = array_values($certList); 
+
+                    $listAux_count = count($listAux); 
+                    while($cont_i < $listAux_count && !$encontrado){
+                            if(strcmp(str_replace('AE', '', $values_cerList[$cont_i]), 
+                                array_values($listAux)[count($listAux)-1])===0){
+                                $position=$cont_i;
+                                $encontrado = true;
+                            }else{
+                                $cont_i++;
+                            }
+                        }
+                    
+                
+                //TODO : CERTLIST estará vacío
+                $certList[]= array_values($certList)[$cont_i];
+            }    
             
         }
 
