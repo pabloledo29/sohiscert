@@ -464,12 +464,15 @@ class Ftp
             $previous = date("y", strtotime("-1 year"));
             /* comienza con dos digitos para año en vigor o anterior y termina con - NOP . extension de 3 letras */
            // $pattern = '/^( [F202]-' . $current . '|' . $previous . ')\w+' . $nop . '.[a-z]{3}$/';
-            $pattern = '/^('. $current . '|' . $previous . ')\w+' . $nop . '.[a-z]{3}$/';
+            //MNN. Cquitamos la comparacion de arrays. 13/04/2021
+            /*$pattern = '/^('. $current . '|' . $previous . ')\w+' . $nop . '.[a-z]{3}$/';
          
 
             $temp = $this->pregGrepKeys($pattern, $certList);
 
-            $certList = $temp;
+            $certList = $temp;*/
+            /* FIN MNN */
+            $certList=$certList;
         } elseif ($query === 'certificados') {
            
             /** Regex para Certificados
