@@ -87,7 +87,7 @@
                                                 {#-{{ doc.dePla }} </a>#}
                                                 {#</form>#}
                                                 
-                                                <form id={{ "procesar_formulario" ~ i }} 
+                                                <form id={{ "procesar_formulario" ~ i }} action="{{ path('admin_file_download') }}"
                                                       method="POST">
                                                       <input name="opId" type="hidden" value="{{operator.id }}"/>
                                                     <input name="opNop" type="hidden" value="{{operator.opNop }}"/>
@@ -132,7 +132,5 @@
         </div>
 
     </section><!-- /.content -->
-    <script>
-        setInterval('window.location.reload()', 10000);
-    </script>
+    
 {% endblock %}
