@@ -88,13 +88,21 @@
 
                                             <form id={{ "procesar_formulario" ~ i }} action="{{ path('admin_file_download') }}" method="POST">
                                                 <input type="hidden" name="opNop" value="{{ opNop }}">
-                                                <input type="hidden" name="path" value="{{ doc }}">
+                                                <input type="text" name="path" value="{{ doc }}">
                                                 <i class="fa fa-floppy-o"></i>
                                                 <a  id={{ "btn_enviar" ~ i }} name={{ "btn_enviar" ~ i }}  href="#"
                                                     type="submit" onclick="$(this).closest('form').submit();"> Descargar
                                                 </a><small  id={{"smallvisitas" ~ i }}>+ {{ visitas[i].visitas }} Visitas</small>
 
                                             </form>
+
+                                            
+
+
+
+
+
+
                                         </td>
 
                                     </tr>
@@ -169,7 +177,7 @@
 
         })*/
      //   $.when(promise1).done(function(){
-          refreshIntervalId= setTimeset('window.location.reload()', 10000);
+      //    refreshIntervalId= setTimeset('window.location.reload()', 10000);
            
         // Nos permite cancelar el envio del formulario
     //});
