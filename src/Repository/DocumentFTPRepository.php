@@ -34,6 +34,8 @@ class DocumentFTPRepository extends ServiceEntityRepository
             ->setParameter('nbDoc1', $nbDoc)
             ->orWhere('d.nbDoc = :nbDoc2')
             ->setParameter('nbDoc2', str_replace('AE','',$nbDoc))
+            ->orWhere('d.nbDoc = :nbDoc5')
+            ->setParameter('nbDoc5', str_replace('/DEPARTAMENTO CERTIFICACION/1 CERTIFICADOS/3 FIRMADOS','/DEPARTAMENTO ADMINISTRACION/ARCHIVO DIGITAL',$nbDoc))
             ->getQuery()
             ->getOneOrNullResult();
         } else{
@@ -42,6 +44,8 @@ class DocumentFTPRepository extends ServiceEntityRepository
             ->setParameter('nbDoc3', "%" .$op . "AE%")
             ->orWhere('d.nbDoc = :nbDoc4')
             ->setParameter('nbDoc4', $nbDoc)
+            ->orWhere('d.nbDoc = :nbDoc6')
+            ->setParameter('nbDoc6', str_replace('/DEPARTAMENTO CERTIFICACION/1 CERTIFICADOS/3 FIRMADOS','/DEPARTAMENTO ADMINISTRACION/ARCHIVO DIGITAL',$nbDoc))
             ->getQuery()
             ->getOneOrNullResult();
             
