@@ -121,7 +121,7 @@ EOF
 
         
         # Rutas para Pruebas
-        $rutasftp = array('certificado' => '/DEPARTAMENTO CERTIFICACION/1 CERTIFICADOS/3 FIRMADOS');
+        $rutasftp = array('certificado' => '/DEPARTAMENTO CERTIFICACION/1 CERTIFICADOS\3 FIRMADOS');
         #$rutasftp = array('factura' => '/facturasintranet');
 
         $em = $this->em;
@@ -197,7 +197,7 @@ EOF
             $docNV = 0;
             #$proc = 0;
 
-            echo "\n Procesando " . $tipodoc . "... \n";
+            echo "\n Procesando los " . $tipodoc . "... \n";
 
             # Recorremos Archivo por Archivo por Directorio
             $calc_for = $numarch/3+1;
