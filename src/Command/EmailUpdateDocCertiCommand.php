@@ -166,7 +166,7 @@ EOF
                 exit(); 
 
             } else {
-                echo "\n Conexión a $this->ftp_server realizada con éxito, por el usuario " .$this->ftp_user_name . " \n";
+                echo "\n Conexión texto de prueba a $this->ftp_server realizada con éxito, por el usuario " .$this->ftp_user_name . " \n";
             }
 
             # Habilitamos la Conexión Pasiva del FTP
@@ -197,7 +197,7 @@ EOF
             $docNV = 0;
             #$proc = 0;
 
-            echo "\n Procesando " . $tipodoc . "... \n";
+            echo "\n Procesando los " . $tipodoc . "... \n";
 
             # Recorremos Archivo por Archivo por Directorio
             $calc_for = $numarch/3+1;

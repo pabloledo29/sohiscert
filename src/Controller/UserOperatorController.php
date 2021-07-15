@@ -406,39 +406,61 @@ class UserOperatorController extends AbstractController
      */
     public function updateAction(Request $request, $id)
     {
+        // Comprobamos que el usuario tenga rol de admin, si no, lanzamos error de acceso
         if (!$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
             throw $this->createAccessDeniedException();
-        }
+        } 
 
+        // Entity managerº
         $em = $this->getDoctrine()->getManager();
+        // Obtenemos los datos de la bd del usuario que quedemos modificar con su ID
         $user = $em->getRepository(UserOperator::class)->find($id);
 
+        // Si no existe usuaro con ese id lanza error
         if (!$user) {
             throw $this->createNotFoundException('No se ha encontrado el usuario ' . $id);
         }
 
-        $form = $this->createForm(RegistrationUserOperatorType::class, $user);
-       
-       
-        $form->remove('username');
-       
+        // Guardamos la contraseña antigua de este usuario
+        $oldPass = $user->getPassword();
+
+        // Creamos el formulario y seteamos los datos de $user, para que se rellenen los campos que ya tenía el usuario en bd
+        $form = $this->createForm(RegistrationUserOperatorType::class, $user);      
+
+        // Eliminamos el 'username' del formulario
+        $form->remove('username');    
+
+        // Obtenemos la resolución de la petición
         $form->handleRequest($request);
-       
+    
+        // Si se ha enviado el formulario y es valido
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setPassword(password_hash($user->getPassword(), PASSWORD_BCRYPT,['cost'=>12])); 
+
+            // Si la contraseña antigua es distinta a la indicada en el formulario la modificamos en bd encriptándola
+            if($oldPass != $user->getPassword()){
+                $user->setPassword(password_hash($user->getPassword(), PASSWORD_BCRYPT,['cost'=>12]));
+            }
+
             
             $userManager = $em;
-            
+
+            // Persistimos los datos
             $userManager->persist($user);
             $userManager->flush();
-            
+
+           
+            // Mandamos el mensaje de que todo ha salido correcto
             $request->getSession()->getFlashBag()->add('msg', 'El usuario ha sido modificado correctamente');
 
+ 
+            // Redireccionamos al listado de clientes
             return $this->redirect($this->generateUrl('admin_useroperator_list'));
-        }
-        
 
+        }
+
+        // Renderizamos el formulario de modificación del userOperator
         return $this->render('admin/form/update_user_operator.form.html.twig', array('form' => $form->createView()));
+
     }
 
 
