@@ -166,7 +166,7 @@ EOF
                 exit(); 
 
             } else {
-                echo "\n Conexión a $this->ftp_server realizada con éxito, por el usuario " .$this->ftp_user_name . " \n";
+                echo "\n Conexión texto de prueba a $this->ftp_server realizada con éxito, por el usuario " .$this->ftp_user_name . " \n";
             }
 
             # Habilitamos la Conexión Pasiva del FTP
