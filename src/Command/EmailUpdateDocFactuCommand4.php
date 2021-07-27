@@ -48,7 +48,7 @@ class EmailUpdateDocFactuCommand4 extends Command
     protected function configure()
     {
         $this
-            ->setName('email:emaildocfactu:send')
+            ->setName('email:emaildocfactu4:send')
             ->setDescription('Send simple email message')
             ->addOption('from', null, InputOption::VALUE_REQUIRED, 'The from address of the message')
             ->addOption('to', null, InputOption::VALUE_REQUIRED, 'The to address of the message')
