@@ -1310,7 +1310,7 @@ class DocExpController extends AbstractController
 
         $docs['ECO/FAE/F227-02-Cuestionario Ampliación Finca ECO.doc'] = $path .'ECO/FAE/F227-02-Cuestionario Ampliación Finca ECO.doc';  
 
-        $docs['ECO/FAE/F223-03-Solicitud Autorización Semilla no ECO.doc'] = $path .'ECO/FAE/F223-03-Solicitud Autorización Semilla no ECO.doc';
+        $docs['ECO/FAE/F223-04-Solicitud Autorización Semilla no ECO.doc'] = $path .'ECO/FAE/F223-04-Solicitud Autorización Semilla no ECO.doc';
             
         $docs['ECO/FAE/F235-02-Programa de Producción Vegetal ECO.doc'] = $path .'ECO/FAE/F235-02-PPV ECO.doc.docx';
 
@@ -1531,7 +1531,7 @@ class DocExpController extends AbstractController
 
                         $docs['ECO/FAE/F227-02-Cuestionario Ampliación Finca ECO.doc'] = $path .'ECO/FAE/F227-02-Cuestionario Ampliación Finca ECO.doc';
 
-                        $docs['ECO/FAE/F223-03-Solicitud Autorización Semilla no ECO.doc'] = $path .'ECO/FAE/F223-03-Solicitud Autorización Semilla no ECO.doc';
+                        $docs['ECO/FAE/F223-04-Solicitud Autorización Semilla no ECO.doc'] = $path .'ECO/FAE/F223-04-Solicitud Autorización Semilla no ECO.doc';
                        /* $docs['F235-01-Comunicación programa de producción vegetal'] = $path .
                             'ECO/FAE/F235-01-Programa de Producción Vegetal ECO.doc';*/
 
