@@ -102,8 +102,8 @@ EOF
         $diahoy = strtotime($diahoy);
 
         
-        $semantes = '2018-01-22';
-        #$semantes = date('Y-m-d', strtotime('-1 week'));
+        //$semantes = '2018-01-22';
+        $semantes = date('Y-m-d', strtotime('-1 month'));
         $semantes = strtotime($semantes);
        
         # Rutas de los Documentos en el Servidor FTP
