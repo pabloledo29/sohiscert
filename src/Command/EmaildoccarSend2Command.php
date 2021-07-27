@@ -175,9 +175,10 @@ EOF
             echo "\n Procesando " . $tipodoc . "... \n";
 
             # Recorremos Archivo por Archivo por Directorio
-            $calc_for2=($numarch/3)+1;
-            $numarch_total = (2*$numarch/3)+2;
-            for ($i=$calc_for2; $i < $numarch_total ; $i++) {
+            $numarch_desde= $numarch/4;
+            $numarch_hasta= $numarch_desde*2;
+            for ($i=$numarch_desde; $i <= $numarch_hasta ; $i++) {
+
                 
                 switch ($tipodoc) {
                    
@@ -229,10 +230,10 @@ EOF
 
                 $fmoddoc = strtotime($fmoddoc);
 
-                echo " " . $contArch . "\r";       
+                echo " " . $i . "\r";       
 
                 # Escribimos Comienzo y Fin de Ejecución
-                fwrite($log,("\n* CONTADOR: ". $contArch ." | Fecha numerica: ". $docftp ." | FECHA REAL: ".$fecha_bruta." RUTA: ".$lista[$i]."\n"));
+                fwrite($log,("\n* CONTADOR: ". $i ." | Fecha numerica: ". $docftp ." | FECHA REAL: ".$fecha_bruta." RUTA: ".$lista[$i]."\n"));
 
                 if (($fmoddoc >= $semantes) && ($fmoddoc <= $diahoy)) {
       
