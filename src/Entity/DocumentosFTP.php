@@ -72,6 +72,21 @@ class DocumentosFTP
      * @ORM\Column(name="visitas", type="integer", nullable=false, options={"unsigned":true, "default":0})
      */
     private $visitas = 0;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fechaEnv", type="datetime", nullable=true)
+     */
+    private $fechaEnv;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mail", type="string", length=255, nullable=true)
+     * @JMS\Type("string"))
+     */
+    private $mail;
     /*
     public function __construct(
         $opCdp,
@@ -238,5 +253,53 @@ class DocumentosFTP
     public function getVisitas()
     {
         return $this->visitas;
+    }
+
+    /**
+     * Set fechaEnv
+     *
+     * @param \DateTime $fechaEnv
+     * @return DocumentosFTP
+     */
+    public function setFechaEnv($fechaEnv)
+    {
+        $this->fechaEnv = $fechaEnv;
+
+        return $this;
+    }
+
+     /**
+     * Set fechaEnv
+     *
+     * @param \DateTime $fechaEnv
+     * @return DocumentosFTP
+     */
+    public function getFechaEnv()
+    {
+        return $this->fechaEnv;
+
+    }
+
+    /**
+     * Set mail
+     *
+     * @param string $mail
+     * @return DocumentosFTP
+     */
+    public function setMail($mail)
+    {
+        $this->mail = $mail;
+
+        return $this;
+    }
+
+    /**
+     * Get mail
+     *
+     * @return string 
+     */
+    public function getMail()
+    {
+        return $this->mail;
     }
 }
