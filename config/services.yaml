@@ -41,7 +41,7 @@ parameters:
     mail_to: 'sohiscert@sohiscert.com'
     mailer_transport: 'smtp'
     mailer_port: 587
-    mailer_host: 'smtp.ionos.es'
+    mailer_host: 'smtp.office365.com'
     mailer_user: 'noreply@sohiscert.com'
     mailer_password: "Naranjo@@2020.-"
     mailer_encryption: 'tls'
