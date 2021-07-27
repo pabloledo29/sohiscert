@@ -21,12 +21,12 @@ use App\Entity\DocumentosFTP;
 use Swift_Mailer;
 use Swift_SmtpTransport;
 /**
- * Class EmaildoccarSend2Command
+ * Class EmaildoccarSend3Command
  * @package App\Command
  */
-class EmaildoccarSend2Command extends Command
+class EmaildoccarSend3Command extends Command
 {
-    protected static $defaultName = 'email:emaildoccar2:send';
+    protected static $defaultName = 'email:emaildoccar3:send';
     public function __construct(string $path_update_logs,string $ftp_server, string $ftp_user_name, string $ftp_user_pass, $mailer,$em)
     {
         $this->path_update_logs = $path_update_logs;
