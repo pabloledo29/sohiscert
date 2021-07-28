@@ -333,7 +333,7 @@ EOF
                                     # Inicializamos Variable y Añadimos los Valores para el Nuevo Documento
                                     $docNew = new DocumentosFTP();
 
-                                    /*if (isset($operador["opCdp"])) {
+                                    if (isset($operador["opCdp"])) {
                                         # code...
                                         $docNew->setOpCdp($operador["opCdp"]);
 
@@ -341,7 +341,7 @@ EOF
                                         $docNew->setOpCdp(" ");
                                     }
 
-                                    $docNew->setOpNop($nbop);
+                                    /*$docNew->setOpNop($nbop);
                                     $docNew->setTipoDoc($tipodoc);
                                     $docNew->setNbDoc($nbdoc);
                                     $docNew->setFechaDoc(new \DateTime($fechadoc));

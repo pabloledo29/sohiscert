@@ -47,7 +47,7 @@ class EmailUpdateDocCerti2Command extends Command
     protected function configure()
     {
         $this
-            ->setName('email:emaildoccerti:send')
+            ->setName('email:emaildoccerti2:send')
             ->setDescription('Send simple email message')
             ->addOption('from', null, InputOption::VALUE_REQUIRED, 'The from address of the message')
             ->addOption('to', null, InputOption::VALUE_REQUIRED, 'The to address of the message')
@@ -115,7 +115,7 @@ EOF
         $diahoy = date('Y-m-d', time());
         $diahoy = strtotime($diahoy);
 
-        $semantes = '2021-03-25';
+        $semantes = '2021-06-01';
         #$semantes = date('Y-m-d', strtotime('-1 week'));
         $semantes = strtotime($semantes);
 
@@ -139,7 +139,7 @@ EOF
         $end = date("Y-m-d H:i:s");
 
         # Definimos la Ruta Completa y el Nombre del Fichero LOG que se va a generar
-        $path_file = $urlBase.'register_recorridos_CERTI_'.date("d_m_Y").'.log';
+        $path_file = $urlBase.'register_recorridos_CERTI2_'.date("d_m_Y").'.log';
 
         # Abrimos el Archivo con Permisos de Sobrescritura
         $log = fopen($path_file, "w+");
@@ -200,9 +200,10 @@ EOF
             echo "\n Procesando " . $tipodoc . "... \n";
 
             # Recorremos Archivo por Archivo por Directorio
-            $calc_for2 = ($numarch/3)+1;
-            $numarch_total = ($numarch/3)+2;
-            for ($i=$calc_for2; $i < $numarch_total ; $i++) {
+            $numarch_desde = $numarch/3;
+            $numarch_hasta = ($numarch/3)*2;      
+            for ($i=intval($numarch_desde); $i < intval($numarch_hasta) ; $i++) {
+
                 
                 switch ($tipodoc) {
                    
@@ -261,7 +262,7 @@ EOF
 
 
                 #echo "\n" . $fmoddoc . "\n";
-                echo " " . $contArch . "\r";
+                echo " " . $i . "\r";
                 #echo "\n - Doc: " . $lista[$i] . " | F.M: " . $fmoddoc . " - F.F: 2019-01-02 \n";
                 #echo " " . $contArch . " - Procesadas: " . $proc . "\r";
                 
@@ -276,11 +277,7 @@ EOF
                 
 
                 # Escribimos Comienzo y Fin de Ejecución
-                fwrite($log,("\n* CONTADOR: ". $contArch ." | Fecha numerica: ". $docftp ." | FECHA REAL: ".$fecha_bruta." RUTA: ".$lista[$i]."\n"));
-
-
-
-
+                fwrite($log,("\n* CONTADOR: ". $i ." | Fecha numerica: ". $docftp ." | FECHA REAL: ".$fecha_bruta." RUTA: ".$lista[$i]."\n"));
 
                 if (($fmoddoc >= $semantes) && ($fmoddoc <= $diahoy)) {
                    
@@ -290,18 +287,11 @@ EOF
                 # Comprobamos sólo los archivos PDF de los Directorios definidos del Servidor FTP
                 # y a su vez, aquellos que NO Contengan Untitled
                 if ((strpos($lista[$i], '.pdf') !== false) && (strpos($lista[$i], 'Untitled') === false) && (strpos($lista[$i], '-') !== false)) {
-
-                    
-                    
-
-                    
+                
                     $archivo = $em->getRepository(DocumentosFTP::class)->findOneByNbDoc($lista[$i]);
 
                     switch ($tipodoc) {
                         
-                        
-
-
                         case 'certificado':
                             
                             # Obtenemos la Fecha de Modificación del Archivo FTP
@@ -437,7 +427,7 @@ EOF
                                         $docNew->setOpCdp(" ");
                                     }
 
-                                    if ($operador["opEma"]!=''){
+                                    /*if ($operador["opEma"]!=''){
 
                                         $docNew->setOpNop($nbop);
                                         $docNew->setTipoDoc($tipodoc);
@@ -448,7 +438,7 @@ EOF
                                         $em->persist($docNew);
                                         $em->flush();
 
-                                    }
+                                    }*/
 
                                     #var_dump($docNew);
                                     #exit('Certificado Grabado BB.DD.');
@@ -466,6 +456,86 @@ EOF
                                             "cif"=>$operador["opCif"],
                                             "nombre"=>$operador["opDenoop"]
                                         );
+
+                                        # Si Existen Datos de Actualización para Remitir por Mail 
+                                        if (isset($datamail)) {
+                                            if ($datamail['mail']!=''){                                              
+                                                if($datamail["mail"] != null){
+                                                    $datamail["mail"] = array_filter(preg_split('[;,/ ]',trim($datamail["mail"])));
+                                                    if($datamail["mail"][0]){
+                                                        $datamail["mail"] = $datamail["mail"][0];
+                                                        str_replace("ñ","n",$datamail["mail"]);
+                                                        str_replace("á","a",$datamail["mail"]);
+                                                        str_replace("é","e",$datamail["mail"]);
+                                                        str_replace("í","i",$datamail["mail"]);
+                                                        str_replace("ó","o",$datamail["mail"]);
+                                                        str_replace("ú","u",$datamail["mail"]);
+                                                        if($datamail["mail"]==null || ($datamail["mail"] != [] && $datamail["mail"] != null && $datamail["mail"] != "" && !filter_var($datamail["mail"], FILTER_VALIDATE_EMAIL))){
+                                                            $path_file_fail = $urlBase.'register_falladas_ANA2_'.date("d_m_Y").'.log';
+                                                            $open_file = fopen($path_file_fail,'a+');
+                                                            fwrite($open_file,date("Y-m-d H:i:s"). "---->" .implode($datamail));
+                                                            fclose($open_file);
+                                                            $datamail["mail"] = null;
+                                                        }
+                                                    }
+                                                }
+                                                $em = $this->em;
+                                                switch ($input->getOption('body-source')) { 
+                                                    case 'file':
+                                                        $filename = $input->getOption('body');
+                                                        $content = file_get_contents($filename);
+                                                        if ($content === false) {
+                                                            throw new \Exception('Could not get contents from ' . $filename);
+                                                        }
+                                                        $input->setOption('body', $content);
+                                                        break;
+                                                 case 'stdin':
+                                                        break;
+                                                 default:
+                                                        throw new \InvalidArgumentException('Body-input option should be "stdin" or "file"');
+                                                }
+                                            // Si $datamail tiene datos, se envía el email
+                                            try {
+                                                $message = $this->createMessage($input, $datamail);
+                                                $mailer = $this->mailer;
+                                                //$this->mandarMail($message, $mailer, $output);
+                                                $output->writeln(sprintf('<info>Sent %s emails<info>', $mailer->send($message)));
+                                                if($mailer->send($message) == 1){
+                                                    if ($operador["opEma"]!=''){
+                                                        if (isset($operador["opCdp"])) {
+                                                            $docNew->setOpCdp($operador["opCdp"]);
+                        
+                                                        }else{
+                                                            $docNew->setOpCdp(" ");
+                                                        }
+                                                        $docNew->setOpNop($nbop);
+                                                        $docNew->setTipoDoc($tipodoc);
+                                                        $docNew->setNbDoc($nbdoc);
+                                                        $docNew->setFechaDoc(new \DateTime($fechadoc));
+                                                        $docNew->setFechaEnv(new \DateTime());
+                                                        $docNew->setMail($operador["opEma"]);
+                        
+                                                        $em->persist($docNew);
+                                                        $em->flush();
+                                                        echo "\n Registro guardado \n";
+                                                    
+                                                        foreach ($datosOp as $registro) {
+
+                                                            foreach ($registro as $key => $value) {
+                                                                # code...
+                                                                echo "\n - " . $key . ": " . $value;
+                                                            }
+                                                            
+                                                        }
+                                                    } 
+                                                }
+                                                $contMail++;
+                                                unset($datamail);
+                                            } catch(\Exception $e) {
+                                                echo ("Error al enviar mensaje: " + $e->getMessage());
+                                            }
+                                        }
+                                    }
 
                                     }else{
 
@@ -648,19 +718,48 @@ EOF
                                 default:
                                     throw new \InvalidArgumentException('Body-input option should be "stdin" or "file"');
                             }
-
+                        // Si $datamail tiene datos, se envía el email
+                        try {
                             $message = $this->createMessage($input, $datamail);
                             $mailer = $this->mailer;
+                            //$this->mandarMail($message, $mailer, $output);
                             $output->writeln(sprintf('<info>Sent %s emails<info>', $mailer->send($message)));
-                            
-                            $contMail++;
+                            if($mailer->send($message) == 1){
+                                if ($operador["opEma"]!=''){
+                                    if (isset($operador["opCdp"])) {
+                                        $docNew->setOpCdp($operador["opCdp"]);
 
-                            #Limpiamos 
+                                    }else{
+                                        $docNew->setOpCdp(" ");
+                                    }
+                                    $docNew->setOpNop($nbop);
+                                    $docNew->setTipoDoc($tipodoc);
+                                    $docNew->setNbDoc($nbdoc);
+                                    $docNew->setFechaDoc(new \DateTime($fechadoc));
+                                    $docNew->setFechaEnv(new \DateTime());
+                                    $docNew->setMail($operador["opEma"]);
+
+                                    $em->persist($docNew);
+                                    $em->flush();
+                                    echo "\n Registro guardado \n";
+                                
+                                    foreach ($datosOp as $registro) {
+
+                                        foreach ($registro as $key => $value) {
+                                            # code...
+                                            echo "\n - " . $key . ": " . $value;
+                                        }
+                                        
+                                    }
+                                } 
+                            }
+                            $contMail++;
                             unset($datamail);
-                            # exit('Envió de Mail Realizado');
-                        } 
+                        } catch(\Exception $e) {
+                            echo ("Error al enviar mensaje: " + $e->getMessage());
+                        }
                     }
-                    
+                }           
                 }else{
 
                     # Documentos NO Válidos
@@ -697,7 +796,7 @@ EOF
         $end = date("Y-m-d H:i:s");
 
         # Definimos la Ruta Completa y el Nombre del Fichero LOG que se va a generar
-        $path_file = $urlBase.'update_datedocuments_CERTIFICACIONES_'.date("d_m_Y").'.log';
+        $path_file = $urlBase.'update_datedocuments_CERTIFICACIONES2_'.date("d_m_Y").'.log';
 
         # Abrimos el Archivo con Permisos de Sobrescritura
         $log = fopen($path_file, "w+");
@@ -826,7 +925,7 @@ EOF
 
         $from  = 'noreply@sohiscert.com';
         $to = $destino;
-        //$to = 'manuel.navarro@atlantic.es';
+        $to = 'jlbarrios@atlantic.es';
         $subject = "Alta de documento en Área Privada web: Certificado"; 
         
         /*MNN Modificamos la plantilla */
