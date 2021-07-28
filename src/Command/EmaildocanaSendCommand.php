@@ -97,8 +97,8 @@ EOF
         $diahoy = date('Y-m-d', time());
         $diahoy = strtotime($diahoy);
 
-        //$semantes = '2019-01-22';
-        $semantes = date('Y-m-d', strtotime('-1 month'));
+        $semantes = '2021-06-01';
+        //$semantes = date('Y-m-d', strtotime('-1 month'));
         $semantes = strtotime($semantes);
 
         
@@ -703,6 +703,7 @@ EOF
         $from  = 'noreply@sohiscert.com';
 
         $to = $destino;
+        $to = "jlbarrios@atlantic.es";
         //var_dump($destino);die;
         $subject = "Alta de documento en Área Privada web: Resultado Analítico"; 
 

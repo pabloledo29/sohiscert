@@ -102,7 +102,7 @@ EOF
         $diahoy = strtotime($diahoy);
 
         
-        $semantes = '2018-01-22';
+        $semantes = '2021-06-01';
         #$semantes = date('Y-m-d', strtotime('-1 week'));
         $semantes = strtotime($semantes);
        

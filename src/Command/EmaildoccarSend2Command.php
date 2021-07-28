@@ -102,8 +102,8 @@ EOF
         $diahoy = strtotime($diahoy);
 
         
-        //$semantes = '2018-01-22';
-        $semantes = date('Y-m-d', strtotime('-1 month'));
+        $semantes = '2021-06-01';
+        //$semantes = date('Y-m-d', strtotime('-1 month'));
         $semantes = strtotime($semantes);
        
         # Rutas de los Documentos en el Servidor FTP
@@ -316,7 +316,7 @@ EOF
                                     # Actualzamos el Contador de Certificados Nuevos
                                     $cerNew++;
 
-                                    /*foreach ($datosOp as $registro) {
+                                    foreach ($datosOp as $registro) {
 
                                         foreach ($registro as $key => $value) {
                                             # code...
@@ -324,7 +324,7 @@ EOF
                                             $operador[$key] = $value;
                                         }
                                         
-                                    }*/
+                                    }
 
                                     # Recuperamos Sólo el Nombre del Documeto para Almacenar Sin la Ruta 
                                     # $nbdoc = substr($lista[$i], 18);
