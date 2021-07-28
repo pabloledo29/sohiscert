@@ -638,7 +638,7 @@ EOF
         $end = date("Y-m-d H:i:s");
 
         # Definimos la Ruta Completa y el Nombre del Fichero LOG que se va a generar
-        $path_file = $urlBase.'update_datedocuments_CARTAS_'.date("d_m_Y").'.log';
+        $path_file = $urlBase.'update_datedocuments_CARTAS3_'.date("d_m_Y").'.log';
 
         # Abrimos el Archivo con Permisos de Sobrescritura
         $log = fopen($path_file, "w+");
