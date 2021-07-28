@@ -272,14 +272,11 @@ EOF
                                     }
                                 }
                                 if(!$encontrado){
-                                    $optimizar_string1 = substr($op, 0, 1);
-                                    $optimizar_string2 = strcmp($optimizar_string1, 'F');
-                                    $optimizar_string3 = strcmp($optimizar_string1, '1');
                                     # Si el Documento No Contiene más '-' o No Empiece por F ni por 1
-                                    if ((strrpos($op, '-') == false && strrpos($op, ' ') == false) || ($optimizar_string2 <> 0 && $optimizar_string3 <> 0)) { 
+                                    if ((strrpos($op, '-') == false && strrpos($op, ' ') == false) || (strcmp(substr($op, 0, 1), 'F') <> 0 && strcmp(substr($op, 0, 1), '1') <> 0)) {                                   
                                         $nbop = $op;
                                     # Si el Documenta Comienza por F, 1 o S
-                                    }elseif ($optimizar_string2 == 0 || $optimizar_string3 == 0 || strcmp($optimizar_string1, 'S') == 0) {
+                                    }elseif (strcmp(substr($op, 0, 1), 'F') == 0 || strcmp(substr($op, 0, 1), '1') == 0 || strcmp(substr($op, 0, 1), 'S') == 0){
                                         
                                         # Obtenemos el Nombre del Operador a partir de la última
                                         # posición del '-'
@@ -288,7 +285,7 @@ EOF
 
                                         $nbop = substr($op, ($uposg + 1), $tamnc);
 
-                                        # Si el Documento Comienza por NAQS o NOP
+                                        # Si el  Documento Comienza por NAQS o NOP
                                     }elseif (strcmp(substr($op, 0, 4), 'NAQS') == 0 || strcmp(substr($op, 0, 3), 'NOP') == 0) {
                                         
                                         # Obtenemos el Nombre del Operador a partir de la última
