@@ -73,7 +73,7 @@ EOF
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output) :int 
+    protected function execute(InputInterface $input, OutputInterface $output) 
     {
         # Definimos Variable de Cominezo de Ejecución 
         $now = date("Y-m-d H:i:s");
@@ -352,6 +352,7 @@ EOF
                                 $operador = array();
 
 
+                                var_dump($datosOp);
                                                                                          
                                 # Si el Operador Existe, NO es Nulo, en el Sistema
                                 if (count($datosOp) > 0) {

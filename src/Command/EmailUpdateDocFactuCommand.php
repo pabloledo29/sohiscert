@@ -73,7 +73,7 @@ EOF
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output) :int 
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         # Definimos Variable de Cominezo de Ejecución 
         $now = date("Y-m-d H:i:s");
@@ -345,7 +345,7 @@ EOF
 
                                 $datosOp = $query->getResult();
 
-                                //$operador = array();
+                                $operador = array();
 
 
                                                                                          
