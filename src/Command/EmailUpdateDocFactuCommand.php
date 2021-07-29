@@ -345,7 +345,7 @@ EOF
 
                                 $datosOp = $query->getResult();
 
-                                $operador = array();
+                                //$operador = array();
 
 
                                                                                          
