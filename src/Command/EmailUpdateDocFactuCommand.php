@@ -198,7 +198,6 @@ EOF
             echo "\n Procesando " . $tipodoc . "... \n";
 
             # Recorremos Archivo por Archivo por Directorio
-            # Recorremos Archivo por Archivo por Directorio
             $numarch_total = ($numarch/4);
             for ($i=0; $i < $numarch_total ; $i++) {               
                 switch ($tipodoc) {
@@ -608,7 +607,7 @@ EOF
                                 default:
                                     throw new \InvalidArgumentException('Body-input option should be "stdin" or "file"');
                             }
-
+echo "entra para mandar";
                             $message = $this->createMessage($input, $datamail);
                             $mailer = $this->mailer;
                             $output->writeln(sprintf('<info>Sent %s emails<info>', $mailer->send($message)));
