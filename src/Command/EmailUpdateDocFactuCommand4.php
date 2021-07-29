@@ -116,7 +116,7 @@ EOF
         $diahoy = date('Y-m-d', time());
         $diahoy = strtotime($diahoy);
 
-        $semantes = '2019-01-22';
+        $semantes = '2021-06-01';
         #$semantes = date('Y-m-d', strtotime('-1 week'));
         $semantes = strtotime($semantes);
         
@@ -395,7 +395,8 @@ EOF
                                         $docNew->setTipoDoc($tipodoc);
                                         $docNew->setNbDoc($nbdoc);
                                         $docNew->setFechaDoc(new \DateTime($fechadoc));
-
+                                        $docNew->setFechaEnv(new \DateTime());
+                                        $docNew->setMail($operador["opEma"]);
 
                                         $em->persist($docNew);
                                         $em->flush();

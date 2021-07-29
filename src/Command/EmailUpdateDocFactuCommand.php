@@ -387,6 +387,8 @@ echo "Si el Operador Existe, NO es Nulo, en el Sistema";
                                         $docNew->setTipoDoc($tipodoc);
                                         $docNew->setNbDoc($nbdoc);
                                         $docNew->setFechaDoc(new \DateTime($fechadoc));
+                                        $docNew->setFechaEnv(new \DateTime());
+                                        $docNew->setMail($operador["opEma"]);
 
 
                                         $em->persist($docNew);
