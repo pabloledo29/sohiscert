@@ -420,7 +420,7 @@ EOF
                                     $facSO++;
                                 }
 
-                            }/*else{
+                            }else{
                                 # Si Existe la Factura en la BB.DD.
                                 
                                 # Asignamos Archivo a una Variable Nueva para Evitar Errores de Trabajo
@@ -528,7 +528,7 @@ EOF
 
 
                                                     # code...
-                              /*                      $datamail = array(
+                                                        $datamail = array(
                                                         "operator" => $nbop,
                                                         "tipo" => $tipodoc,
                                                         "documento" => $nbdoc,
@@ -554,7 +554,7 @@ EOF
 
                                 # exit('Entro en Facturas Existentes');
                                 }
-                            }*/
+                            }
                             break;
 
   
