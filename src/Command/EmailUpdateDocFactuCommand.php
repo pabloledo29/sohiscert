@@ -282,7 +282,7 @@ EOF
 
 
                 if (($fmoddoc >= $semantes) && ($fmoddoc <= $diahoy)) {
-                   
+                   echo "($fmoddoc >= $semantes) && ($fmoddoc <= $diahoy) \n";
                 #if (strtotime($fmoddoc) == strtotime('2018-12-17')) {
                 #    echo "\n Entro \n";
                
@@ -309,6 +309,7 @@ EOF
 
                             # Si NO Existe la Factura en BB.DD.
                             if (!isset($archivo)) {
+                                echo "Si NO Existe la Factura en BB.DD. \n";
                                 
                                 # Obtenemos el Operador para ello
                                 #  - tenemos que localizar la posición del último "-"
@@ -350,7 +351,7 @@ EOF
                                                                                          
                                 # Si el Operador Existe, NO es Nulo, en el Sistema
                                 if (count($datosOp) > 0) {
-
+echo "Si el Operador Existe, NO es Nulo, en el Sistema";
                                     # Actualzamos el Contador de Facturas Nuevas
                                     $facNew++;
 
@@ -454,7 +455,7 @@ EOF
                                         # Comparamos la Fecha del Documento del Servidor FTP con
                                         # la Fecha del mismo Documento almacenada en BB.DD.
                                         if (strcmp($fechadoc, $fechaalm) <> 0) {
-
+echo "la fecha del documento es distinta a la del ftp, HAY QUE ACTUALIZAR";
                                             # Asignamos Valores del Registro para su posterior envio
                                             # y Actualizamos la Fecha del Documento del Registro
                                             #$registro->getOpCdp();
