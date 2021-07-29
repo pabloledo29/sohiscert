@@ -471,7 +471,7 @@ EOF
                                                         str_replace("ó","o",$datamail["mail"]);
                                                         str_replace("ú","u",$datamail["mail"]);
                                                         if($datamail["mail"]==null || ($datamail["mail"] != [] && $datamail["mail"] != null && $datamail["mail"] != "" && !filter_var($datamail["mail"], FILTER_VALIDATE_EMAIL))){
-                                                            $path_file_fail = $urlBase.'register_falladas_ANA2_'.date("d_m_Y").'.log';
+                                                            $path_file_fail = $urlBase.'register_falladas_CERTI2_'.date("d_m_Y").'.log';
                                                             $open_file = fopen($path_file_fail,'a+');
                                                             fwrite($open_file,date("Y-m-d H:i:s"). "---->" .implode($datamail));
                                                             fclose($open_file);
