@@ -119,7 +119,7 @@ EOF
         $diahoy = date('Y-m-d', time());
         $diahoy = strtotime($diahoy);
 
-        $semantes = '2021-06-01';
+        $semantes = '2019-01-22';
         #$semantes = date('Y-m-d', strtotime('-1 week'));
         $semantes = strtotime($semantes);
         
@@ -463,7 +463,7 @@ EOF
                                         $docNew->setOpCdp(" ");
                                     }
 
-                                    /*$docNew->setOpNop($nbop);
+                                    $docNew->setOpNop($nbop);
                                     $docNew->setTipoDoc($tipodoc);
                                     $docNew->setNbDoc($nbdoc);
                                     $docNew->setFechaDoc(new \DateTime($fechadoc));
@@ -485,105 +485,14 @@ EOF
                                             "documento" => $nbdoc,
                                             "mail" => $operador["opEma"],
                                             "alcance"=>$operador["reDeno"]
-                                        );*/
-                                        if ($operador["opEma"]!=''){
-                                            $datamail = array(
-                                                "operator" => $nbop,
-                                                "tipo" => $tipodoc,
-                                                "documento" => $nbdoc,
-                                                "mail" => $operador["opEma"],
-                                                "alcance"=>$operador["reDeno"],
-                                                "cif"=>$operador["opCif"],
-                                                "nombre"=>$operador["opDenoop"]
-    
-                                            );
-    
-                                            # Si Existen Datos de Actualización para Remitir por Mail 
-                                            if (isset($datamail)) {
-                                                if ($datamail['mail']!=''){                                              
-                                                    if($datamail["mail"] != null){
-                                                        $datamail["mail"] = array_filter(preg_split('[;,/ ]',trim($datamail["mail"])));
-                                                        if($datamail["mail"][0]){
-                                                            $datamail["mail"] = $datamail["mail"][0];
-                                                            str_replace("ñ","n",$datamail["mail"]);
-                                                            str_replace("á","a",$datamail["mail"]);
-                                                            str_replace("é","e",$datamail["mail"]);
-                                                            str_replace("í","i",$datamail["mail"]);
-                                                            str_replace("ó","o",$datamail["mail"]);
-                                                            str_replace("ú","u",$datamail["mail"]);
-                                                            if($datamail["mail"]==null || ($datamail["mail"] != [] && $datamail["mail"] != null && $datamail["mail"] != "" && !filter_var($datamail["mail"], FILTER_VALIDATE_EMAIL))){
-                                                                $path_file_fail = $urlBase.'register_falladas_CONCLU_'.date("d_m_Y").'.log';
-                                                                $open_file = fopen($path_file_fail,'a+');
-                                                                fwrite($open_file,date("Y-m-d H:i:s"). "---->" .implode($datamail));
-                                                                fclose($open_file);
-                                                                $datamail["mail"] = null;
-                                                            }
-                                                        }
-                                                    }
-                                                    $em = $this->em;
-                                                    switch ($input->getOption('body-source')) { 
-                                                        case 'file':
-                                                            $filename = $input->getOption('body');
-                                                            $content = file_get_contents($filename);
-                                                            if ($content === false) {
-                                                                throw new \Exception('Could not get contents from ' . $filename);
-                                                            }
-                                                            $input->setOption('body', $content);
-                                                            break;
-                                                     case 'stdin':
-                                                            break;
-                                                     default:
-                                                            throw new \InvalidArgumentException('Body-input option should be "stdin" or "file"');
-                                                    }
-                                                // Si $datamail tiene datos, se envía el email
-                                                try {
-                                                    $message = $this->createMessage($input, $datamail);
-                                                    $mailer = $this->mailer;
-                                                    //$this->mandarMail($message, $mailer, $output);
-                                                    $output->writeln(sprintf('<info>Sent %s emails<info>', $mailer->send($message)));
-                                                    if($mailer->send($message) == 1){
-                                                        if ($operador["opEma"]!=''){
-                                                            if (isset($operador["opCdp"])) {
-                                                                $docNew->setOpCdp($operador["opCdp"]);
-                            
-                                                            }else{
-                                                                $docNew->setOpCdp(" ");
-                                                            }
-                                                            $docNew->setOpNop($nbop);
-                                                            $docNew->setTipoDoc($tipodoc);
-                                                            $docNew->setNbDoc($nbdoc);
-                                                            $docNew->setFechaDoc(new \DateTime($fechadoc));
-                                                            $docNew->setFechaEnv(new \DateTime());
-                                                            $docNew->setMail($operador["opEma"]);
-                            
-                                                            $em->persist($docNew);
-                                                            $em->flush();
-                                                            echo "\n Registro guardado \n";
-                                                        
-                                                            foreach ($datosOp as $registro) {
-    
-                                                                foreach ($registro as $key => $value) {
-                                                                    # code...
-                                                                    echo "\n - " . $key . ": " . $value;
-                                                                }
-                                                                
-                                                            }
-                                                        } 
-                                                    }
-                                                    $contMail++;
-                                                    unset($datamail);
-                                                } catch(\Exception $e) {
-                                                    echo ("Error al enviar mensaje: " + $e->getMessage());
-                                                }
-                                            }
-                                        }
+                                        );
+                               
                                     }else{
 
                                         # Actualzamos el Contador de Certificados Incorrectos, Sin E-mail
                                         $cerSO++;
                                     }
-                                
-                                   
+                                    
                                 }else{
                                     # Actualzamos el Contador de Certificados Incorrectos, Sin Operador
                                     $cerSO++;
@@ -928,7 +837,7 @@ EOF
 
         $from  = 'noreply@sohiscert.com';
         $to = $destino;
-        $to = 'jlbarrios@atlantic.es';
+        //$to = 'ignacio.fernandez@atlantic.es';
         $subject = "Alta de documento en Área Privada web: Conclusiones de auditoría"; 
         
         /*MNN Modificamos la plantilla */
