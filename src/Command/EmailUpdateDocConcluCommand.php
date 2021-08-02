@@ -324,7 +324,7 @@ EOF
                                 #var_dump($op);
                                 #$op = trim($op, '-');
                                 $op= substr($op, 0, -4);
-                                
+                                var_dump($op);
                                 $encontrado = false;
                                 foreach ($lista_mapeo as $mapeo_key => $mapeo_value){
                                     if(strpos($mapeo_value,str_replace("AE","",$op))!==false && !$encontrado){
@@ -837,7 +837,7 @@ EOF
 
         $from  = 'noreply@sohiscert.com';
         $to = $destino;
-        //$to = 'ignacio.fernandez@atlantic.es';
+        $to = 'jlbarrios@atlantic.es';
         $subject = "Alta de documento en Área Privada web: Conclusiones de auditoría"; 
         
         /*MNN Modificamos la plantilla */
