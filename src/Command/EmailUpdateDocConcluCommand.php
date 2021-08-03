@@ -282,7 +282,7 @@ EOF
 
 
                 if (($fmoddoc >= $semantes) && ($fmoddoc <= $diahoy)) {
-                   var_dump("hola 1");
+                   
                 #if (strtotime($fmoddoc) == strtotime('2018-12-17')) {
                 #    echo "\n Entro \n";
                
@@ -292,7 +292,7 @@ EOF
 
                     
                     
-                    var_dump("hola 2");
+
                    
                     $archivo = $em->getRepository(DocumentosFTP::class)->findOneByNbDoc($lista[$i]);
 
@@ -324,6 +324,7 @@ EOF
                                 #var_dump($op);
                                 #$op = trim($op, '-');
                                 $op= substr($op, 0, -4);
+                                
                                 $encontrado = false;
                                 foreach ($lista_mapeo as $mapeo_key => $mapeo_value){
                                     if(strpos($mapeo_value,str_replace("AE","",$op))!==false && !$encontrado){
