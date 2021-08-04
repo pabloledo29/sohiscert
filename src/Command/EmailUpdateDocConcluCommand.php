@@ -837,7 +837,7 @@ EOF
 
         $from  = 'noreply@sohiscert.com';
         $to = $destino;
-        $to = 'jlbarrios@atlantic.es';
+        //$to = 'jlbarrios@atlantic.es';
         $subject = "Alta de documento en Área Privada web: Conclusiones de auditoría"; 
         
         /*MNN Modificamos la plantilla */

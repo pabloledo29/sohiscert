@@ -703,7 +703,7 @@ EOF
         $from  = 'noreply@sohiscert.com';
 
         $to = $destino;
-        $to = "jlbarrios@atlantic.es";
+        //$to = "jlbarrios@atlantic.es";
         //var_dump($destino);die;
         $subject = "Alta de documento en Área Privada web: Resultado Analítico"; 
 

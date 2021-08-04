@@ -797,7 +797,7 @@ EOF
 
         $from  = 'noreply@sohiscert.com';
         $to = $destino;
-        $to = 'jlbarrios@atlantic.es';
+        //$to = 'jlbarrios@atlantic.es';
         $subject = "Alta de documento en Área Privada web: Factura"; 
         
         /*MNN Modificamos la plantilla */

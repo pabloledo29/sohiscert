@@ -709,7 +709,7 @@ EOF
 
         $from  = 'noreply@sohiscert.com';
         $to = $destino;
-        $to = "jlbarrios@atlantic.es";
+        //$to = "jlbarrios@atlantic.es";
         $subject = "Alta de documento en Área Privada web: Comunicación Decisión de Certificación"; 
         
         /*MNN Modificamos la plantilla */
