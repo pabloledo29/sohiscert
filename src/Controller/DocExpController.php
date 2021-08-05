@@ -1318,6 +1318,12 @@ class DocExpController extends AbstractController
 
         $docs['Logotipo SHC Agricultura Ecológica'] = $path . 'ECO/FAE/Logotipo SHC Agricultura Ecológica.rar';
 
+        $docs['F528-01-Anexo 2-Modelo de solicitud de contraetiquetas o precintas'] = $path . 'ECO/FAE/F528-01-Anexo 2-Modelo de solicitud de contraetiquetas o precintas.docx';
+
+        $docs['F529-01-Anexo 3-Declaraciones mensuales de movimientos y de existencias de vinos'] = $path . 'ECO/FAE/F529-01-Anexo 3-Declaraciones mensuales de movimientos y de existencias de vinos.docx';
+
+        $docs['F530-01-Anexo 4-Declaración mensual de situación de añadas'] = $path . 'ECO/FAE/F530-01-Anexo 4-Declaración mensual de situación de añadas.docx';
+
         $docs['ECO/GAE/F234-01_Cuestionario Ampliación Ganadería ECO.doc'] = $path .'ECO/GAE/F234-01_Cuestionario Ampliacion Ganaderia ECO.doc';
 
         $docs['ECO/GAE/F236-02_Programa Anual de Ubicación de los Colmenares ECO.docx'] = $path .'ECO/GAE/F236-02_Programa Anual de Ubicación de los Colmenares ECO.docx';
