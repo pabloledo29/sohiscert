@@ -333,7 +333,7 @@ class Ftp
 
                     $nop_aux= str_replace('AE','', $nop_aux);
                     $filename_aux= str_replace('.pdf','',$filename_aux);
-                    if(strpos($filename_aux, ".") !== false || (strlen($filename_aux)==7) ){
+                    if(strpos($filename_aux, ".") !== false || (strlen($filename_aux)==7 && is_numeric($filename_aux)) ){
                     //if(strpos($filename_aux, ".") !== false){
                         if(isset($filename[1])){
                             $filename_aux=$filename[1];
