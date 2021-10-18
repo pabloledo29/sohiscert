@@ -33,7 +33,7 @@ class Ftp
     const FTP_UPLOADS = "/subidas";
     // MNN Nueva ruta para conclusiones
     //const FTP_CONCLUSIONES = "/test/acceso directo";
-    const FTP_CONCLUSIONES = "/DEPARTAMENTO DE CONTROL/3. CONCLUSIONES/AREA PRIVADA";  
+    const FTP_CONCLUSIONES = "/DEPARTAMENTO DE CONTROL/03. CONCLUSIONES/AREA PRIVADA";  
     
 
     protected $ftp;
@@ -245,7 +245,7 @@ class Ftp
         } elseif ($query === 'analisis'){
             $nop = $nop;
         // MNN. añadimos la nueva nomemclatura 
-        } elseif ($query === 'conclusiones'){  
+        } elseif ($query === "conclusiones"){  
             $nop = $nop; 
             
             
