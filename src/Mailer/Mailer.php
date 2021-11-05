@@ -741,7 +741,7 @@ class Mailer
                     <div id="mensaje">
                         <h1>Estimado operador</h1>
 
-                       <p>Para restablecer su contraseña por favor pinche el siguiente enlace: <a href="{{path(https://intranet-sohiscert4.e4ff.pro-eu-west-1.openshiftapps.com/public/resetting/' . $parameters['confirmationUrl'].')}}">https://intranet-sohiscert4.e4ff.pro-eu-west-1.openshiftapps.com/public/resetting/' . $parameters['confirmationUrl'] .'</a></p> 
+                        <p>Para restablecer su contraseña por favor pinche el siguiente enlace: <a href="{{path(https://intranet-sohiscert4.e4ff.pro-eu-west-1.openshiftapps.com/public/resetting/' . $parameters['confirmationUrl'].')}}">https://intranet-sohiscert4.e4ff.pro-eu-west-1.openshiftapps.com/public/resetting/' . $parameters['confirmationUrl'] .'</a></p> 
 
                        <p>Atentamente,</p>
                        <p>Sohiscert.</p>
