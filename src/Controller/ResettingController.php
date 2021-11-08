@@ -59,9 +59,11 @@ class ResettingController extends AbstractController
             
             $user->setConfirmationToken($tokenGenerator);
         }else{
-            if(count($user->getConfirmationToken())>12){
-                $tokenGenerator = $this->generateRandomString(12);
-                $user->setConfirmationToken($tokenGenerator);
+            if(is_array($user->getConfirmationToken())){
+                if(count($user->getConfirmationToken())>12){
+                    $tokenGenerator = $this->generateRandomString(12);
+                    $user->setConfirmationToken($tokenGenerator);
+                }
             }
         }
         
