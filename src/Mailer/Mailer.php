@@ -746,7 +746,7 @@ class Mailer
                     <div id="mensaje">
                         <h1>Estimado operador</h1>
 
-                       <p>Para restablecer MAILERPHP su contraseña por favor pinche el siguiente enlace: <a href="{{path(http://localhost:9000/resetting/' . $parameters['confirmationUrl'].')}}">http://localhost:9000/resetting/' . $parameters['confirmationUrl'] .'</a></p> 
+                       <p>Para restablecer MAILERPHP su contraseña por favor pinche el siguiente enlace: <a href="{{path(https://intranet-sohiscert4.e4ff.pro-eu-west-1.openshiftapps.com/resetting/' . $parameters['confirmationUrl'].')}}">https://intranet-sohiscert4.e4ff.pro-eu-west-1.openshiftapps.com/resetting/' . $parameters['confirmationUrl'] .'</a></p> 
 
                        <p>Atentamente,</p>
                        <p>Sohiscert.</p>
