@@ -464,7 +464,7 @@ class Mailer
 
         $to = $this->mail_to;
 
-        $to = 'manuel.navarro@atlantic.es';//$this->mail_to;
+       // $to = 'manuel.navarro@atlantic.es';//$this->mail_to;
 
     
 
@@ -487,7 +487,7 @@ class Mailer
                 //))
 
                 ->setBcc(array(
-                    'raul@sohiscert.com' => 'Soporte Sohiscert', 'manolosuna@gmail.com'  => 'Soporte Atlantic'
+                    'sohiscert@sohiscert.com' => 'Soporte Sohiscert'
                 ))
                 ->addPart($bodyText, 'text/plain');
 
