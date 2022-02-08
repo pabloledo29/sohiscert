@@ -2,8 +2,8 @@
 
 
 {% block content %}
-    
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <div class="loader"></div>
      <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
@@ -47,7 +47,7 @@
                                     <th>Cif</th>
                                     <th class="text-center">Datos</th>
                                     <th class="text-center"><span class="fa fa-pencil"></span> Crear Usuario &nbsp;&nbsp;&nbsp;
-                                        <a href="{{ path('admin_useroperator_registerall') }}"><button type="submit" class="btn btn-xs btn-info"<span class="fa fa-pencil"></span> Crear Todos </button></a><br>
+                                        <a href="{{ path('admin_useroperator_registerall') }}"><button id="crearTodos" type="submit" class="btn btn-xs btn-info"<span class="fa fa-pencil"></span> Crear Todos </button></a><br>
                                         <font size="1" color="#FF8A33"><i>( * excepto Clientes con Datos Insuficientes )</i></font> 
                                     </th>
                                 </tr>
@@ -77,10 +77,14 @@
 
     </section><!-- /.content -->
 
-    
-
-
-    
-
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $(".loader").fadeOut("slow");
+            $("#crearTodos").click(function() {
+                $(".loader").fadeIn("slow");
+            });
+        });
+        
+    </script>
 
 {% endblock %}

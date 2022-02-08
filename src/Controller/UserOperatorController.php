@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use App\Entity\Operator;
 use App\Entity\UserOperator;
+use App\Entity\UserAdmin;
 use App\Entity\UpdateLog;
 use App\Repository\UserOperatorRepository;
 use App\Form\PartialUpdUserOperatorType;
@@ -250,11 +251,10 @@ class UserOperatorController extends AbstractController
         
         foreach ($notRegisteredUserOperators as $operadores)
         {
-            //dump($operadores);
             $usuario = $operadores['opCif'];
             $mail = $operadores['opEma'];
             
-            /** @var UserOperator $userOperator */
+            
             
             if($mail != null){
                 //Generamos contraseña aleatoria
@@ -263,16 +263,18 @@ class UserOperatorController extends AbstractController
                 //$discriminator = $this->container->get('pugx_user.manager.user_discriminator');
                 //$discriminator->setClass('App\Entity\UserOperator');
                 //$userManager = $this->container->get('pugx_user_manager');
-                $user = new UserOperator();
+
+                /** @var UserOperator $userOperator */
+                $userOperator = new UserOperator();
                 
 
-                $user->setUsername($usuario);
-                $user->setEmail($mail);
+                $userOperator->setUsername($usuario);
+                $userOperator->setEmail($mail);
                 
                 //$userOperator->setPlainPassword('1234');
-                $user->setPassword(password_hash($pswd, PASSWORD_BCRYPT,['cost'=>12])); 
+                $userOperator->setPassword(password_hash($pswd, PASSWORD_BCRYPT,['cost'=>12])); 
                
-                $user->setEnabled(true);
+                $userOperator->setEnabled(true);
                 
 
                 $request = new Request();
@@ -284,7 +286,7 @@ class UserOperatorController extends AbstractController
                 $dispatcher->dispatch('registration_initalize', $event);
                 
                 
-                $form = $this->createForm(RegistrationUserOperatorType::class, $user);
+                $form = $this->createForm(RegistrationUserOperatorType::class, $userOperator);
         
                 $form->handleRequest($request);
                 
@@ -294,15 +296,63 @@ class UserOperatorController extends AbstractController
                
                 $em = $this->getDoctrine()->getManager();
                 try{
-                    $em->persist($user);
+                    $em->persist($userOperator);
                     $em->flush();
                 }catch (\Exception $e){
                     continue;
                 }
-                
 
+                // JLB - 15/11/21
+
+                if (!$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+                    throw $this->createAccessDeniedException();
+                }
+                
+                $em = $this->getDoctrine()->getManager();
+                $toolsupdate = $this->container->get('toolsupdate');
+                $gsbase = $this->container->get('gsbase');
+                $gsbasexml = $this->container->get('gsbasexml');
+        
+                $operators = $em->getRepository(Operator::class)->findBy(array('opCif' => $usuario));
+        
+                if (count($operators) > 0) {
+                    //var_dump($operators);die;
+                    //for ($i=0;$i < count($operators); $i++){
+                        $operator = $operators[0];
+                        $opCcl = $operator->getOpCcl();
+                        $client = $toolsupdate->getClient($gsbase, $gsbasexml, $userOperator, $opCcl);
+                    //}
+                    
+                } else {
+                    $client['registersProcessed'] = 0;
+                }
+        
+                if ($client['registersProcessed'] < 1) {
+                    $request->getSession()->getFlashBag()->add('msg', 'Error recuperando los datos del cliente.');
+                } else {
+        
+                    $userOperator->getOperators()->clear();
+        
+                    foreach ($operators as $operator) {
+                        $userOperator->addOperator($operator);
+                    }
+                    $em->flush();
+                }
+
+                $usuarioUser = $em->getRepository(User::class)->findBy(array('username' => $userOperator->getUsername()));
+                //var_dump($usuario);die;
+                //$mailer = new Mailer();
+                //$this->mailer->sendCreatedUserOperatorEmail($usuario);
+                $this->get('app.mailer.service')->sendCreatedUserOperatorEmail2($usuarioUser[0], $pswd);
+                // FIN JLB - 15/11/21
             }
         }
+        if(isset($gsbase)){
+            $gsbase->gsbase_stop();
+        } else {
+            return $this->redirect($this->generateUrl('admin_useroperator_list'));
+        }
+        
         
         //exit("Comprobar Datos");
         
@@ -356,9 +406,8 @@ class UserOperatorController extends AbstractController
             //Obtenemos la clave introducida en el formulario
             $pass = $userOperator->getPassword();
 
-
             //Si la contraseña esta vacia le generamos una clave automáticamente
-            if ($pass == null) {
+            if ($pass == null || empty($pass)) {
 
                 //Llamamos a la función que genera las claves automáticamente                
                 $pswd = $this->generadorClave();
@@ -366,6 +415,8 @@ class UserOperatorController extends AbstractController
                 //Actualizamos el valor del campo de la contraseña
                 $userOperator->setPassword(password_hash($pswd, PASSWORD_BCRYPT,['cost'=>12]));
                 
+            } else {
+                $userOperator->setPassword(password_hash($pass, PASSWORD_BCRYPT,['cost'=>12]));
             }
 
                         
@@ -380,6 +431,54 @@ class UserOperatorController extends AbstractController
            
             $em->persist($userOperator);
             $em->flush();
+
+            // JLB - 15/11/21
+
+            if (!$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+                throw $this->createAccessDeniedException();
+            }
+            
+            $em = $this->getDoctrine()->getManager();
+            $toolsupdate = $this->container->get('toolsupdate');
+            $gsbase = $this->container->get('gsbase');
+            $gsbasexml = $this->container->get('gsbasexml');
+    
+            $operators = $em->getRepository(Operator::class)->findBy(array('opCif' => $userOperator->getUsername()));
+            
+    
+            if (count($operators) > 0) {
+                
+                $operator = $operators[0];
+                $opCcl = $operator->getOpCcl();
+                //var_dump($opCcl);die;
+                $client = $toolsupdate->getClient($gsbase, $gsbasexml, $userOperator, $opCcl);
+            } else {
+                $client['registersProcessed'] = 0;
+            }
+    
+            $gsbase->gsbase_stop();
+    
+            if ($client['registersProcessed'] < 1) {
+                $request->getSession()->getFlashBag()->add('msg', 'Error recuperando los datos del cliente.');
+            } else {
+    
+                $userOperator->getOperators()->clear();
+    
+                foreach ($operators as $operator) {
+                    $userOperator->addOperator($operator);
+                }
+                $em->flush();
+            }
+
+            $usuario = $em->getRepository(User::class)->findBy(array('username' => $userOperator->getUsername()));
+            //var_dump($usuario);die;
+            //$mailer = new Mailer();
+            //$this->mailer->sendCreatedUserOperatorEmail($usuario);
+            if ($pass != null) {
+                $pswd = $pass;
+            }
+            $this->get('app.mailer.service')->sendCreatedUserOperatorEmail2($usuario[0], $pswd);
+            // FIN JLB - 15/11/21
            // $userManager->updateUser($userOperator, true);
 
             $request->getSession()->getFlashBag()->add('msg', 'El cliente ha sido guardado correctamente');
@@ -417,15 +516,19 @@ class UserOperatorController extends AbstractController
             throw $this->createNotFoundException('No se ha encontrado el usuario ' . $id);
         }
 
-        $form = $this->createForm(RegistrationUserOperatorType::class, $user);
-       
+        $oldPass = $user->getPassword();
+
+        $form = $this->createForm(RegistrationUserOperatorType::class, $user);       
        
         $form->remove('username');
        
         $form->handleRequest($request);
        
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setPassword(password_hash($user->getPassword(), PASSWORD_BCRYPT,['cost'=>12])); 
+
+            if($oldPass != $user->getPassword()){
+                $user->setPassword(password_hash($user->getPassword(), PASSWORD_BCRYPT,['cost'=>12])); 
+            }
             
             $userManager = $em;
             
@@ -454,3 +557,4 @@ class UserOperatorController extends AbstractController
         return $pswd;
     }
 }
+

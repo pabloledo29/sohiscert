@@ -695,10 +695,12 @@ class FtpController extends AbstractController
         /** @var Operator $op */
         $op = $em->getRepository(Operator::class)->find($opId);
         $nop = $op->getOpNop();
-       
-        
-        $fileList = $this->get('app.ftp.service')->retrieveDocListFromFtpServer($nop, $query);
-        
+        if(strpos($nop,'/') && $query == "facturas"){
+            $opnew= $em->getRepository(OpNopTransform::class)->findBy(array('opNop' => $nop));
+            $fileList = $this->get('app.ftp.service')->retrieveDocListFromFtpServer($opnew[0]->getopNopTransform(), $query);
+        } else {
+            $fileList = $this->get('app.ftp.service')->retrieveDocListFromFtpServer($nop, $query);
+        }
 
         #dump($fileList);
 

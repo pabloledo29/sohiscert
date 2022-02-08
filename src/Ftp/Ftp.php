@@ -33,7 +33,7 @@ class Ftp
     const FTP_UPLOADS = "/subidas";
     // MNN Nueva ruta para conclusiones
     //const FTP_CONCLUSIONES = "/test/acceso directo";
-    const FTP_CONCLUSIONES = "/DEPARTAMENTO DE CONTROL/3. CONCLUSIONES/AREA PRIVADA";  
+    const FTP_CONCLUSIONES = "/DEPARTAMENTO DE CONTROL/03. CONCLUSIONES/AREA PRIVADA";  
     
 
     protected $ftp;
@@ -245,7 +245,7 @@ class Ftp
         } elseif ($query === 'analisis'){
             $nop = $nop;
         // MNN. añadimos la nueva nomemclatura 
-        } elseif ($query === 'conclusiones'){  
+        } elseif ($query === "conclusiones"){  
             $nop = $nop; 
             
             
@@ -333,12 +333,23 @@ class Ftp
 
                     $nop_aux= str_replace('AE','', $nop_aux);
                     $filename_aux= str_replace('.pdf','',$filename_aux);
-                    if(strpos($filename_aux, ".") !== false || (strlen($filename_aux)==7 && is_numeric($filename_aux)) ){
-                    //if(strpos($filename_aux, ".") !== false){
-                        if(isset($filename[1])){
-                            $filename_aux=$filename[1];
-                            
-                        }
+                    
+                    if ($query === 'facturas') {
+                        if(strpos($filename_aux, ".") !== false || (strlen($filename_aux)==7) ){
+                            //if(strpos($filename_aux, ".") !== false){
+                                if(isset($filename[1])){
+                                    $filename_aux=$filename[1];
+                                    
+                                }
+                            }
+                    } else {
+                        if(strpos($filename_aux, ".") !== false || (strlen($filename_aux)==7 && is_numeric($filename_aux)) ){
+                            //if(strpos($filename_aux, ".") !== false){
+                                if(isset($filename[1])){
+                                    $filename_aux=$filename[1];
+                                    
+                                }
+                            }
                     }
                    
                     $filename_aux = str_replace('AE','', $filename_aux);

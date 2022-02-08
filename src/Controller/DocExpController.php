@@ -1310,13 +1310,19 @@ class DocExpController extends AbstractController
 
         $docs['ECO/FAE/F227-02-Cuestionario Ampliación Finca ECO.doc'] = $path .'ECO/FAE/F227-02-Cuestionario Ampliación Finca ECO.doc';  
 
-        $docs['ECO/FAE/F223-03-Solicitud Autorización Semilla no ECO.doc'] = $path .'ECO/FAE/F223-03-Solicitud Autorización Semilla no ECO.doc';
+        $docs['ECO/FAE/F223-04-Solicitud Autorización Semilla no ECO.doc'] = $path .'ECO/FAE/F223-04-Solicitud Autorización Semilla no ECO.doc';
             
         $docs['ECO/FAE/F235-02-Programa de Producción Vegetal ECO.doc'] = $path .'ECO/FAE/F235-02-PPV ECO.doc.docx';
 
         $docs['Logotipo SHC En Conversión a la Agricultura Ecológica'] = $path . 'ECO/FAE/Logotipo SHC en Conversión a la Agricultura Ecológica.rar';  
 
         $docs['Logotipo SHC Agricultura Ecológica'] = $path . 'ECO/FAE/Logotipo SHC Agricultura Ecológica.rar';
+
+        $docs['F528-01-Anexo 2-Modelo de solicitud de contraetiquetas o precintas'] = $path . 'ECO/FAE/F528-01-Anexo 2-Modelo de solicitud de contraetiquetas o precintas.docx';
+
+        $docs['F529-01-Anexo 3-Declaraciones mensuales de movimientos y de existencias de vinos'] = $path . 'ECO/FAE/F529-01-Anexo 3-Declaraciones mensuales de movimientos y de existencias de vinos.docx';
+
+        $docs['F530-01-Anexo 4-Declaración mensual de situación de añadas'] = $path . 'ECO/FAE/F530-01-Anexo 4-Declaración mensual de situación de añadas.docx';
 
         $docs['ECO/GAE/F234-01_Cuestionario Ampliación Ganadería ECO.doc'] = $path .'ECO/GAE/F234-01_Cuestionario Ampliacion Ganaderia ECO.doc';
 
@@ -1531,7 +1537,7 @@ class DocExpController extends AbstractController
 
                         $docs['ECO/FAE/F227-02-Cuestionario Ampliación Finca ECO.doc'] = $path .'ECO/FAE/F227-02-Cuestionario Ampliación Finca ECO.doc';
 
-                        $docs['ECO/FAE/F223-03-Solicitud Autorización Semilla no ECO.doc'] = $path .'ECO/FAE/F223-03-Solicitud Autorización Semilla no ECO.doc';
+                        $docs['ECO/FAE/F223-04-Solicitud Autorización Semilla no ECO.doc'] = $path .'ECO/FAE/F223-04-Solicitud Autorización Semilla no ECO.doc';
                        /* $docs['F235-01-Comunicación programa de producción vegetal'] = $path .
                             'ECO/FAE/F235-01-Programa de Producción Vegetal ECO.doc';*/
 

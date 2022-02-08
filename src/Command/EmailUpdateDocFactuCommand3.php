@@ -21,7 +21,7 @@ use Swift_Mailer;
 use Swift_SmtpTransport;
 
 /**
- * Class EmailUpdateDocFactuCommand
+ * Class EmailUpdateDocFactuCommand3
  * @package App\Command
  */
 class EmailUpdateDocFactuCommand3 extends Command
@@ -48,7 +48,7 @@ class EmailUpdateDocFactuCommand3 extends Command
     protected function configure()
     {
         $this
-            ->setName('email:emaildocfactu:send')
+            ->setName('email:emaildocfactu3:send')
             ->setDescription('Send simple email message')
             ->addOption('from', null, InputOption::VALUE_REQUIRED, 'The from address of the message')
             ->addOption('to', null, InputOption::VALUE_REQUIRED, 'The to address of the message')
@@ -73,7 +73,7 @@ EOF
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output) :int 
+    protected function execute(InputInterface $input, OutputInterface $output) 
     {
         # Definimos Variable de Cominezo de Ejecución 
         $now = date("Y-m-d H:i:s");
@@ -116,7 +116,7 @@ EOF
         $diahoy = date('Y-m-d', time());
         $diahoy = strtotime($diahoy);
 
-        $semantes = '2019-01-22';
+        $semantes = '2021-06-01';
         #$semantes = date('Y-m-d', strtotime('-1 week'));
         $semantes = strtotime($semantes);
         
@@ -139,7 +139,7 @@ EOF
         $end = date("Y-m-d H:i:s");
 
         # Definimos la Ruta Completa y el Nombre del Fichero LOG que se va a generar
-        $path_file = $urlBase.'register_recorridos_FACTU_'.date("d_m_Y").'.log';
+        $path_file = $urlBase.'register_recorridos_FACTU3_'.date("d_m_Y").'.log';
 
         # Abrimos el Archivo con Permisos de Sobrescritura
         $log = fopen($path_file, "w+");
@@ -198,8 +198,12 @@ EOF
             echo "\n Procesando " . $tipodoc . "... \n";
 
             # Recorremos Archivo por Archivo por Directorio
+            $numarch_desde=($numarch/4)*2;
+            $numarch_hasta=($numarch/4)*3;
 
-            for ($i=($numarch/3)+2; $i < $numarch ; $i++) {
+            #numarch_hasta=$numarch_desde+$diferencia;
+
+            for ($i=intval($numarch_desde); $i < intval($numarch_hasta); $i++) {
                 
                 switch ($tipodoc) {
                     case 'factura':
@@ -261,7 +265,7 @@ EOF
 
 
                 #echo "\n" . $fmoddoc . "\n";
-                echo " " . $contArch . "\r";
+                echo " " . $i . "\r";
                 #echo "\n - Doc: " . $lista[$i] . " | F.M: " . $fmoddoc . " - F.F: 2019-01-02 \n";
                 #echo " " . $contArch . " - Procesadas: " . $proc . "\r";
                 
@@ -276,7 +280,7 @@ EOF
                 
 
                 # Escribimos Comienzo y Fin de Ejecución
-                fwrite($log,("\n* CONTADOR: ". $contArch ." | Fecha numerica: ". $docftp ." | FECHA REAL: ".$fecha_bruta." RUTA: ".$lista[$i]."\n"));
+                fwrite($log,("\n* CONTADOR: ". $i ." | Fecha numerica: ". $docftp ." | FECHA REAL: ".$fecha_bruta." RUTA: ".$lista[$i]."\n"));
 
 
 
@@ -348,6 +352,7 @@ EOF
                                 $operador = array();
 
 
+                                var_dump($datosOp);
                                                                                          
                                 # Si el Operador Existe, NO es Nulo, en el Sistema
                                 if (count($datosOp) > 0) {
@@ -387,6 +392,8 @@ EOF
                                         $docNew->setTipoDoc($tipodoc);
                                         $docNew->setNbDoc($nbdoc);
                                         $docNew->setFechaDoc(new \DateTime($fechadoc));
+                                        $docNew->setFechaEnv(new \DateTime());
+                                        $docNew->setMail($operador["opEma"]);
 
 
                                         $em->persist($docNew);
@@ -420,7 +427,7 @@ EOF
                                     $facSO++;
                                 }
 
-                            }/*else{
+                            }else{
                                 # Si Existe la Factura en la BB.DD.
                                 
                                 # Asignamos Archivo a una Variable Nueva para Evitar Errores de Trabajo
@@ -528,7 +535,7 @@ EOF
 
 
                                                     # code...
-                              /*                      $datamail = array(
+                                                        $datamail = array(
                                                         "operator" => $nbop,
                                                         "tipo" => $tipodoc,
                                                         "documento" => $nbdoc,
@@ -554,7 +561,7 @@ EOF
 
                                 # exit('Entro en Facturas Existentes');
                                 }
-                            }*/
+                            }
                             break;
 
   
@@ -583,7 +590,7 @@ EOF
                                         str_replace("ó","o",$datamail["mail"]);
                                         str_replace("ú","u",$datamail["mail"]);
                                     if($datamail["mail"]==null || ($datamail["mail"] != [] && $datamail["mail"] != null && $datamail["mail"] != "" && !filter_var($datamail["mail"], FILTER_VALIDATE_EMAIL))){
-                                        $path_file_fail = $urlBase.'register_falladas_FACT_'.date("d_m_Y").'.log';
+                                        $path_file_fail = $urlBase.'register_falladas_FACT3_'.date("d_m_Y").'.log';
                                         $open_file = fopen($path_file_fail,'a+');
                                         fwrite($open_file,date("Y-m-d H:i:s"). "---->" .implode($datamail));
                                         fclose($open_file);
@@ -661,7 +668,7 @@ EOF
         $end = date("Y-m-d H:i:s");
 
         # Definimos la Ruta Completa y el Nombre del Fichero LOG que se va a generar
-        $path_file = $urlBase.'update_datedocuments_FACTURACION_'.date("d_m_Y").'.log';
+        $path_file = $urlBase.'update_datedocuments_FACTURACION3_'.date("d_m_Y").'.log';
 
         # Abrimos el Archivo con Permisos de Sobrescritura
         $log = fopen($path_file, "w+");
@@ -790,7 +797,7 @@ EOF
 
         $from  = 'noreply@sohiscert.com';
         $to = $destino;
-        #$to = 'manuel.navarro@atlantic.es';
+        //$to = 'jlbarrios@atlantic.es';
         $subject = "Alta de documento en Área Privada web: Factura"; 
         
         /*MNN Modificamos la plantilla */

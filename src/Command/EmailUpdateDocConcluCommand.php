@@ -467,6 +467,8 @@ EOF
                                     $docNew->setTipoDoc($tipodoc);
                                     $docNew->setNbDoc($nbdoc);
                                     $docNew->setFechaDoc(new \DateTime($fechadoc));
+                                    $docNew->setFechaEnv(new \DateTime());
+                                    $docNew->setMail($operador["opEma"]);
 
 
                                     $em->persist($docNew);
@@ -835,7 +837,7 @@ EOF
 
         $from  = 'noreply@sohiscert.com';
         $to = $destino;
-        //$to = 'ignacio.fernandez@atlantic.es';
+        //$to = 'jlbarrios@atlantic.es';
         $subject = "Alta de documento en Área Privada web: Conclusiones de auditoría"; 
         
         /*MNN Modificamos la plantilla */

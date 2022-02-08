@@ -160,7 +160,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
     }
 
     public function getConfirmationToken(){
-        if($this->confirmation_token){
+        if(is_array($this->confirmation_token)){
             if(count($this->confirmation_token)>12){
                 $tokenGenerator = $this->generateRandomString(12);
                 $this->confirmation_token = $tokenGenerator;

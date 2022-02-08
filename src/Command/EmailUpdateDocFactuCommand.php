@@ -26,7 +26,7 @@ use Swift_SmtpTransport;
  */
 class EmailUpdateDocFactuCommand extends Command
 {
-    protected static $defaultName = 'email:emaildocfactu:send';
+    protected static $defaultName = 'email:emaildocfactu1:send';
     public function __construct(string $path_update_logs,string $ftp_server, string $ftp_user_name, string $ftp_user_pass, $mailer,$em)
     {
         $this->path_update_logs = $path_update_logs;
@@ -48,7 +48,7 @@ class EmailUpdateDocFactuCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('email:emaildocfactu:send')
+            ->setName('email:emaildocfactu1:send')
             ->setDescription('Send simple email message')
             ->addOption('from', null, InputOption::VALUE_REQUIRED, 'The from address of the message')
             ->addOption('to', null, InputOption::VALUE_REQUIRED, 'The to address of the message')
@@ -73,7 +73,7 @@ EOF
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output) :int 
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         # Definimos Variable de Cominezo de Ejecución 
         $now = date("Y-m-d H:i:s");
@@ -116,7 +116,7 @@ EOF
         $diahoy = date('Y-m-d', time());
         $diahoy = strtotime($diahoy);
 
-        $semantes = '2019-01-22';
+        $semantes = '2021-06-01';
         #$semantes = date('Y-m-d', strtotime('-1 week'));
         $semantes = strtotime($semantes);
         
@@ -139,7 +139,7 @@ EOF
         $end = date("Y-m-d H:i:s");
 
         # Definimos la Ruta Completa y el Nombre del Fichero LOG que se va a generar
-        $path_file = $urlBase.'register_recorridos_FACTU_'.date("d_m_Y").'.log';
+        $path_file = $urlBase.'register_recorridos_FACTU1_'.date("d_m_Y").'.log';
 
         # Abrimos el Archivo con Permisos de Sobrescritura
         $log = fopen($path_file, "w+");
@@ -198,9 +198,8 @@ EOF
             echo "\n Procesando " . $tipodoc . "... \n";
 
             # Recorremos Archivo por Archivo por Directorio
-            $numarch_total = ($numarch/3) + 1;
-            for ($i=0; $i < $numarch_total ; $i++) {
-                
+            $numarch_total = ($numarch/4);
+            for ($i=0; $i < $numarch_total ; $i++) {               
                 switch ($tipodoc) {
                     case 'factura':
                         # Facturas Procesadas
@@ -261,7 +260,7 @@ EOF
 
 
                 #echo "\n" . $fmoddoc . "\n";
-                echo " " . $contArch . "\r";
+                echo " " . $i . "\r";
                 #echo "\n - Doc: " . $lista[$i] . " | F.M: " . $fmoddoc . " - F.F: 2019-01-02 \n";
                 #echo " " . $contArch . " - Procesadas: " . $proc . "\r";
                 
@@ -276,14 +275,14 @@ EOF
                 
 
                 # Escribimos Comienzo y Fin de Ejecución
-                fwrite($log,("\n* CONTADOR: ". $contArch ." | Fecha numerica: ". $docftp ." | FECHA REAL: ".$fecha_bruta." RUTA: ".$lista[$i]."\n"));
+                fwrite($log,("\n* CONTADOR: ". $i ." | Fecha numerica: ". $docftp ." | FECHA REAL: ".$fecha_bruta." RUTA: ".$lista[$i]."\n"));
 
 
 
 
 
                 if (($fmoddoc >= $semantes) && ($fmoddoc <= $diahoy)) {
-                   
+                   echo "($fmoddoc >= $semantes) && ($fmoddoc <= $diahoy) \n";
                 #if (strtotime($fmoddoc) == strtotime('2018-12-17')) {
                 #    echo "\n Entro \n";
                
@@ -310,6 +309,7 @@ EOF
 
                             # Si NO Existe la Factura en BB.DD.
                             if (!isset($archivo)) {
+                                echo "Si NO Existe la Factura en BB.DD. \n";
                                 
                                 # Obtenemos el Operador para ello
                                 #  - tenemos que localizar la posición del último "-"
@@ -351,7 +351,7 @@ EOF
                                                                                          
                                 # Si el Operador Existe, NO es Nulo, en el Sistema
                                 if (count($datosOp) > 0) {
-
+echo "Si el Operador Existe, NO es Nulo, en el Sistema";
                                     # Actualzamos el Contador de Facturas Nuevas
                                     $facNew++;
 
@@ -387,6 +387,8 @@ EOF
                                         $docNew->setTipoDoc($tipodoc);
                                         $docNew->setNbDoc($nbdoc);
                                         $docNew->setFechaDoc(new \DateTime($fechadoc));
+                                        $docNew->setFechaEnv(new \DateTime());
+                                        $docNew->setMail($operador["opEma"]);
 
 
                                         $em->persist($docNew);
@@ -420,7 +422,7 @@ EOF
                                     $facSO++;
                                 }
 
-                            }/*else{
+                            }else{
                                 # Si Existe la Factura en la BB.DD.
                                 
                                 # Asignamos Archivo a una Variable Nueva para Evitar Errores de Trabajo
@@ -455,7 +457,7 @@ EOF
                                         # Comparamos la Fecha del Documento del Servidor FTP con
                                         # la Fecha del mismo Documento almacenada en BB.DD.
                                         if (strcmp($fechadoc, $fechaalm) <> 0) {
-
+echo "la fecha del documento es distinta a la del ftp, HAY QUE ACTUALIZAR";
                                             # Asignamos Valores del Registro para su posterior envio
                                             # y Actualizamos la Fecha del Documento del Registro
                                             #$registro->getOpCdp();
@@ -528,7 +530,7 @@ EOF
 
 
                                                     # code...
-                              /*                      $datamail = array(
+                                                        $datamail = array(
                                                         "operator" => $nbop,
                                                         "tipo" => $tipodoc,
                                                         "documento" => $nbdoc,
@@ -554,7 +556,7 @@ EOF
 
                                 # exit('Entro en Facturas Existentes');
                                 }
-                            }*/
+                            }
                             break;
 
   
@@ -572,7 +574,7 @@ EOF
 
                         if ($datamail['mail']!=''){
                             var_dump($datamail);
-                        /*if($datamail["mail"] != null){
+                        if($datamail["mail"] != null){
                             $datamail["mail"] = array_filter(preg_split('[;,/ ]',trim($datamail["mail"])));
                                 if($datamail["mail"][0]){
                                     $datamail["mail"] = $datamail["mail"][0];
@@ -583,7 +585,7 @@ EOF
                                         str_replace("ó","o",$datamail["mail"]);
                                         str_replace("ú","u",$datamail["mail"]);
                                     if($datamail["mail"]==null || ($datamail["mail"] != [] && $datamail["mail"] != null && $datamail["mail"] != "" && !filter_var($datamail["mail"], FILTER_VALIDATE_EMAIL))){
-                                        $path_file_fail = $urlBase.'register_falladas_FACT_'.date("d_m_Y").'.log';
+                                        $path_file_fail = $urlBase.'register_falladas_FACT1_'.date("d_m_Y").'.log';
                                         $open_file = fopen($path_file_fail,'a+');
                                         fwrite($open_file,date("Y-m-d H:i:s"). "---->" .implode($datamail));
                                         fclose($open_file);
@@ -608,12 +610,12 @@ EOF
                                 default:
                                     throw new \InvalidArgumentException('Body-input option should be "stdin" or "file"');
                             }
-
+echo "entra para mandar";
                             $message = $this->createMessage($input, $datamail);
                             $mailer = $this->mailer;
                             $output->writeln(sprintf('<info>Sent %s emails<info>', $mailer->send($message)));
                         
-                            $contMail++;*/
+                            $contMail++;
 
                             #Limpiamos array
                             unset($datamail);
@@ -661,7 +663,7 @@ EOF
         $end = date("Y-m-d H:i:s");
 
         # Definimos la Ruta Completa y el Nombre del Fichero LOG que se va a generar
-        $path_file = $urlBase.'update_datedocuments_FACTURACION_'.date("d_m_Y").'.log';
+        $path_file = $urlBase.'update_datedocuments_FACTURACION1_'.date("d_m_Y").'.log';
 
         # Abrimos el Archivo con Permisos de Sobrescritura
         $log = fopen($path_file, "w+");
@@ -790,7 +792,7 @@ EOF
 
         $from  = 'noreply@sohiscert.com';
         $to = $destino;
-        #$to = 'manuel.navarro@atlantic.es';
+        //$to = 'jlbarrios@atlantic.es';
         $subject = "Alta de documento en Área Privada web: Factura"; 
         
         /*MNN Modificamos la plantilla */

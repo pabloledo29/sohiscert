@@ -41,7 +41,7 @@ parameters:
     mail_to: 'sohiscert@sohiscert.com'
     mailer_transport: 'smtp'
     mailer_port: 587
-    mailer_host: 'smtp.ionos.es'
+    mailer_host: 'smtp.office365.com'
     mailer_user: 'noreply@sohiscert.com'
     mailer_password: "Naranjo@@2020.-"
     mailer_encryption: 'tls'
@@ -154,6 +154,10 @@ services:
         tags: { name: 'console.command', command: 'email:emaildocfactu3:send'}
         arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@mailer','@doctrine.orm.entity_manager']
 
+    App\Command\EmailUpdateDocFactuCommand4:
+        tags: { name: 'console.command', command: 'email:emaildocfactu4:send'}
+        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@mailer','@doctrine.orm.entity_manager']    
+
     App\Command\EmailUpdateDocConcluCommand:
         tags: { name: 'console.command', command: 'email:emaildoccon:send'}
         arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@mailer','@doctrine.orm.entity_manager']
@@ -174,7 +178,11 @@ services:
         arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@mailer','@doctrine.orm.entity_manager']
     App\Command\EmaildoccarSend3Command:
         tags: { name: 'console.command', command: "email:emaildoccar3:send" }
-        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@mailer','@doctrine.orm.entity_manager']    
+        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@mailer','@doctrine.orm.entity_manager'] 
+
+    App\Command\EmaildoccarSend4Command:
+        tags: { name: 'console.command', command: "email:emaildoccar4:send" }
+        arguments: ['%path_update_logs%','%ftp_server%','%ftp_user_name%', '%ftp_user_pass%','@mailer','@doctrine.orm.entity_manager']       
 
     App\Command\EmailUpdateDocCertiCommand:
         tags: { name: 'console.command', command: "email:emaildoccerti:send" }

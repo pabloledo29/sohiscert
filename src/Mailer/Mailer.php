@@ -464,6 +464,10 @@ class Mailer
 
         $to = $this->mail_to;
 
+       // $to = 'manuel.navarro@atlantic.es';//$this->mail_to;
+
+    
+
         $template = $this->twig->load('email/uploadeddoc_email.html.twig');
 
         $subject = $template->renderBlock('subject', $parameters);
@@ -471,19 +475,20 @@ class Mailer
         $bodyText = $template->renderBlock('body_text', $parameters);
 
         try { 
+            
             $message = (new \Swift_Message($subject))
                 ->setFrom($this->email_from_address, $this->email_from_name)
                 ->setTo($to)
                 ->setCharset('utf-8')
                 ->setBody($bodyHtml, 'text/html')
                 #->setCc($clientEmail) // Copia a cliente
-                //->setBcc(array(
-                //    'raul@sohiscert.com' => 'Soporte Sohiscert', 'ignacio.fernandez@atlantic.es'  => 'Soporte Atlantic', 'sohiscert@sohiscert.com' => 'Departamento de Administración y Finanzas', 'soporte@sohiscert.com' => 'Soporte Sohiscert'
-               // ))
+               // ->setBcc(array(
+                //    'raul@sohiscert.com' => 'Soporte Sohiscert', 'ignacio.fernandez@atlantic.es'  => 'Soporte Atlantic', 'manuel.navarro@atlantic.es' => 'Departamento de Administración y Finanzas', 'manuel.navarro@atlantic.es' => 'Soporte Sohiscert'
+                //))
 
-               ->setBcc(array(
-                   'raul@sohiscert.com' => 'Soporte Sohiscert'
-                )) 
+                ->setBcc(array(
+                    'sohiscert@sohiscert.com' => 'Soporte Sohiscert'
+                ))
                 ->addPart($bodyText, 'text/plain');
 
             $response = $this->mailer->send($message);
@@ -741,7 +746,7 @@ class Mailer
                     <div id="mensaje">
                         <h1>Estimado operador</h1>
 
-                       <p>Para restablecer su contraseña por favor pinche el siguiente enlace: <a href="{{path(https://intranet-sohiscert4.e4ff.pro-eu-west-1.openshiftapps.com/public/resetting/' . $parameters['confirmationUrl'].')}}">https://intranet-sohiscert4.e4ff.pro-eu-west-1.openshiftapps.com/public/resetting/' . $parameters['confirmationUrl'] .'</a></p> 
+                       <p>Para restablecer su contraseña por favor pinche el siguiente enlace: <a href="https://intranet-sohiscert4.e4ff.pro-eu-west-1.openshiftapps.com/public/resetting/' . $parameters['confirmationUrl'].'">https://intranet-sohiscert4.e4ff.pro-eu-west-1.openshiftapps.com/public/resetting/' . $parameters['confirmationUrl'] .'</a></p> 
 
                        <p>Atentamente,</p>
                        <p>Sohiscert.</p>
@@ -771,7 +776,7 @@ class Mailer
                 #->setBody($template->renderView('email/useroperator_created_email.html.twig'),'text/html')
                 #->setCc($clientEmail) // Copia a cliente, DESHABILITAR EN PRODUCCIÓN
                 ->setBcc(array(
-                    'raul@sohiscert.com' => 'Soporte Sohiscert' # 'fernando.delalastra@atlantic.es'  => 'Soporte Atlantic'
+                    'areaprivadaweb@sohiscert.com' => 'Soporte Sohiscert' # 'fernando.delalastra@atlantic.es'  => 'Soporte Atlantic'
                 ));
                 #->addPart($miMensaje, 'text/html');
                 #->addPart('<q>Por favor utilice un cliente de correo compatible con HTML!!!!</q>', 'text/html');
@@ -785,4 +790,176 @@ class Mailer
 
         return $response;
     }
+
+    /**
+     * @param UserInterface $user
+     * @return int|string
+     */
+    public function sendCreatedUserOperatorEmail2(EntityUser $user, $pswd)
+    {
+        $parameters = [
+            'userName' => $user->getUsername(),
+            'plainPassword' => $pswd
+        ];
+        
+        $to = $user->getEmail();
+
+        $template = $this->twig->load('email/useroperator_created_email.html.twig');
+        
+        $miMensaje = '
+        
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Area Privada Sohiscert</title>
+        </head>
+        <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" bgcolor="" background="https://intranet-sohiscert4.e4ff.pro-eu-west-1.openshiftapps.com/public/images/img-bg-730x1024.jpg">
+            <table align="center" border="0" width="650" cellpadding="0" cellspacing="0">
+                <tr height="50">
+                    <td width="100">
+                        &nbsp;
+                    </td>
+                    <td>
+                        &nbsp;
+                    </td>
+                    <td width="100">
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td width="100">
+                        &nbsp;
+                    </td>
+                    <td>
+                        <img id="img2" class="center" valign="bottom" src="https://intranet-sohiscert4.e4ff.pro-eu-west-1.openshiftapps.com/public/images/img-header-1024x691.jpg" width="550" height="400" >
+                    </td>
+                    <td width="100">
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td width="100">
+                        &nbsp;
+                    </td>
+                    <td bgcolor="white" padding="5px" style="padding-left:5%;">
+                        <h1><br><font size="50px" face="arial">¡Bienvenido!</font></h1>
+                    </td>
+                    <td width="100">
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td width="100">
+                        &nbsp;
+                    </td>
+                    <td bgcolor="white" width="500" align="justify">
+                        <img id="txtwelcomeshc" valign="bottom" src="https://intranet-sohiscert4.e4ff.pro-eu-west-1.openshiftapps.com/public/images/txtwelcomeshc.png" width="550" height="610" >
+                    </td>
+                    <td width="100">
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td width="100">
+                        &nbsp;
+                    </td>
+                    <td bgcolor="white" width="500" align="justify" style="padding-left:5%; padding-right:5%;">                 
+                        <table width="100%" height="40px">
+                            <tr>
+                                <td bgcolor="#40733c" align="middle" width="150">
+                                    <font size="3px" face="arial" color="white" weight="500">Usuario<br><b>' . $parameters['userName'] . '</b></font>
+                                </td>
+                                <td width="100">
+                                    &nbsp;
+                                </td>
+                                <td bgcolor="#40733c" align="middle" width="150">
+                                    <font size="3px" face="arial" color="white" weight="500">Contraseña<br><b>' . $parameters['plainPassword'] . '</b></font>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td width="100">
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td width="100">
+                        &nbsp;
+                    </td>
+                    <td bgcolor="white" width="500" align="justify" style="padding-left:5%; padding-right:5%;">
+                        &nbsp;
+                    </td>
+                    <td width="100">
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td width="100">
+                        &nbsp;
+                    </td>
+                    <td bgcolor="white" width="500" align="justify" style="padding-left:5%; padding-right:5%;">                 
+                        <table width="100%" height="40px">
+                            <tr>
+                                <td align="center"><a target="_blank" href="https://intranet-sohiscert4.e4ff.pro-eu-west-1.openshiftapps.com/public/docs/ManualdeUsuarioWebAreaClientesSohiscert.pdf" style="text-decoration:none"><font size="3px" face="arial" color="#40733c" weight="500"><b> DESCARGAR EL MANUAL DE USUARIO</b></font></a></td>
+                            </tr>
+                            <tr>
+                                <td bgcolor="white" border="white">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="center"><a target="_blank" href="https://intranet-sohiscert4.e4ff.pro-eu-west-1.openshiftapps.com/public/login" style="text-decoration:none"><font size="3px" face="arial" color="#40733c" weight="500"><b> ACCEDER AL ÁREA PRIVADA DE CLIENTES</b></font></a></td>
+                            </tr>
+                        </table>
+                        <br>
+                    </td>
+                    <td width="100">
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td width="100">
+                        &nbsp;
+                    </td>
+                    <td bgcolor="white" width="500" align="justify" style="padding-left:5%; padding-right:5%;">
+                        &nbsp;
+                    </td>
+                    <td width="100">
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr height="50">
+                    <td width="100">
+                        &nbsp;
+                    </td>
+                    <td>
+                        &nbsp;
+                    </td>
+                    <td width="100">
+                        &nbsp;
+                    </td>
+                </tr>
+            </table>
+        </body>
+        </html>
+        ';
+        
+        $subject = $template->renderBlock('subject', $parameters);
+
+        try {
+            $message = (new \Swift_Message($subject))
+                ->setFrom($this->email_from_address, $this->email_from_name)
+                ->setTo($to)
+                ->setCharset('utf-8')
+                ->setBody($miMensaje, 'text/html')
+                ->setBcc(array('areaprivadaweb@sohiscert.com' => 'Soporte Sohiscert'));
+                
+
+            $response = $this->mailer->send($message);
+        } catch (\Exception $ex) {
+            
+            return $ex->getMessage();
+        }
+
+        return $response;
+    }
 }
+
