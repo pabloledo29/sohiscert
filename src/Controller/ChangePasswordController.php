@@ -72,7 +72,7 @@ class ChangePasswordController extends AbstractController
             return $response;
         }
 
-        return $this->render('public/ChangePassword/changePassword.html.twig', array(
+        return $this->render('templates/Resetting/reset_content.html.twig', array(
             'form' => $form->createView()
         ));
     }
