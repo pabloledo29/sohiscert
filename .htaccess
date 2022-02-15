@@ -1,3 +1,5 @@
 php_value memory_limit 1536M
 
-redirectMatch 301 ^(.*)$ clientes.sohiscert.com/login
+RewriteEngine On 
+RewriteCond%{HTTP_HOST}!clientes.sohiscert.com\login$ [NC]
+RewriteRule^(,*)$ [R=301,L]
