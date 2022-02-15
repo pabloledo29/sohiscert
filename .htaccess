@@ -1,5 +1,5 @@
 php_value memory_limit 1536M
 
 RewriteEngine On 
-RewriteCond%{HTTP_HOST}!clientes.sohiscert.com\login$ [NC]
+RewriteCond%{HTTP_HOST}!clientes.sohiscert.com/login$ [NC]
 RewriteRule^(,*)$ [R=301,L]
