@@ -1,8 +1,80 @@
-
+{% extends 'base.html.twig' %}
 
 
 
 {% block content %}
-<p>Para acceder clicke en el siguiente enlace</p>
-   <a href="clientes.sohiscert.com">clientes.sohiscert.com</a>
+<div id="contain">
+    <div id="contain3" class="">
+
+         {% for type, messages in app.session.flashbag.all() %}
+                {% for message in messages %}
+                    <div class="flash-{{ type }}">
+                        <div class="form-box" id="login-box">
+                            <div class="alert alert-danger alert-dismissable">
+                                <i class="fa fa-ban"></i>
+                               <!-- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>-->
+                            <b>Error! </b>{{ message }}
+                            </div>
+                        </div>
+             {% endfor %}
+            {% endfor %}
+    </div>
+    <br>&nbsp;</br>
+
+    <div id="contain2" class="login-logo center"><img id="logo" src="app/img/login/logo.svg"></div>
+     
+        <div class="center center_mnn" align="center">ÁREA PRIVADA DE CLIENTES</div>
+    
+        <!--MNN. Cambiamos el logo-->
+        <!--<div class="login-logo center"><img id="avatar" src="https://sohiscert.com/wp-content/uploads/2018/07/avatar.png"></div>-->
+        <div class="login-logo center"><img id="avatar-mnn" src="app/img/login/munecos.svg"></div>
+        <div id="login-box">
+            <div class="login-box-msg">
+                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                    {{ 'layout.logged_in_as'|trans({'%username%': username}, 'message') }} |
+                    <a href="{{ path('security_logout') }}">
+                        {{ 'layout.logout'|trans({}, 'message') }}
+                    </a>
+                {% else %}
+                    <!--<div id="conozca-beneficios">¡Tus ventajas te estan esperando!</div>-->
+                {% endif %}
+            </div>
+
+            <div id="entrar" class="center center_mnn2">ENTRAR</div>
+            <form action="{{ path("security_login") }}" method="post">
+                <div class="form-group-mnn has-feedback">
+                    <input type="text" class="form-control-mnn" id="username" name="_username" value="{{ last_username }}"
+                           required="required" placeholder="Usuario (NIF/CIF)"/>
+                    <span class="glyphicon glyphicon-user-mnn form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                    <input type="password" class="form-control-mnn" id="password" name="_password" required="required"
+                           placeholder="Contraseña"/>
+                    <span class="glyphicon glyphicon-lock-mnn form-control-feedback"></span>
+                </div>
+                <input type="hidden" name="_csrf_token"
+                                    value="{{ csrf_token('authenticate') }}">
+
+                <div class="footer">
+                    <input type="submit" id="_submit" name="_submit" value="ACCEDER"
+                           class="btn-primary-mnn botonac"/>
+                </div>
+            </form>
+
+            <br>&nbsp;</br>
+
+            <div class="titulo" align="center">¿Olvidó su contraseña? <a target="_blank" href="{{ path('resetting_request') }}"><b>Pinche aquí</b></a></div>
+
+        
+           <br>&nbsp;</br>
+              <div align="center">
+                <div class="manual">Manual de Usuario</div>
+                <div class="logo-play"><a target="_blank" href="https://youtu.be/fK91avPHHa0"><img id="avatar-mnn" src="app/img/login/logo_play.svg"><div class="texto-login">Ver Video</a></div></div>
+
+                <div class="logo-pdf"><a target="_blank" href="https://intranet-sohiscert4.e4ff.pro-eu-west-1.openshiftapps.com/public/docs/ManualdeUsuarioWebAreaClientesSohiscert.pdf"><img id="avatar-mnn" src="app/img/login/logo_pdf.svg"><div class="texto-login">Descargar PDF</a></div></div>
+            </div>
+           
+        </div>
+    </div>
+</div>
 {% endblock %}
