@@ -1,6 +1,2 @@
 php_value memory_limit 1536M
 
-RewriteEngine On 
-RewriteCond%{HTTP_HOST} ^https://intranet-sohiscert4.e4ff.pro-eu-west-1.openshiftapps.com/public [NC,OR]
-RewriteCond%{HTTP_HOST} ^https://intranet-sohiscert4.e4ff.pro-eu-west-1.openshiftapps.com/public [NC]
-RewriteRule ^(.*)$  clientes.sohiscert.com/login [L,R=301,NC]
