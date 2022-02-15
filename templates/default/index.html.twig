@@ -1,27 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    Homepage.
-    usuarios {{ usersCreados }}
-    <table>
-        <thead>
-        <tr>
-            <th>UserName</th>
-            <th>e-mail</th>
-            <th>PlainPassword</th>
-        </tr>
-        </thead>
-        {% for item in data %}
-            <tr>
-                {% for item2 in item %}
-                    <td>{{ item2 }}</td>
-                {% endfor %}
-            </tr>
-        {% endfor %}
-    </table>
-    {#{{ ld(fileList) }}#}
-    {#{{ form_start(form) }}#}
-    {#{{ form_widget(form) }}#}
-    {#{{ form_end(form) }}#}
-
+    <p>Para acceder clicke en el siguiente enlace</p>
+   <a href="clientes.sohiscert.com/login">clientes.sohiscert.com/login</a>
 {% endblock %}
