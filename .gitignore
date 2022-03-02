@@ -6,10 +6,14 @@
 /.env.*.local
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
+/var/
 /var/cache/
 /var/log/
+/var/update/
+/var/sessions/
 ###< symfony/framework-bundle ###
-
+/vendor/
+/logs/
 ###> symfony/phpunit-bridge ###
 .phpunit
 phpunit.xml.dist

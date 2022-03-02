@@ -26,7 +26,7 @@ use Swift_SmtpTransport;
  */
 class EmailUpdateDocFactuCommand extends Command
 {
-    protected static $defaultName = 'email:emaildocfactu1:send';
+    protected static $defaultName = 'email:emaildocfactu:send';
     public function __construct(string $path_update_logs,string $ftp_server, string $ftp_user_name, string $ftp_user_pass, $mailer,$em)
     {
         $this->path_update_logs = $path_update_logs;
@@ -48,7 +48,7 @@ class EmailUpdateDocFactuCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('email:emaildocfactu1:send')
+            ->setName('email:emaildocfactu:send')
             ->setDescription('Send simple email message')
             ->addOption('from', null, InputOption::VALUE_REQUIRED, 'The from address of the message')
             ->addOption('to', null, InputOption::VALUE_REQUIRED, 'The to address of the message')
@@ -165,7 +165,6 @@ EOF
         # Recorremos los Directorios FTP definidos anteriormente en las rutas
         # Definimos la Ruta
         foreach ($rutasftp as $tipodoc => $ruta) {
-
 
             # Habilitamos la Conexión Pasiva del FTP
             ftp_pasv($conn_id, true);
@@ -390,7 +389,6 @@ echo "Si el Operador Existe, NO es Nulo, en el Sistema";
                                         $docNew->setFechaEnv(new \DateTime());
                                         $docNew->setMail($operador["opEma"]);
 
-
                                         $em->persist($docNew);
                                         $em->flush();
                                     }    
@@ -610,11 +608,10 @@ echo "la fecha del documento es distinta a la del ftp, HAY QUE ACTUALIZAR";
                                 default:
                                     throw new \InvalidArgumentException('Body-input option should be "stdin" or "file"');
                             }
-echo "entra para mandar";
+
                             $message = $this->createMessage($input, $datamail);
                             $mailer = $this->mailer;
                             $output->writeln(sprintf('<info>Sent %s emails<info>', $mailer->send($message)));
-                        
                             $contMail++;
 
                             #Limpiamos array
@@ -652,7 +649,6 @@ echo "entra para mandar";
         }
 
         echo "\n Proceso Finalizado, generando Archivo Log ...\n";
-
         #
         # Archivo LOG con la Información Procesada
         #
@@ -790,16 +786,13 @@ echo "entra para mandar";
         }
         
 
-        $from  = 'noreply@sohiscert.com';
-        $to = $destino;
-        //$to = 'jlbarrios@atlantic.es';
-        $subject = "Alta de documento en Área Privada web: Factura"; 
+        $from    = 'noreply@sohiscert.com';
+        $to      = $destino;
+        $subject = "Alta de documento en Área Privada web: Factura";
         
         /*MNN Modificamos la plantilla */
 
         $body  = '
-
-
         <!DOCTYPE html>
         <html>
         <head>
@@ -870,7 +863,7 @@ echo "entra para mandar";
                                                         <td align="center">
                                                             <br>
                                                             <br>
-                                                            <p><a target="_blank" href="https://intranet-sohiscert4.e4ff.pro-eu-west-1.openshiftapps.com/public/login" style="text-decoration:none"><font size="3px" face="arial" color="#40733c" weight="500"><b> ACCEDER AL ÁREA PRIVADA DE CLIENTES</b></font></a>
+                                                            <p><a target="_blank" href="clientes.sohsicert.com/login" style="text-decoration:none"><font size="3px" face="arial" color="#40733c" weight="500"><b> ACCEDER AL ÁREA PRIVADA DE CLIENTES</b></font></a>
                                                             </p>
                                                         </td>
                                                     </tr>

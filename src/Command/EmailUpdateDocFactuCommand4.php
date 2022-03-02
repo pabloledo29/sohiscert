@@ -21,7 +21,7 @@ use Swift_Mailer;
 use Swift_SmtpTransport;
 
 /**
- * Class EmailUpdateDocFactuCommand
+ * Class EmailUpdateDocFactuCommand4
  * @package App\Command
  */
 class EmailUpdateDocFactuCommand4 extends Command
@@ -400,7 +400,7 @@ EOF
 
                                         $em->persist($docNew);
                                         $em->flush();
-                                    }    
+                                    }
 
 
 
@@ -617,13 +617,10 @@ EOF
                                 default:
                                     throw new \InvalidArgumentException('Body-input option should be "stdin" or "file"');
                             }
-
                             $message = $this->createMessage($input, $datamail);
                             $mailer = $this->mailer;
                             $output->writeln(sprintf('<info>Sent %s emails<info>', $mailer->send($message)));
-                        
                             $contMail++;
-
                             #Limpiamos array
                             unset($datamail);
 
@@ -797,10 +794,9 @@ EOF
         }
         
 
-        $from  = 'noreply@sohiscert.com';
-        $to = $destino;
-        //$to = 'jlbarrios@atlantic.es';
-        $subject = "Alta de documento en Área Privada web: Factura"; 
+        $from    = 'noreply@sohiscert.com';
+        $to      = $destino;
+        $subject = "Alta de documento en Área Privada web: Factura";
         
         /*MNN Modificamos la plantilla */
 
@@ -877,7 +873,7 @@ EOF
                                                         <td align="center">
                                                             <br>
                                                             <br>
-                                                            <p><a target="_blank" href="https://intranet-sohiscert4.e4ff.pro-eu-west-1.openshiftapps.com/public/login" style="text-decoration:none"><font size="3px" face="arial" color="#40733c" weight="500"><b> ACCEDER AL ÁREA PRIVADA DE CLIENTES</b></font></a>
+                                                            <p><a target="_blank" href="clientes.sohiscert.com/login" style="text-decoration:none"><font size="3px" face="arial" color="#40733c" weight="500"><b> ACCEDER AL ÁREA PRIVADA DE CLIENTES</b></font></a>
                                                             </p>
                                                         </td>
                                                     </tr>

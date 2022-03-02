@@ -125,7 +125,7 @@ EOF
         
         
         # Rutas para Pruebas
-        $rutasftp = array('conclusiones' => '/DEPARTAMENTO DE CONTROL/3. CONCLUSIONES/AREA PRIVADA');
+        $rutasftp = array('conclusiones' => '/DEPARTAMENTO DE CONTROL/03. CONCLUSIONES/AREA PRIVADA');
         #$rutasftp = array('factura' => '/facturasintranet');
         $em = $this->em;
         $mapeo_nop = $em->getRepository(OpNopTransform::class)->findAll();
@@ -166,14 +166,12 @@ EOF
         # Definimos la Ruta
         foreach ($rutasftp as $tipodoc => $ruta) {
 
-            
             # Habilitamos la Conexión Pasiva del FTP
             ftp_pasv($conn_id, true);
 
             # Obtener el número de archivos contenidos en el directorio actual
             $lista= ftp_nlist($conn_id,$ruta);
             $numarch = count($lista);
-
 
             echo "\n -> Documentos, " . $tipodoc . ": " . $numarch . " archivos \n";
 
@@ -233,7 +231,6 @@ EOF
 
                     # Inciamos Sesión
                     $login_result = ftp_login($conn_id, $this->ftp_user_name, $this->ftp_user_pass); 
-
                     if (!$login_result) {  
                         echo "\n ¡La conexión FTP ha fallado DESPUES DEL ERROR!\n";
                         echo " \n"; 
@@ -249,7 +246,6 @@ EOF
                 }
 
                 
-
                 $fmoddoc = date("Y-m-d", $docftp);
                 $fecha_bruta=$fmoddoc;
 
@@ -474,9 +470,6 @@ EOF
                                     $em->persist($docNew);
                                     $em->flush();
 
-                                    #var_dump($docNew);
-                                    #exit('Certificado Grabado BB.DD.');
-                                    
                                     if (isset($operador["opEma"])) {
                                         # code...
                                         $datamail = array(
@@ -544,9 +537,6 @@ EOF
 
                                             $em->persist($registro);
                                             $em->flush();
-
-                                            #var_dump($registro);
-                                            #exit('Fecha Registro Modificada');
 
                                             # Obtenemos los Datos del Operador a partir del Nombre para recuperar el Mail 
                                             #$cons = $em->container->get('doctrine')->getManager();
@@ -669,10 +659,8 @@ EOF
                         $message = $this->createMessage($input, $datamail);
                         $mailer = $this->mailer;
                         $output->writeln(sprintf('<info>Sent %s emails<info>', $mailer->send($message)));
-                        
                         $contMail++;
                         unset($datamail);
-                        # exit('Envió de Mail Realizado');
 
                     }
                 }
@@ -835,10 +823,9 @@ EOF
         }
         
 
-        $from  = 'noreply@sohiscert.com';
-        $to = $destino;
-        //$to = 'jlbarrios@atlantic.es';
-        $subject = "Alta de documento en Área Privada web: Conclusiones de auditoría"; 
+        $from    = 'noreply@sohiscert.com';
+        $to      = 'maria.gonzalez@atlantic.es';//$destino;
+        $subject = "Alta de documento en Área Privada web: Conclusiones de auditoría";
         
         /*MNN Modificamos la plantilla */
 

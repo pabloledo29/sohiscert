@@ -469,7 +469,6 @@ EOF
 
                                             $em->persist($registro);
                                             $em->flush();
-
                                             #var_dump($registro);
                                             #exit('Fecha Registro Modificada');
 
@@ -615,7 +614,6 @@ EOF
                             $message = $this->createMessage($input, $datamail);
                             $mailer = $this->mailer;
                             $output->writeln(sprintf('<info>Sent %s emails<info>', $mailer->send($message)));
-                        
                             $contMail++;
 
                             #Limpiamos array
@@ -791,10 +789,9 @@ EOF
         }
         
 
-        $from  = 'noreply@sohiscert.com';
-        $to = $destino;
-        //$to = 'jlbarrios@atlantic.es';
-        $subject = "Alta de documento en Área Privada web: Factura"; 
+        $from    = 'noreply@sohiscert.com';
+        $to      = $destino;
+        $subject = "Alta de documento en Área Privada web: Factura";
         
         /*MNN Modificamos la plantilla */
 
@@ -871,7 +868,7 @@ EOF
                                                         <td align="center">
                                                             <br>
                                                             <br>
-                                                            <p><a target="_blank" href="https://intranet-sohiscert4.e4ff.pro-eu-west-1.openshiftapps.com/public/login" style="text-decoration:none"><font size="3px" face="arial" color="#40733c" weight="500"><b> ACCEDER AL ÁREA PRIVADA DE CLIENTES</b></font></a>
+                                                            <p><a target="_blank" href="clientes.sohiscert.com/login" style="text-decoration:none"><font size="3px" face="arial" color="#40733c" weight="500"><b> ACCEDER AL ÁREA PRIVADA DE CLIENTES</b></font></a>
                                                             </p>
                                                         </td>
                                                     </tr>

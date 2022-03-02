@@ -205,7 +205,7 @@ class Mailer
                                 <td bgcolor="white" border="white">&nbsp;</td>
                             </tr>
                             <tr>
-                                <td align="center"><a target="_blank" href="https://intranet-sohiscert4.e4ff.pro-eu-west-1.openshiftapps.com/public/login" style="text-decoration:none"><font size="3px" face="arial" color="#40733c" weight="500"><b> ACCEDER AL ÁREA PRIVADA DE CLIENTES</b></font></a></td>
+                                <td align="center"><a target="_blank" href="http://clientes.sohiscert.com/login" style="text-decoration:none"><font size="3px" face="arial" color="#40733c" weight="500"><b> ACCEDER AL ÁREA PRIVADA DE CLIENTES</b></font></a></td>
                             </tr>
                         </table>
                         <br>
@@ -386,7 +386,7 @@ class Mailer
                                 <td bgcolor="white" border="white">&nbsp;</td>
                             </tr>
                             <tr>
-                                <td align="center"><a target="_blank" href="https://intranet-sohiscert4.e4ff.pro-eu-west-1.openshiftapps.com/public/login" style="text-decoration:none"><font size="3px" face="arial" color="#40733c" weight="500"><b> ACCEDER AL ÁREA PRIVADA DE CLIENTES</b></font></a></td>
+                                <td align="center"><a target="_blank" href="http://clientes.sohiscert.com/login" style="text-decoration:none"><font size="3px" face="arial" color="#40733c" weight="500"><b> ACCEDER AL ÁREA PRIVADA DE CLIENTES</b></font></a></td>
                             </tr>
                         </table>
                         <br>
@@ -746,7 +746,7 @@ class Mailer
                     <div id="mensaje">
                         <h1>Estimado operador</h1>
 
-                       <p>Para restablecer su contraseña por favor pinche el siguiente enlace: <a href="{{path(http://intranet-pre-intranetshc.e4ff.pro-eu-west-1.openshiftapps.com/public/resetting/' . $parameters['confirmationUrl'].')}}">http://intranet-pre-intranetshc.e4ff.pro-eu-west-1.openshiftapps.com/public/resetting/' . $parameters['confirmationUrl'] .'</a></p> 
+                       <p>Para restablecer su contraseña por favor pinche el siguiente enlace: <a href="clientes.sohiscert.com/resetting/' . $parameters['confirmationUrl'].'">clientes.sohiscert.com/resetting/' . $parameters['confirmationUrl'] .'</a></p> 
 
                        <p>Atentamente,</p>
                        <p>Sohiscert.</p>

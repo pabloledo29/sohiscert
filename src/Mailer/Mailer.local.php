@@ -200,7 +200,7 @@ class Mailer
                     <td bgcolor="white" width="500" align="justify" style="padding-left:5%; padding-right:5%;">                 
                         <table width="100%" height="40px">
                             <tr>
-                                <td align="center"><a target="_blank" href="https://intranet-sohiscert4.e4ff.pro-eu-west-1.openshiftapps.com/public/docs/ManualdeUsuarioWebAreaClientesSohiscert.pdf" style="text-decoration:none"><font size="3px" face="arial" color="#40733c" weight="500"><b> DESCARGAR EL MANUAL DE USUARIO</b></font></a></td>
+                                <td align="center"><a target="_blank" href="https://clientes.sohiscert.com/public/docs/ManualdeUsuarioWebAreaClientesSohiscert.pdf" style="text-decoration:none"><font size="3px" face="arial" color="#40733c" weight="500"><b> DESCARGAR EL MANUAL DE USUARIO</b></font></a></td>
                             </tr>
                             <tr>
                                 <td bgcolor="white" border="white">&nbsp;</td>
